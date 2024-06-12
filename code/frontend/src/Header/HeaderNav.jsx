@@ -11,7 +11,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 
 function HeaderNav() {
   return (
-    <AppBar position="sticky" sx={{ bgcolor: "white" }}>
+    <AppBar position="static" sx={{ bgcolor: "white" }}>
       <Toolbar>
         {/* <IconButton size="large" edge="start" color="inherit" aria-label="menu">
           <MenuIcon />
