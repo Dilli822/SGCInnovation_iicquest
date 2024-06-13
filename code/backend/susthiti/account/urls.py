@@ -13,7 +13,7 @@ urlpatterns = [
     path('doctors/edit/<int:pk>/', DoctorProfileRetrieveUpdateDestroy.as_view(), name='doctor-detail'),
     
     path('doctors/self',  DoctorProfileList.as_view(), name='doctor-list-create'),
-
+    path('users/self',  UserProfileList.as_view(), name='doctor-list-create'),
 
     path('anonymous-users/', AnnonymousUserListCreate.as_view(), name='anonymous-user-list-create'),
     path('anonymous-users/<int:pk>/', AnnonymousUserRetrieveUpdateDestroy.as_view(), name='anonymous-user-detail'),

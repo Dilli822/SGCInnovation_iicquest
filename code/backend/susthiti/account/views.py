@@ -67,6 +67,14 @@ class DoctorProfileListCreate(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     
 
+class UserProfileList(generics.ListAPIView):
+    serializer_class = AnnonymousUserSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        user = self.request.user
+        return AnnonymousUser.objects.filter(user=user)
+    
 
 class DoctorProfileList(generics.ListCreateAPIView):
     serializer_class = DoctorProfileSerializer
