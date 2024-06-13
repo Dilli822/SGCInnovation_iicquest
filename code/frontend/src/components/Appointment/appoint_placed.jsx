@@ -36,7 +36,7 @@ const AppointmentPlacementsTable = () => {
         const accessToken = localStorage.getItem("accessToken");
 
         const response = await fetch(
-          "http://localhost:8000/sushtiti/account/appointment-placements/",
+          "http://localhost:8000/sushtiti/account/users/appointments-to-doctor/list/",
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -71,7 +71,7 @@ const AppointmentPlacementsTable = () => {
       const accessToken = localStorage.getItem("accessToken");
 
       const response = await fetch(
-        `http://localhost:8000/sushtiti/account/appointment-placements/${appointmentIdToDelete}/`,
+        `http://localhost:8000/sushtiti/account/users/appointments-to-doctor/${appointmentIdToDelete}/`,
         {
           method: "DELETE",
           headers: {
@@ -142,7 +142,7 @@ const AppointmentPlacementsTable = () => {
           <TableHead>
             <TableRow>
               <TableCell>User</TableCell>
-              <TableCell>Doctor or Teacher</TableCell>
+              <TableCell>Doctor</TableCell>
               <TableCell>Start Time</TableCell>
               <TableCell>End Time</TableCell>
               <TableCell>Action</TableCell>
@@ -152,9 +152,9 @@ const AppointmentPlacementsTable = () => {
             {appointmentPlacements.slice(0, displayCount).map((appointment) => (
               <TableRow key={appointment.id}>
                 <TableCell>{appointment.user}</TableCell>
-                <TableCell>{appointment.doctor_or_teacher}</TableCell>
-                <TableCell>{appointment.start_time}</TableCell>
-                <TableCell>{appointment.end_time}</TableCell>
+                <TableCell>{appointment.doctor}</TableCell>
+                <TableCell>{new Date(appointment.booked_datetime).toLocaleString()}</TableCell>
+                <TableCell>{appointment.doctor_verify ? "Verified" : "Pending"}</TableCell>
                 <TableCell>
                   <Button
                     variant="outlined"
@@ -212,7 +212,6 @@ const AppointmentPlacementsTable = () => {
           {snackbarMessage}
         </Alert>
       </Snackbar>
-      <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
     </Container>
   );
 };
