@@ -59,7 +59,7 @@ const AnyUserProfileUpdate = () => {
   const fetchProfileData = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8000/sushtiti/account/doctors/${userId}/`,
+        `http://localhost:8000/sushtiti/account/anonymous-users/${userId}/`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -107,7 +107,7 @@ const AnyUserProfileUpdate = () => {
       formData.append("bio", profileData.bio);
       formData.append("user", userId);
       const response = await fetch(
-        `http://localhost:8000/sushtiti/account/doctors/${userId}/`,
+        `http://localhost:8000/sushtiti/account/anonymous-users/${userId}/`,
         {
           method: "PUT",
           headers: {

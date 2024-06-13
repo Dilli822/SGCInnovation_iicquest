@@ -66,6 +66,16 @@ class DoctorProfileListCreate(generics.ListCreateAPIView):
     serializer_class = DoctorProfileSerializer
     permission_classes = [IsAuthenticated]
     
+
+
+class DoctorProfileList(generics.ListCreateAPIView):
+    serializer_class = DoctorProfileSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        user = self.request.user
+        return DoctorProfile.objects.filter(user=user)
+    
 class AnnonymousUserListCreate(generics.ListCreateAPIView):
     queryset = AnnonymousUser.objects.all()
     serializer_class = AnnonymousUserSerializer
@@ -144,3 +154,21 @@ class AppointmentDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Appointment.objects.filter(user=self.request.user)
+    
+class NotificationListView(generics.ListAPIView):
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user_id = self.request.user.id
+        return Notification.objects.filter(user_id=user_id).order_by('-created_at')
+
+
+class NotificationDetailView(generics.RetrieveAPIView):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user_id = self.request.user.id
+        return Notification.objects.filter(user_id=user_id)

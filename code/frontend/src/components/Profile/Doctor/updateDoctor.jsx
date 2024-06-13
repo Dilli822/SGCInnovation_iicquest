@@ -22,9 +22,11 @@ const DoctorProfileUpdate = () => {
   const [imageFile, setImageFile] = useState(null);
   const [initialProfileData, setInitialProfileData] = useState({});
   const [open, setOpen] = useState(false);
+  const [doctorId, setDoctorId] = useState(0);
 
   useEffect(() => {
     fetchUserId();
+    fetchDoctorData();
   }, []);
 
   useEffect(() => {
@@ -45,6 +47,7 @@ const DoctorProfileUpdate = () => {
       );
       if (response.ok) {
         const data = await response.json();
+        console.log(data)
         setUserId(data.id);
         setBuyerName(data.username);
         setBuyerEmail(data.email);
@@ -56,10 +59,46 @@ const DoctorProfileUpdate = () => {
     }
   };
 
+  
+  const fetchDoctorData = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8000/sushtiti/account/doctors/self/",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+
+        console.log(data)
+
+        setDoctorId(data.doctor_id);
+
+        if (data.length > 0) {
+
+          const doctorId = data[0].doctor_id; // Assuming there's only one doctor returned
+          setDoctorId(doctorId); // Set doctor_id in state
+          localStorage.setItem("doctorId", doctorId); // Store doctor_id in localStorage
+        }
+      } else {
+        console.error("Failed to fetch doctor data");
+      }
+    } catch (error) {
+      console.error("Error fetching doctor data:", error);
+    }
+  };
+
+
+  console.log(doctorId)
+
   const fetchProfileData = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8000/sushtiti/account/doctors/${userId}/`,
+        `http://localhost:8000/sushtiti/account/doctors/1/`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -105,9 +144,12 @@ const DoctorProfileUpdate = () => {
       formData.append("address", profileData.address);
       formData.append("phone_number", profileData.phone_number);
       formData.append("bio", profileData.bio);
-      formData.append("user", userId);
+      // formData.append("user", userId);
+
+      var doctorId = localStorage.getItem("doctorId");
+      
       const response = await fetch(
-        `http://localhost:8000/sushtiti/account/doctors/${userId}/`,
+        `http://localhost:8000/sushtiti/account/doctors/edit/${doctorId}/`,
         {
           method: "PUT",
           headers: {

@@ -10,10 +10,11 @@ urlpatterns = [
     path('auth/user/', UserView.as_view(), name="user"),
     
     path('doctors/', DoctorProfileListCreate.as_view(), name='doctor-list-create'),
-    path('doctors/<int:pk>/', DoctorProfileRetrieveUpdateDestroy.as_view(), name='doctor-detail'),
+    path('doctors/edit/<int:pk>/', DoctorProfileRetrieveUpdateDestroy.as_view(), name='doctor-detail'),
     
-    
-    
+    path('doctors/self',  DoctorProfileList.as_view(), name='doctor-list-create'),
+
+
     path('anonymous-users/', AnnonymousUserListCreate.as_view(), name='anonymous-user-list-create'),
     path('anonymous-users/<int:pk>/', AnnonymousUserRetrieveUpdateDestroy.as_view(), name='anonymous-user-detail'),
     
@@ -28,12 +29,13 @@ urlpatterns = [
     # buyer place the appointment to the doctor
     path('users/appointments-to-doctor/create/', AppointmentListCreateView.as_view(), name='appointment-list-create'),
     path('users/appointments-to-doctor/list/', AppointmentListCreateView.as_view(), name='appointment-list-create'),
-    path('appointments/<int:pk>/', AppointmentDetailView.as_view(), name='appointment-detail'),
-    
+    path('users/appointments-to-doctor/<int:pk>/', AppointmentDetailView.as_view(), name='appointment-detail'),
     
     # doctor list the received appoints from the user
     path('appointments-to-doctor/list/', AppointmentListCreateView.as_view(), name='appointment-list-create'),
     path('appointments/<int:pk>/', AppointmentDetailView.as_view(), name='appointment-detail'),
-
+    
+    path('notifications/', NotificationListView.as_view(), name='notification-list'),
+    path('notifications/<int:pk>/', NotificationDetailView.as_view(), name='notification-detail'),
     #########
 ]
