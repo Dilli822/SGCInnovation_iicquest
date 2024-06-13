@@ -8,11 +8,11 @@ import Login from "./components/auth/login"
 import SignUp from "./components/auth/signup";
 import Community from "./components/community/Community";
 import PaymentPage from "./components/payment/e-khalti";
-import DoctorProfile from "./components/Profile/DoctorProfile";
+import DoctorProfile from "./components/Profile/Doctor/DoctorProfile";
 import Feed from "./components/home/feed";
 import AptitudeTest from "./components/aptitudeTest/appitudeComp";
 import MediatatorProfile from "./components/MeditationInstructor/MeditatorProfile"
-import AnnoyUser from "./components/Profile/AnonyUser"
+import AnnoyUser from "./components/Profile/User/AnonyUser"
 
 export default function MainRouter() {
   return (

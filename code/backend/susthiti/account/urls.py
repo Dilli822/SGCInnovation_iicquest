@@ -12,15 +12,28 @@ urlpatterns = [
     path('doctors/', DoctorProfileListCreate.as_view(), name='doctor-list-create'),
     path('doctors/<int:pk>/', DoctorProfileRetrieveUpdateDestroy.as_view(), name='doctor-detail'),
     
+    
+    
     path('anonymous-users/', AnnonymousUserListCreate.as_view(), name='anonymous-user-list-create'),
     path('anonymous-users/<int:pk>/', AnnonymousUserRetrieveUpdateDestroy.as_view(), name='anonymous-user-detail'),
     
     path('mediator-teachers/', MediatatorTeacherProfileListCreate.as_view(), name='mediator-teacher-list-create'),
     path('mediator-teachers/<int:pk>/', MediatatorTeacherProfileRetrieveUpdateDestroy.as_view(), name='mediator-teacher-detail'),
-
-    path('free-time-slots/', FreeTimeSlotListCreateAPIView.as_view(), name='free-time-slot-list-create'),
-    path('free-time-slots/<int:pk>/', FreeTimeSlotRetrieveUpdateDestroyAPIView.as_view(), name='free-time-slot-detail'),
     
+    
+    path('doctor/free-time-slots/list/', FreeTimeSlotListCreateAPIView.as_view(), name='free-time-slot-list-create'),
+    path('doctor/free-time-slots/create/', FreeTimeSlotListCreateAPIView.as_view(), name='free-time-slot-list-create'),
+    path('doctor/free-time-slots/edit/<int:pk>/', FreeTimeSlotRetrieveUpdateDestroyAPIView.as_view(), name='free-time-slot-detail'),
+    
+    # buyer place the appointment to the doctor
+    path('users/appointments-to-doctor/create/', AppointmentListCreateView.as_view(), name='appointment-list-create'),
+    path('users/appointments-to-doctor/list/', AppointmentListCreateView.as_view(), name='appointment-list-create'),
+    path('appointments/<int:pk>/', AppointmentDetailView.as_view(), name='appointment-detail'),
+    
+    
+    # doctor list the received appoints from the user
+    path('appointments-to-doctor/list/', AppointmentListCreateView.as_view(), name='appointment-list-create'),
+    path('appointments/<int:pk>/', AppointmentDetailView.as_view(), name='appointment-detail'),
 
     #########
 ]

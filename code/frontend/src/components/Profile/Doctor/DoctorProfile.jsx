@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DoctorProfileUpdate from "./updateDoctor";
-import Appointment from "../Appointment/Appointment";
+import AppointmentToDoctors from "../../Appointment/Appointment";
 
 import {
   Grid,
@@ -18,9 +18,6 @@ const DoctorProfile = () => {
       navigate("/profile/mediator-teacher");
     }
 
-
-
-
     if (localStorage.getItem("is_doctor") !== "true" && localStorage.getItem("is_mediatationTeacher") !== true && localStorage.getItem("is_annoymousUser") == true) {
       // Optional: Navigate to the doctor profile page if needed
       navigate("/profile/user/");
@@ -35,11 +32,11 @@ const DoctorProfile = () => {
 
   return (
     <Grid container spacing={3}>
-      <Grid item md={6}>
+      <Grid item md={5}>
         <DoctorProfileUpdate />
       </Grid>
       <Grid item md={6}>
-        <Appointment />
+        <AppointmentToDoctors />
       </Grid>
     </Grid>
   );

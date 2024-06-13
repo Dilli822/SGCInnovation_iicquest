@@ -4,6 +4,8 @@ from django.utils.text import slugify
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 class UserManager(BaseUserManager):
     use_in_migration = True
@@ -150,21 +152,26 @@ class MediatatorTeacherProfile(models.Model):
         if not self.email:
             self.email = self.user.email
         super().save(*args, **kwargs)
-        
-class Appointment(models.Model):
-    user = models.ForeignKey(UserData, on_delete=models.CASCADE, related_name='appointments')
-    doctor_or_teacher = models.ForeignKey(UserData, on_delete=models.CASCADE, related_name='scheduled_appointments')
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
-    details = models.TextField(blank=True)
 
-    def __str__(self):
-        return f"Appointment with {self.doctor_or_teacher} at {self.start_time}"
 
 class FreeTimeSlot(models.Model):
-    doctor_or_teacher = models.ForeignKey(UserData, on_delete=models.CASCADE, related_name='free_time_slots')
+    user = models.ForeignKey(UserData, on_delete=models.CASCADE, related_name='free_time_slots')
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
 
     def __str__(self):
-        return f"Free time slot for {self.doctor_or_teacher} from {self.start_time} to {self.end_time}"
+        return f"Free Time Slot for {self.user.username} from {self.start_time} to {self.end_time}"
+
+class Appointment(models.Model):
+    doctor = models.ForeignKey(UserData, on_delete=models.CASCADE, related_name='appointments_as_doctor')
+    free_time_slot = models.ForeignKey(FreeTimeSlot, on_delete=models.CASCADE, related_name='appointments')
+    user = models.ForeignKey(UserData, on_delete=models.CASCADE, related_name='appointments')
+    booked_datetime = models.DateTimeField(auto_now_add=True)
+    doctor_verify = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Appointment for {self.user.username} with {self.doctor.username} at {self.free_time_slot.start_time}"
+
+    class Meta:
+        ordering = ['-booked_datetime']
+    

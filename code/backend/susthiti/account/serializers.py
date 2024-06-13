@@ -52,9 +52,14 @@ class MediatatorTeacherProfileSerializer(serializers.ModelSerializer):
                 
                 
 from rest_framework import serializers
-from .models import FreeTimeSlot
+from .models import *
 
 class FreeTimeSlotSerializer(serializers.ModelSerializer):
     class Meta:
         model = FreeTimeSlot
-        fields = "__all__"
+        fields = '__all__'
+
+class AppointmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Appointment
+        fields = '__all__'
