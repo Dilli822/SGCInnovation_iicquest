@@ -11,6 +11,8 @@ import PaymentPage from "./components/payment/e-khalti";
 import DoctorProfile from "./components/Profile/DoctorProfile";
 import Feed from "./components/home/feed";
 import AptitudeTest from "./components/aptitudeTest/appitudeComp";
+import MediatatorProfile from "./components/MeditationInstructor/MeditatorProfile"
+import AnnoyUser from "./components/Profile/AnonyUser"
 
 export default function MainRouter() {
   return (
@@ -23,11 +25,10 @@ export default function MainRouter() {
       <Route path="/community" element={<Community />} />
       <Route path="/payment" element={<PaymentPage />} />
       <Route path="/profile/doctor" element={<DoctorProfile />} />
-      <Route path="/profile/mediator-teacher/" element={<DoctorProfile />} />
-      <Route path="/profile/user" element={<DoctorProfile />} />
+      <Route path="/profile/mediator-teacher" element={<MediatatorProfile/>} />
+      <Route path="/profile/user" element={<AnnoyUser />} />
       <Route path="/feed" element={<Feed />} />
-
-      <Route path="/aptitude-test/" element={<AptitudeTest />} />
+      <Route path="/aptitude-test" element={<AptitudeTest />} />
       <Route path="/feed" element={<Feed />} />
 
     </Routes>

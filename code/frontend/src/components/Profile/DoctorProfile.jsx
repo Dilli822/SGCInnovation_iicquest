@@ -1,46 +1,48 @@
-import Appointment from "../Appointment/Appointment";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import DoctorProfileUpdate from "./updateDoctor";
+import Appointment from "../Appointment/Appointment";
+
 import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Container,
-  IconButton,
-  Drawer,
-  List,
   Grid,
-  Card,
-  CardContent,
-  CardActionArea,
-  CardMedia,
-  ListItem,
-  ListItemText,
-  TextField,
-  Menu,
-  MenuItem,
-  useMediaQuery,
-  createTheme, // Import createTheme
 } from "@mui/material";
-export default function DoctorProfile(){
-  return(
-    <>
 
-    <Grid container>
-      <Grid item md={5}>
-      <DoctorProfileUpdate/>
+const DoctorProfile = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check user role based on localStorage
+    
+    if (localStorage.getItem("is_doctor") !== "true" && localStorage.getItem("is_mediatationTeacher") == true && localStorage.getItem("is_annoymousUser") != true) {
+      // Optional: Navigate to the doctor profile page if needed
+      navigate("/profile/mediator-teacher");
+    }
 
 
 
+
+    if (localStorage.getItem("is_doctor") !== "true" && localStorage.getItem("is_mediatationTeacher") !== true && localStorage.getItem("is_annoymousUser") == true) {
+      // Optional: Navigate to the doctor profile page if needed
+      navigate("/profile/user/");
+    }
+
+
+     if (localStorage.getItem("is_doctor") === "true" && localStorage.getItem("is_mediatationTeacher") !== true && localStorage.getItem("is_annoymousUser") !== true) {
+      // Optional: Navigate to the doctor profile page if needed
+      navigate("/profile/doctor/");
+    }
+  }, [navigate]);
+
+  return (
+    <Grid container spacing={3}>
+      <Grid item md={6}>
+        <DoctorProfileUpdate />
       </Grid>
-
-      <Grid  item md={5}>
-      <Appointment/>
+      <Grid item md={6}>
+        <Appointment />
       </Grid>
-
-
-
     </Grid>
+  );
+};
 
-    </>
-  )
-}
+export default DoctorProfile;

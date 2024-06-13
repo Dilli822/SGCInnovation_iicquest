@@ -166,6 +166,7 @@ const DoctorProfileUpdate = () => {
 
   return (
     <Container>
+
       <Card
         style={{
           padding: "24px",
@@ -175,6 +176,10 @@ const DoctorProfileUpdate = () => {
           borderRadius: "8px",
         }}
       >
+        <Typography variant="h5">
+        Doctor Profile
+        </Typography>
+    
         <Box display="flex" flexDirection="column">
           <Box
             display="flex"
@@ -202,6 +207,8 @@ const DoctorProfileUpdate = () => {
                 objectFit: "cover",
               }}
             />
+
+
             {profileEditMode && (
               <TextField
                 type="file"

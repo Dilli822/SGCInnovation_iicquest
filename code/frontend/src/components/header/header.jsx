@@ -150,20 +150,12 @@ const Header = () => {
     setSearchResults([]);
   };
 
-  const isSeller = localStorage.getItem("is_doctor") === "true";
-  const isBuyer = localStorage.getItem("is_anonymousUser") === "true";
-  const [products, setProducts] = useState({});
-  const [selectedProduct, setSelectedProduct] = useState(null);
-
-  const profileLink = isSeller ? "/profile/seller" : "/profile/buyer";
-
-  const handleCardClick = (product) => {
-    setSelectedProduct(product);
-    navigate(
-      `/product/${product.product_name}/${product.id}/${product.category_name}`,
-      { state: { product } }
-    ); // Pass product details as state
-  };
+  const isDoctor = localStorage.getItem("is_doctor") === "true";
+  const is_mediatationTeacher = localStorage.getItem("is_mediatationTeacher") === "true";
+  const AnnoyUser = localStorage.getItem("is_annoymousUser") === "true";
+  
+  const profileLink = isDoctor ? "/profile/doctor" : (is_mediatationTeacher ? "/profile/mediator-teacher" : "/profile/user");
+  
 
   const menuItems = (
     <List>
@@ -281,3 +273,4 @@ const Header = () => {
 };
 
 export default Header;
+

@@ -21,35 +21,49 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { v4 as uuidv4 } from "uuid";
+import FreeTimeSlots from "./Free_Slot_Time";
 
 const Appointment = () => {
   const [availableSlots, setAvailableSlots] = useState([]);
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
-  const [patientAppointments, setPatientAppointments] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      dob: "1990-01-15",
-      address: "123 Main St",
-      contact: "+1234567890",
-      datetime: "2024-06-14 10:00",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      dob: "1985-08-20",
-      address: "456 Elm St",
-      contact: "+1987654321",
-      datetime: "2024-06-14 11:00",
-    },
-  ]);
+  const [patientAppointments, setPatientAppointments] = useState([]);
+  const [slotSaved, setSlotSaved] = useState(false); // State to track if slot was saved successfully
 
-  const handleAddSlot = () => {
+  const handleAddSlot = async () => {
     if (date && time) {
-      setAvailableSlots([...availableSlots, { id: uuidv4(), date, time }]);
+      const newSlot = { id: uuidv4(), date, time };
+      setAvailableSlots([...availableSlots, newSlot]);
       setDate("");
       setTime("");
+
+      try {
+        const response = await fetch(
+          "http://localhost:8000/sushtiti/account/free-time-slots/",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+            body: JSON.stringify({
+              start_time: `${date}T${time}:00`,
+              end_time: `${date}T${time}:00`,
+              doctor_or_teacher: localStorage.getItem("userId"),
+            }),
+          }
+        );
+        if (response.ok) {
+          console.log("Slot saved successfully");
+          setSlotSaved(true); // Update state to indicate successful save
+          // Optionally, fetch updated patient appointments list here
+        } else {
+          const responseData = await response.json();
+          console.error("Failed to save slot:", responseData);
+        }
+      } catch (error) {
+        console.error("Error saving slot:", error);
+      }
     }
   };
 
@@ -103,21 +117,27 @@ const Appointment = () => {
             </Button>
           </Grid>
         </Grid>
+
+        <Grid>
+<FreeTimeSlots/>
+          
+        </Grid>
         <List>
-          {availableSlots.map((slot) => (
-            <ListItem key={slot.id}>
-              <ListItemText primary={`${slot.date} ${slot.time}`} />
-              <ListItemSecondaryAction>
-                <IconButton
-                  edge="end"
-                  aria-label="delete"
-                  onClick={() => handleDeleteSlot(slot.id)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
+          {slotSaved &&
+            availableSlots.map((slot) => (
+              <ListItem key={slot.id}>
+                <ListItemText primary={`${slot.date} ${slot.time}`} />
+                <ListItemSecondaryAction>
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={() => handleDeleteSlot(slot.id)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+            ))}
         </List>
       </Box>
 
