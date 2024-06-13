@@ -2,6 +2,7 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import MainRouter from "./routes";
+import "./App.css"
 
 // import TipsCards from './components/TipsCards/TipsCards';
 

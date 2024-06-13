@@ -173,9 +173,9 @@ const FreeTimeSlots = () => {
   };
 
   return (
-    <Box sx={{ m: 4 }}>
+    <Box sx={{ m: 2 }}>
       <Typography variant="h4" component="h2" gutterBottom>
-        Available Free Time Slots
+        Doctor Available Free Time Slots
       </Typography>
 
       <TableContainer component={Paper}>

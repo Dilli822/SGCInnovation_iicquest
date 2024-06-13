@@ -15,6 +15,7 @@ import {
   DialogActions,
   DialogContentText,
   Snackbar,
+  Grid,
   Alert,
 } from "@mui/material";
 import { Cancel } from "@mui/icons-material";
@@ -137,6 +138,9 @@ const AppointmentPlacementsTable = () => {
 
   return (
     <Container>
+      <Grid item md={12}>
+
+   
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -212,6 +216,7 @@ const AppointmentPlacementsTable = () => {
           {snackbarMessage}
         </Alert>
       </Snackbar>
+      </Grid>
     </Container>
   );
 };

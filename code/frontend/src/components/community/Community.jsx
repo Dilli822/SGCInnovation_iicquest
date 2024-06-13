@@ -9,6 +9,7 @@ import {
   Typography,
   Divider,
   IconButton,
+  Grid,
   InputAdornment,
   TextField,
 } from '@mui/material';
@@ -198,9 +199,30 @@ function Community() {
 
   return (
     <Box p={4}>
+          <Typography variant="h3" fontWeight="bold" spacing={2}>
+        Community & Support
+      </Typography>
+
       <Typography variant="h5" fontWeight="bold" mb={4}>
         Activity Feed
       </Typography>
+
+       {/* Search Input */}
+       <Box mb={4}>
+        <InputBase
+          placeholder="Search..."
+          value={searchTerm}
+          onChange={handleSearchChange}
+          startAdornment={
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          }
+          sx={{ p: 1, border: '1px solid #ccc', borderRadius: 1 }}
+          fullWidth
+        />
+      </Box>
+      
 
       {/* New Post Input */}
       <Box mb={4} display="flex" flexDirection="column">
@@ -222,6 +244,7 @@ function Community() {
           sx={{ mb: 2 }}
           fullWidth
         />
+        <Grid item md={3}>
         <Button 
           color="primary" 
           variant="contained" 
@@ -229,23 +252,11 @@ function Community() {
         >
           Post
         </Button>
+        </Grid>
+       
       </Box>
 
-      {/* Search Input */}
-      <Box mb={4}>
-        <InputBase
-          placeholder="Search..."
-          value={searchTerm}
-          onChange={handleSearchChange}
-          startAdornment={
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          }
-          sx={{ p: 1, border: '1px solid #ccc', borderRadius: 1 }}
-          fullWidth
-        />
-      </Box>
+     
 
       {/* Display Filtered Posts */}
       {filteredPosts.map(({ post, comments }) => (

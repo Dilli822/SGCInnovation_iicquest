@@ -5,6 +5,7 @@ import Notification from "../Notifications/Notifications";
 import {
   AppBar,
   Toolbar,
+  Button,
   Typography,
   Container,
   IconButton,
@@ -151,11 +152,15 @@ const Header = () => {
   };
 
   const isDoctor = localStorage.getItem("is_doctor") === "true";
-  const is_mediatationTeacher = localStorage.getItem("is_mediatationTeacher") === "true";
+  const is_mediatationTeacher =
+    localStorage.getItem("is_mediatationTeacher") === "true";
   const AnnoyUser = localStorage.getItem("is_annoymousUser") === "true";
-  
-  const profileLink = isDoctor ? "/profile/doctor" : (is_mediatationTeacher ? "/profile/mediator-teacher" : "/profile/user");
-  
+
+  const profileLink = isDoctor
+    ? "/profile/doctor"
+    : is_mediatationTeacher
+    ? "/profile/mediator-teacher"
+    : "/profile/user";
 
   const menuItems = (
     <List>
@@ -181,59 +186,90 @@ const Header = () => {
   return (
     <>
       <AppBar position="sticky" sx={{ bgcolor: "#FFFFFF", color: "#000" }}>
-        <Grid container>
-          <Grid item xs={6} md={6}>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              <Link
-                to="/feed"
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                Logo
-                {/* <img
-                    src={HeadLogo}
-                    alt=""
-                    style={{ width: "50px", borderRadius: "15%" }}
-                  /> */}
-              </Link>
-            </Typography>
+        <Grid container style={{ display: "flex", alignItems: "center" }} id="mobileNav">
+          <Grid item xs={6}>
+            <img
+              src="https://raw.githubusercontent.com/aakashstha1/Susthiti/main/Logo.png"
+              alt=""
+              style={{ width: "150px" }}
+            />
           </Grid>
 
-          <Grid item xs={6} md={6}>
-            <div
-              style={{
-                float: "right",
-                display: "flex",
-                alignItems: "center",
+          <Grid item xs={6}>
+            <Grid container style={{ display: "flex", justifyContent: "flex-end"}}>
+              <Grid item>
+              <Link to="/aptitude-test" underline="none">
+              <Button
+              variant="text"
+              sx={{
+                color: "inherit",
+                textTransform: "none",
+                "&:hover": {
+                  backgroundColor: "transparent",
+                },
               }}
             >
-              <Notification />
-              {/* <Notifications /> */}
-              &nbsp;
-              {!isMobile && (
-                <IconButton onClick={handleMenuClick}>
-                  <AccountCircleIcon className={classes.largeIcon} />
-                </IconButton>
-              )}
-              <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-                keepMounted
-                sx={{ width: "250px" }}
-                MenuListProps={{
-                  sx: {
-                    width: "250px",
-                  },
-                }}
-              >
-                <Link
-                  to={profileLink}
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                </Link>
-              </Menu>
-              {isMobile && (
+
+              Apitutde Test
+            </Button>
+            </Link>
+              </Grid>
+
+              <Grid item>
+              <Link to="/community" underline="none">
+              <Button
+              variant="text"
+              sx={{
+                color: "inherit",
+                textTransform: "none",
+                "&:hover": {
+                  backgroundColor: "transparent",
+                },
+              }}
+            >
+              Join Our Community
+            </Button>
+            </Link>
+              </Grid>
+
+
+              <Grid item>
+              <Link to="/login" underline="none">
+              <Button
+              variant="text"
+              sx={{
+                color: "inherit",
+                textTransform: "none",
+                "&:hover": {
+                  backgroundColor: "transparent",
+                },
+              }}
+            >
+              {/* Login/Register */}Profile
+            </Button>
+            </Link>
+              </Grid>
+
+            </Grid>
+           
+
+
+
+          </Grid>
+        </Grid>
+
+        {isMobile && (
+          <Grid container style={{ display: "flex", alignItems: "center" }}>
+            <Grid item xs={6}>
+              <img
+                src="https://raw.githubusercontent.com/aakashstha1/Susthiti/main/Logo.png"
+                alt=""
+                style={{ width: "150px" }}
+              />
+            </Grid>
+
+            <Grid item xs={6}>
+              <div style={{ float: "right" }}>
                 <IconButton
                   color="inherit"
                   aria-label="open drawer"
@@ -242,10 +278,10 @@ const Header = () => {
                 >
                   <MenuIcon />
                 </IconButton>
-              )}
-            </div>
+              </div>
+            </Grid>
           </Grid>
-        </Grid>
+        )}
       </AppBar>
       <Container>
         <Grid container>
@@ -273,4 +309,3 @@ const Header = () => {
 };
 
 export default Header;
-

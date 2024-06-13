@@ -191,9 +191,9 @@ export default function SignUp() {
                     onChange={(e) => setUserType(e.target.value)}
                     label="User Type"
                   >
-                    <MenuItem value="is_annoymousUser">Doctor</MenuItem>
-                    <MenuItem value="is_doctor">Mediatator</MenuItem>
-                    <MenuItem value="is_annoymousUser">Annoymous User</MenuItem>
+                    <MenuItem value="is_annoymousUser"> Annoymous User </MenuItem>
+                    <MenuItem value="is_Doctor">Doctor </MenuItem>
+                    <MenuItem value="is_mediatationTeacher">Mediatation Teacher</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>

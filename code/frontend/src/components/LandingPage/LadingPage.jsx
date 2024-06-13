@@ -5,26 +5,90 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Container,
+  Grid,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Emergency from "../Emergency/Emergency";
+import Widget from "../Widget/Widget";
 import Projects from "../Project/Projects";
 
-export default function Widget() {
+export default function LandingPage() {
   return (
     <>
-      <Projects />
-      <Box bgcolor="teal" color="white" p={4}>
-        <Typography variant="h3" align="center" mb={4} fontWeight="bold">
-          Common questions
+      {/* <Emergency /> */}
+      {/* <Carousel/> */}
+
+      <Grid container></Grid>
+
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        style={{
+          backgroundImage: `url("https://raw.githubusercontent.com/aakashstha1/Susthiti/main/Frame%2013.jpg")`,
+          backgroundSize: "contain",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          height: "60vh", // Adjust height as needed
+        }}
+      >
+        <Grid container>
+          <Grid item md={1}></Grid>
+
+          <Grid item md={6}>
+            <Typography variant="h3">Stronger Minds, Together</Typography>
+            <br />
+
+            <Typography align="left" variant="body1">
+              Join our community of like-minded individuals committed to
+              personal growth and collective well-being. Together, we explore
+              the depths of human potential and support each other on the
+              journey to becoming the best versions of ourselves.
+            </Typography>
+          </Grid>
+        </Grid>
+
+        {/* Add content inside the Grid if needed */}
+      </Grid>
+      <br />
+      <br />
+      <br />
+      <br />
+      <Widget />
+
+      <br />
+      <br />
+    
+      <Box color="white" p={4}>
+      <hr />
+        <br />
+        <br />
+     
+        <Grid container>
+        <Grid item md={11}>
+        <Typography variant="h3" align="left" mb={2} sx={{ color: "#000" }}>
+          Frequently Asked Questions
         </Typography>
-        <Typography variant="body1" align="center" mb={8}>
+        <Typography align="left" sx={{ color: "#000", fontSize: "18px" }}>
           Curiosity is an important part of taking care of ourselves and those
-          we care about. Asking questions and staying informed helps protect and
+          we care about.
+          </Typography>
+          {/* "#4FC3F7",  */}
+        <Typography align="left" sx={{ color: "#000", fontSize: "18px" }}>
+ Asking
+           questions and staying informed helps protect and
           improve our emotional health.
         </Typography>
+          </Grid>
+          </Grid>
+        <br />
+        <hr />
+        <br />
+        <br />
+  
         <Box>
-          <Accordion>
+          <Accordion sx={{ backgroundColor: "#fff", color: "black", mb: 2 }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
@@ -44,7 +108,7 @@ export default function Widget() {
             </AccordionDetails>
           </Accordion>
 
-          <Accordion>
+          <Accordion sx={{ backgroundColor: "#fff", color: "black", mb: 2 }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel2a-content"
@@ -66,7 +130,7 @@ export default function Widget() {
             </AccordionDetails>
           </Accordion>
 
-          <Accordion>
+          <Accordion sx={{ backgroundColor: "#fff", color: "black", mb: 2 }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel3a-content"
@@ -86,7 +150,7 @@ export default function Widget() {
             </AccordionDetails>
           </Accordion>
 
-          <Accordion>
+          <Accordion sx={{ backgroundColor: "#fff", color: "black", mb: 2 }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel4a-content"
@@ -107,7 +171,7 @@ export default function Widget() {
             </AccordionDetails>
           </Accordion>
 
-          <Accordion>
+          <Accordion sx={{ backgroundColor: "#fff", color: "black", mb: 2 }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel5a-content"
@@ -127,7 +191,7 @@ export default function Widget() {
             </AccordionDetails>
           </Accordion>
 
-          <Accordion>
+          <Accordion sx={{ backgroundColor: "#fff", color: "black", mb: 2 }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel6a-content"
@@ -148,7 +212,6 @@ export default function Widget() {
           </Accordion>
         </Box>
       </Box>
-      <Emergency />
     </>
   );
 }

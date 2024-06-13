@@ -34,7 +34,6 @@ import {
   createTheme, // Import createTheme
 } from "@mui/material";
 
-
 function Feed() {
   // Function to fetch user data and store user ID in localStorage
   const fetchUserData = async () => {
@@ -80,39 +79,10 @@ function Feed() {
   return (
     <>
       <Header />
+      <Grid container spacing={2}></Grid>
+      <LandingPage />
+      <GeolocationComponent />
 
-      <Banner />
-
- 
-      <Grid container spacing={2}>
-      {/* Grid item for the image */}
-      <Grid item xs={6}>
-        <img
-          src="https://unsplash.it/555/"
-          alt="Placeholder image"
-          style={{ maxWidth: "100%", height: "auto" }}
-        />
-      </Grid>
-
-      {/* Grid item for other content */}
-      <Grid item xs={6}>
-        {/* Place your content here */}
-      </Grid>
-      </Grid>
-  
-
-   
-  
-
-
-
-      <LandingPage/>
-
-      
-
-      <GeolocationComponent/>
-
-      {/* <PieChartComponent/> */}
 
       <TipsCards />
 

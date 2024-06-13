@@ -70,19 +70,22 @@ const EmergencySupport = () => {
   return (
     <Card sx={{ margin: 2 }}>
       <CardContent>
-        <Box display="flex" alignItems="center" mb={2}>
-          <HelpIcon color="error" fontSize="large" />
+
+        <Grid container>
+          <Grid item md={6}>
+<HelpIcon color="error" fontSize="large" />
           <Typography variant="h6" ml={2}>
             Emergency Support
           </Typography>
-        </Box>
+
         <Typography variant="body1" mb={2}>
           If you need immediate assistance, please use one of the following
           options to contact our support team.
         </Typography>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={2}>
-            <Button
+          </Grid>
+
+          <Grid item md={6}>
+          <Button
               variant="contained"
               color="error"
               startIcon={<PhoneIcon />}
@@ -102,6 +105,14 @@ const EmergencySupport = () => {
             >
               Email Us
             </Button>
+</Grid>
+
+        </Grid>
+
+          
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} md={2}>
+           
           </Grid>
         </Grid>
 

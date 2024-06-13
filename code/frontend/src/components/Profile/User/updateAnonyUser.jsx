@@ -21,17 +21,18 @@ const AnyUserProfileUpdate = () => {
   const [error, setError] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [initialProfileData, setInitialProfileData] = useState({});
+  const [annyId, setAnnyId] = useState();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     fetchUserId();
   }, []);
 
-  useEffect(() => {
-    if (userId) {
-      fetchProfileData();
-    }
-  }, [userId]);
+  // useEffect(() => {
+  //   if (userId) {
+  //     fetchProfileData();
+  //   }
+  // }, [userId]);
 
   const fetchUserId = async () => {
     try {
@@ -45,6 +46,7 @@ const AnyUserProfileUpdate = () => {
       );
       if (response.ok) {
         const data = await response.json();
+
         setUserId(data.id);
         setBuyerName(data.username);
         setBuyerEmail(data.email);
@@ -56,27 +58,19 @@ const AnyUserProfileUpdate = () => {
     }
   };
 
-  const fetchProfileData = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:8000/sushtiti/account/anonymous-users/${userId}/`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setProfileData(data);
-        setInitialProfileData(data);
-      } else {
-        setError("Failed to fetch profile data");
-      }
-    } catch (error) {
-      setError("Error fetching profile data");
-    }
-  };
+  const [userIds, setUserIds] = useState([]);
+
+  useEffect(() => {
+    // Fetch data from API
+    fetch("http://localhost:8000/sushtiti/account/users/self")
+      .then((response) => response.json())
+      .then((data) => {
+        // Extract annonyuser_id values from the response
+        const ids = data.map((user) => user.annonyuser_id);
+        setUserIds(ids); // Store IDs in state
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
 
   const handleLogout = () => {
     setOpen(true);
@@ -105,9 +99,9 @@ const AnyUserProfileUpdate = () => {
       formData.append("address", profileData.address);
       formData.append("phone_number", profileData.phone_number);
       formData.append("bio", profileData.bio);
-      formData.append("user", userId);
+      let Aaaid = localStorage.getItem("Aid");
       const response = await fetch(
-        `http://localhost:8000/sushtiti/account/anonymous-users/${userId}/`,
+        `http://localhost:8000/sushtiti/account/anonymous-users/1/`,
         {
           method: "PUT",
           headers: {
@@ -146,10 +140,6 @@ const AnyUserProfileUpdate = () => {
     setProfileEditMode(true);
   };
 
-  const handleSaveButtonClick = () => {
-    handleSaveProfile();
-  };
-
   const handleImageChange = (e) => {
     setImageFile(e.target.files[0]);
 
@@ -165,7 +155,7 @@ const AnyUserProfileUpdate = () => {
   };
 
   return (
-    <Container>
+    <>
       <Card
         style={{
           padding: "24px",
@@ -204,7 +194,6 @@ const AnyUserProfileUpdate = () => {
                 objectFit: "cover",
               }}
             />
-       
 
             {profileEditMode && (
               <TextField
@@ -231,7 +220,7 @@ const AnyUserProfileUpdate = () => {
             {buyerEmail}
           </Typography>
           <Typography variant="body1" style={{ marginBottom: "16px" }}>
-            ID: #{profileData.doctor_id}
+            ID: #{profileData.annonyuser_id}
           </Typography>
 
           <Typography variant="body1" style={{ marginBottom: "16px" }}>
@@ -292,7 +281,7 @@ const AnyUserProfileUpdate = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={handleSaveButtonClick}
+                  onClick={handleSaveProfile}
                   disabled={loading}
                   style={{ marginRight: "8px" }}
                 >
@@ -372,7 +361,7 @@ const AnyUserProfileUpdate = () => {
           </Box>
         </Box>
       </Modal>
-    </Container>
+    </>
   );
 };
 

@@ -4,11 +4,13 @@ import {
   Button,
   Typography,
   Box,
+  Link,
   CircularProgress,
 } from "@mui/material";
 import Question from "./appitude"; // Assuming you have a Question component
 import PieChartComponent from "../charts/pieChart";
 import { Pie } from 'react-chartjs-2';
+import AppFooter from "../footer/footer";
 
 const questionsData = {
   questions: [
@@ -232,31 +234,40 @@ const AptitudeTest = () => {
   };
     return (
       <Container>
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
         <Typography variant="h4">Quiz Results</Typography>
         <Typography variant="h6">Your score: {percentage}%</Typography>
-
+        <Link to="/">
+        <Button variant="outlined" onClick={window.reload}>
+        Back to Home
+        </Button>
+        </Link>
         {/* <Pie data={data} /> */}
-      </Container>
+      </Box>
+    </Container>
     );
   }
-
-
-
-
 
   const currentQuestion = questionsData.questions[currentQuestionIndex];
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>
-        Stress Test
-      </Typography>
+    <>
+
+
+     
       <Question
         question={currentQuestion.question}
         options={currentQuestion.options}
         selectedOption={answers[currentQuestionIndex] || ""}
         onChange={handleOptionChange}
       />
+      <Container>
       <Box mt={2}>
         {currentQuestionIndex > 0 && (
           <Button
@@ -287,7 +298,12 @@ const AptitudeTest = () => {
           </Button>
         )}
       </Box>
-    </Container>
+      </Container>
+      <br />      <br />      <br />      <br />      <br />      <br />
+    
+
+      <AppFooter/>
+    </>
   );
 };
 

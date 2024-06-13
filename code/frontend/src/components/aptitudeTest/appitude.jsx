@@ -8,11 +8,24 @@ import {
   FormControlLabel,
   FormControl,
   FormLabel,
-} from "@mui/material";
+  Container,
 
-const Question = ({ question, options, selectedOption, onChange }) => {
+} from "@mui/material";
+import AppFooter from "../footer/footer";
+import Header from "../header/header";
+import PublicHeader from "../header/header_public";
+
+;const Question = ({ question, options, selectedOption, onChange }) => {
   return (
-    <Card variant="outlined">
+    <>
+    <Header/>
+
+    <Container> 
+    <br />
+    <Typography variant="h5" gutterBottom>
+        Stress/Aptitude Test
+      </Typography>
+    <Card variant="outlined" mt={2}>
       <CardContent>
         <FormControl component="fieldset">
           <FormLabel component="legend">
@@ -35,6 +48,9 @@ const Question = ({ question, options, selectedOption, onChange }) => {
         </FormControl>
       </CardContent>
     </Card>
+    </Container>
+
+    </>
   );
 };
 

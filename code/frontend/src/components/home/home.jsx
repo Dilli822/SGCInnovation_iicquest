@@ -6,7 +6,7 @@ import AppFooter from "../footer/footer";
 import Notification from "../Notifications/Notifications";
 import HeaderPublic from "../header/header_public";
 import { useNavigate } from "react-router-dom";
-import LandingPage from "../LandingPage/LadingPage"
+import LandingPage from "../LandingPage/LadingPage";
 import React, { useState, useEffect } from "react";
 import EmergencySupport from "../Emergency/Emergency";
 import PieChartComponent from "../charts/pieChart";
@@ -45,26 +45,9 @@ function Home() {
   return (
     <>
       <HeaderPublic />
-      <Banner />
-
-      <Grid container>
-
-        <Grid item={6}>
-          <img src="https://unsplash/it/555" alt="" />
-
-        </Grid>
-
-        <Grid item={16}>
-
-        </Grid>
-
-      </Grid>
-      
-      <GeolocationComponent/>
-      <LandingPage/>
-    
+      <GeolocationComponent />
+      <LandingPage />
       <TipsCards />
-
       <AppFooter />
     </>
   );

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DoctorProfileUpdate from "../Doctor/updateDoctor";
 import Appointment from "../../Appointment/Appointment";
-
+import AppHeader from "../../header/header";
 import { Grid } from "@mui/material";
 import AnyUserProfileUpdate from "./updateAnonyUser";
 import FreeTimeSlots from "../../Appointment/Free_Slot_Time";
@@ -43,17 +43,21 @@ const AnnoyUser = () => {
   }, [navigate]);
 
   return (
-    <Grid container spacing={3}>
-      <Grid item md={6}>
-        <AnyUserProfileUpdate />
+    <>
+    <AppHeader/>
+      <Grid container spacing={3}>
+        <Grid item md={6}>
+          <AnyUserProfileUpdate />
+        </Grid>
+        <Grid item md={6}>
+          <FreeTimeSlots />
+        </Grid>
       </Grid>
-      <Grid item md={6}>
-        <FreeTimeSlots />
-      </Grid>
-      <Grid item md={6}>
+
+      <Grid item md={12}>
         <AppointmentPlacementsList />
       </Grid>
-    </Grid>
+    </>
   );
 };
 

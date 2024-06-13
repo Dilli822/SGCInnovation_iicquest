@@ -63,7 +63,7 @@ const DoctorProfileUpdate = () => {
   const fetchDoctorData = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/sushtiti/account/doctors/self/",
+        "http://localhost:8000/sushtiti/account/doctors/self",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
