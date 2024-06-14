@@ -1,287 +1,306 @@
-// import React, { useState } from "react";
-// import { useLocation } from "react-router-dom";
-// import { Link, useNavigate } from "react-router-dom";
-// import { Close as CloseIcon } from "@material-ui/icons";
+import React, { useState, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Close as CloseIcon } from "@material-ui/icons";
+import Notification from "../Notifications/Notifications";
+import {
+  AppBar,
+  Button,
+  Container,
+  IconButton,
+  Drawer,
+  List,
+  Grid,
+  ListItem,
+  ListItemText,
+  useMediaQuery,
+  createTheme, // Import createTheme
+} from "@mui/material";
 
-import Header from "./header";
+import { ShoppingCart, Search, Notifications } from "@material-ui/icons";
+// import HeadLogo from "../assets/logo/e-com logo.jpg";
 
-// import {
-//   AppBar,
-//   Toolbar,
-//   Typography,
-//   Container,
-//   IconButton,
-//   Drawer,
-//   List,
-//   Grid,
-//   ListItem,
-//   ListItemText,
-//   TextField,
-//   Menu,
-//   MenuItem,
-//   useMediaQuery,
-//   ThemeProvider,
-//   createTheme,
-// } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { makeStyles } from "@material-ui/core/styles";
+const theme = createTheme(); // Create a theme
 
-// import { ShoppingCart, Search } from "@material-ui/icons";
-// import MenuIcon from "@mui/icons-material/Menu";
-// import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-// import { makeStyles } from "@material-ui/core/styles";
+const useStyles = makeStyles((theme) => ({
+  cartLink: {
+    textDecoration: "none",
+    color: "red",
+    display: "flex",
+    alignItems: "center",
+  },
+  cartIcon: {
+    marginRight: theme.spacing(1),
+    color: "red", // Change color to red
+    // border: "1px solid red", // Add border for outline effect
+    borderRadius: "5%", // Optional: To make it circular
+    padding: theme.spacing(0.35), // Optional: Adjust padding for spacing
+  },
+  cartText: {
+    fontWeight: "bold",
+    color: "red", // Change text color to red
+  },
+  largeIcon: {
+    fontSize: "2.15rem!important", // Adjust the size as needed
+    color: theme.palette.primary.secondary, // Change color to match your theme
+  },
+  searchContainer: {
+    display: "flex",
+    alignItems: "center",
+    width: "100%",
+  },
+  searchInput: {
+    width: "100%",
+    background: "#fff!important",
+    border: "2px solid #ccc",
+    borderRadius: "5px",
+    padding: theme.spacing(1),
+    paddingLeft: theme.spacing(2),
+    transition: "border-color 0.3s ease!important",
+    "&:hover, &:focus": {
+      borderColor: theme.palette.primary.main,
+    },
+  },
 
-// const theme = createTheme(); // Create a theme object
+  searchResults: {
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[3],
+    borderRadius: theme.shape.borderRadius,
+    overflowY: "auto",
+  },
+  searchResultItem: {
+    padding: theme.spacing(1, 2),
+    "&:hover": {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+}));
 
-// const useStyles = makeStyles((theme) => ({
-//   // Your existing styles
-// }));
+const HeaderPublic = () => {
+  const classes = useStyles();
 
-// const HeaderPublic = () => {
-//   const classes = useStyles();
-//   const location = useLocation();
+  const navigate = useNavigate();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [searchText, setSearchText] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-//   const isAuthPage =
-//     location.pathname === "/login" ||
-//     location.pathname === "/signup" ||
-//     location.pathname === "/forgot-password";
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-//   const navigate = useNavigate();
-//   const [drawerOpen, setDrawerOpen] = useState(false);
-//   const [anchorEl, setAnchorEl] = useState(null);
-//   const [searchText, setSearchText] = useState("");
-//   const [searchResults, setSearchResults] = useState([]);
-//   const isMobile = useMediaQuery(theme.breakpoints.down("md")); // Using useMediaQuery with theme.breakpoints
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
+  };
 
-//   const handleMenuClick = (event) => {
-//     setAnchorEl(event.currentTarget);
-//   };
+  const handleClose = () => {
+    setAnchorEl(null);
+    setDrawerOpen(false); // Close drawer on menu item click
+  };
 
-//   const toggleDrawer = () => {
-//     setDrawerOpen(!drawerOpen);
-//   };
+  const handleSearchChange = async (event) => {
+    const { value } = event.target;
+    setSearchText(value);
 
-//   const handleClose = () => {
-//     setAnchorEl(null);
-//     setDrawerOpen(false);
-//   };
+    if (value.trim() === "") {
+      // Close search results if input is empty
+      setSearchResults([]);
+      return;
+    }
 
-//   const handleSearchChange = async (event) => {
-//     const { value } = event.target;
-//     setSearchText(value);
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/e-com/api/products/public/list/?search=${value}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch search results");
+      }
+      const data = await response.json();
 
-//     if (value.trim() === "") {
-//       setSearchResults([]);
-//       return;
-//     }
+      // Filter the data based on the search input
+      const filteredResults = Object.keys(data).reduce((acc, category) => {
+        const filteredCategory = data[category].filter((product) =>
+          product.product_name.toLowerCase().includes(value.toLowerCase())
+        );
+        if (filteredCategory.length > 0) {
+          acc[category] = filteredCategory;
+        }
+        return acc;
+      }, {});
 
-//     try {
-//       const response = await fetch(
-//         `http://127.0.0.1:8000/e-com/api/products/public/list/?search=${value}`
-//       );
-//       if (!response.ok) {
-//         throw new Error("Failed to fetch search results");
-//       }
-//       const data = await response.json();
+      setSearchResults(filteredResults);
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+    }
+  };
 
-//       const filteredResults = Object.keys(data).reduce((acc, category) => {
-//         const filteredCategory = data[category].filter((product) =>
-//           product.product_name.toLowerCase().includes(value.toLowerCase())
-//         );
-//         if (filteredCategory.length > 0) {
-//           acc[category] = filteredCategory;
-//         }
-//         return acc;
-//       }, {});
+  const closeSearch = () => {
+    setSearchText("");
+    setSearchResults([]);
+  };
 
-//       setSearchResults(filteredResults);
-//     } catch (error) {
-//       console.error("Error fetching search results:", error);
-//     }
-//   };
+  const isDoctor = localStorage.getItem("is_doctor") === "true";
+  const is_mediatationTeacher =
+    localStorage.getItem("is_mediatationTeacher") === "true";
+  const AnnoyUser = localStorage.getItem("is_annoymousUser") === "true";
 
-//   const closeSearch = () => {
-//     setSearchText("");
-//     setSearchResults([]);
-//   };
+  const profileLink = isDoctor
+    ? "/profile/doctor"
+    : is_mediatationTeacher
+    ? "/profile/mediator-teacher"
+    : "/profile/user";
 
-//   const isSeller = localStorage.getItem("IsSeller") === "true";
-//   const isBuyer = localStorage.getItem("IsBuyer") === "true";
-//   const [selectedProduct, setSelectedProduct] = useState(null);
+  const menuItems = (
+    <List>
+      <ListItem button onClick={handleClose}>
+        <Link
+          to="/cart/details/"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <ListItemText primary="Cart" />
+        </Link>
+      </ListItem>
+      <ListItem button onClick={handleClose}>
+        <Link
+          to={profileLink}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <ListItemText primary="Profile" />
+        </Link>
+      </ListItem>
+    </List>
+  );
 
-//   const profileLink = isSeller ? "/profile/seller" : "/profile/buyer";
-
-//   const handleCardClick = (product) => {
-//     setSelectedProduct(product);
-//     navigate(
-//       `/product/${product.product_name}/${product.id}/${product.category_name}`,
-//       { state: { product } }
-//     );
-//   };
-
-//   const menuItems = (
-//     <List>
-//       <ListItem button onClick={handleClose}>
-//         <Link to="/login" style={{ textDecoration: "none", color: "inherit" }}>
-//           <ListItemText primary="Login" />
-//         </Link>
-//       </ListItem>
-//       <ListItem button onClick={handleClose}>
-//         <Link to="/signup" style={{ textDecoration: "none", color: "inherit" }}>
-//           <ListItemText primary="Signup" />
-//         </Link>
-//       </ListItem>
-//     </List>
-//   );
-
-//   return (
-//     <ThemeProvider theme={theme}> {/* Wrap your component with ThemeProvider */}
-//       <>
-//         <AppBar position="sticky" sx={{ bgcolor: "#FFFFFF", color: "#000" }}>
-//           <Container>
-//             <Grid
-//               container
-//               style={{
-//                 display: "flex",
-//                 alignItems: "center",
-//                 padding: "5px 0",
-//               }}
-//             >
-//               <Grid item xs={3} md={3}>
-//                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-//                   <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-//                     Logo
-//                   </Link>
-//                 </Typography>
-//               </Grid>
-
-//               <Grid item xs={6} md={4}>
-//                 {!isAuthPage && (
-//                   <div className={classes.searchContainer}>
-//                     <TextField
-//                       className={classes.searchInput}
-//                       placeholder="Search..."
-//                       variant="outlined"
-//                       value={searchText}
-//                       onChange={handleSearchChange}
-//                       id="masterSearchInput"
-//                     />
-//                     &nbsp;
-//                     {searchText && (
-//                       <IconButton
-//                         className={classes.closeIcon}
-//                         onClick={closeSearch}
-//                       >
-//                         <CloseIcon color="secondary" />
-//                       </IconButton>
-//                     )}
-//                   </div>
-//                 )}
-//               </Grid>
-
-//               <Grid item xs={3} md={5}>
-//                 <div
-//                   style={{
-//                     float: "right",
-//                     display: "flex",
-//                     alignItems: "center",
-//                   }}
-//                 >
-//                   {/* <Link to="/cart/details" className={classes.cartLink}>
-//                     <ShoppingCart className={classes.cartIcon} />
-//                     <span className={classes.cartText}></span> */}
-//                   {/* </Link> */}
-//                   &nbsp;
-//                   {!isMobile && (
-//                     <>
-//                       <ListItem
-//                         button
-//                         component={Link}
-//                         to="/login"
-//                         onClick={handleClose}
-//                       >
-//                         <ListItemText primary="Login" />
-//                       </ListItem>
-
-//                       <ListItem
-//                         button
-//                         component={Link}
-//                         to="/signup"
-//                         onClick={handleClose}
-//                       >
-//                         <ListItemText primary="Signup" />
-//                       </ListItem>
-//                     </>
-//                   )}
-//                   <Menu
-//                     anchorEl={anchorEl}
-//                     open={Boolean(anchorEl)}
-//                     onClose={handleClose}
-//                     keepMounted
-//                     sx={{ width: "250px" }}
-//                     MenuListProps={{
-//                       sx: {
-//                         width: "250px",
-//                       },
-//                     }}
-//                   >
-//                     <Link
-//                       to={profileLink}
-//                       style={{ textDecoration: "none", color: "inherit" }}
-//                     >
-//                       <MenuItem onClick={handleClose}>Profile</MenuItem>
-//                     </Link>
-//                   </Menu>
-//                   {isMobile && (
-//                     <IconButton
-//                       color="inherit"
-//                       aria-label="open drawer"
-//                       edge="start"
-//                       onClick={toggleDrawer}
-//                     >
-//                       <MenuIcon />
-//                     </IconButton>
-//                   )}
-//                 </div>
-//               </Grid>
-//             </Grid>
-//           </Container>
-//         </AppBar>
-//         <Container>
-//           <Grid container>
-//             <Grid
-//               item
-//               xs={10}
-//               style={{ zIndex: 999, width: "100%", position: "fixed" }}
-//             >
-              
-          
-//             </Grid>
-//           </Grid>
-//         </Container>
-
-//         {isMobile && (
-//           <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer}>
-//             <div
-//               role="presentation"
-//               onClick={toggleDrawer}
-//               onKeyDown={toggleDrawer}
-//             >
-//               {menuItems}
-//             </div>
-//           </Drawer>
-//         )}
-//       </>
-//     </ThemeProvider>
-//   );
-// };
-
-// export default HeaderPublic;
-
-function HeaderPublic(){
-  return(
+  return (
     <>
-    <Header/>
+      <AppBar position="sticky" sx={{ bgcolor: "#FFFFFF", color: "#000" }}>
+        <Grid
+          container
+          style={{ display: "flex", alignItems: "center" }}
+          id="mobileNav"
+        >
+          <Grid item xs={6}>
+            <Link to="/">
+              <img
+                src="https://raw.githubusercontent.com/aakashstha1/Susthiti/main/Logo.png"
+                alt=""
+                style={{ width: "150px" }}
+              />
+            </Link>
+          </Grid>
+
+          <Grid item xs={6}>
+            <Grid
+              container
+              style={{ display: "flex", justifyContent: "flex-end" }}
+            >
+              <Grid item>
+                <Link to="/aptitude-test" underline="none">
+                  <Button
+                    variant="text"
+                    sx={{
+                      color: "inherit",
+                      textTransform: "none",
+                      "&:hover": {
+                        backgroundColor: "transparent",
+                      },
+                    }}
+                  >
+                    Apitutde Test
+                  </Button>
+                </Link>
+              </Grid>
+
+              <Grid item>
+                <Link to="/community" underline="none">
+                  <Button
+                    variant="text"
+                    sx={{
+                      color: "inherit",
+                      textTransform: "none",
+                      "&:hover": {
+                        backgroundColor: "transparent",
+                      },
+                    }}
+                  >
+                    Join Our Community
+                  </Button>
+                </Link>
+              </Grid>
+
+              <Grid item>
+                <Link to="/login" underline="none">
+                  <Button
+                    variant="text"
+                    sx={{
+                      color: "inherit",
+                      textTransform: "none",
+                      "&:hover": {
+                        backgroundColor: "transparent",
+                      },
+                    }}
+                  >
+                    {/* Login/Register */}Login/Signup
+                  </Button>
+                </Link>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        <Container> 
+        {isMobile && (
+          <Grid container >
+            <Grid item xs={6}>
+              <img
+                src="https://raw.githubusercontent.com/aakashstha1/Susthiti/main/Logo.png"
+                alt=""
+                style={{ width: "150px" }}
+              />
+            </Grid>
+
+            <Grid item xs={6}>
+              <div style={{ float: "right" }}>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  edge="start"
+                  onClick={toggleDrawer}
+                >
+                  <MenuIcon />
+                </IconButton>
+              </div>
+            </Grid>
+          </Grid>
+        )}
+        </Container>
+      </AppBar>
+      <Container>
+        <Grid container>
+          <Grid
+            item
+            xs={10}
+            style={{ zIndex: 999, width: "100%", position: "fixed" }}
+          ></Grid>
+        </Grid>
+      </Container>
+
+      {isMobile && (
+        <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer}>
+          <div
+            role="presentation"
+            onClick={toggleDrawer}
+            onKeyDown={toggleDrawer}
+          >
+            {menuItems}
+          </div>
+        </Drawer>
+      )}
     </>
-  )
-}
+  );
+};
 
 export default HeaderPublic;

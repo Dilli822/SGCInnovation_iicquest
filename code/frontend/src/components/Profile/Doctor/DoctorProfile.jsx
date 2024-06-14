@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "../../header/header";
+import Footer from "../../footer/footer"
 import DoctorProfileUpdate from "./updateDoctor";
 import AppointmentToDoctors from "../../Appointment/Appointment";
 
@@ -31,6 +33,9 @@ const DoctorProfile = () => {
   }, [navigate]);
 
   return (
+    <> 
+        <Header/>
+
     <Grid container spacing={3}>
       <Grid item md={5}>
         <DoctorProfileUpdate />
@@ -39,6 +44,9 @@ const DoctorProfile = () => {
         <AppointmentToDoctors />
       </Grid>
     </Grid>
+
+    <Footer/>
+    </>
   );
 };
 

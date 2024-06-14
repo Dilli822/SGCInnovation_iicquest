@@ -18,7 +18,7 @@ import PublicHeader from "../header/header_public";
 ;const Question = ({ question, options, selectedOption, onChange }) => {
   return (
     <>
-    <Header/>
+    <PublicHeader/>
 
     <Container> 
     <br />

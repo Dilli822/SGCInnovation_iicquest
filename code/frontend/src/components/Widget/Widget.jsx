@@ -1,6 +1,7 @@
 import React from "react";
 import { Typography, Button, Grid, Box } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Link } from "react-router-dom";
 
 const theme = createTheme();
 
@@ -52,16 +53,21 @@ const Widget = () => {
           or simply need a moment to recharge, remember that there are steps you
           can take to support yourself and others around you.
         </Typography>
+        <span> We have Some Exercises For You! </span>
         <Box mt={2}>
-          <Button
-            variant="contained"
-            sx={{ mr: 2, backgroundColor: "#4FC3F7" }}
-          >
-            FOR YOU
-          </Button>
-          <Button variant="outlined" sx={{ color: "#4FC3F7" }}>
-            FOR A FRIEND
-          </Button>
+          <Link to="/engagement">
+            <Button
+              variant="contained"
+              sx={{ mr: 2, backgroundColor: "#4FC3F7" }}
+            >
+              FOR YOU
+            </Button>
+          </Link>
+          <Link to="/community">
+            <Button variant="outlined" sx={{ color: "#4FC3F7" }}>
+              FOR A FRIEND
+            </Button>
+          </Link>
         </Box>
       </Grid>
     </Grid>

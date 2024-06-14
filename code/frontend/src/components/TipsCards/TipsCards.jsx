@@ -44,10 +44,12 @@ const TipsCards = () => {
       style={{ position: "fixed", bottom: "24px", right: "24px" }}
     >
       <SnackbarContent
-        style={{ backgroundColor: "#fff", color: "#333", maxWidth: "400px" }}
+        style={{ backgroundColor: "#4FC3F7", color: "#000", maxWidth: "400px" }}
         message={
           <div style={{ display: "flex", alignItems: "center" }}>
-            <span style={{ marginRight: "auto" }}>{quotes[currentQuoteIndex]}</span>
+            <span style={{ marginRight: "auto" }}>
+              {quotes[currentQuoteIndex]}
+            </span>
             <IconButton
               size="small"
               aria-label="close"

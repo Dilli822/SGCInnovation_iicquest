@@ -158,7 +158,7 @@ const MeditatorProfile = () => {
         </Grid>
 
         {/* Zoom Meeting Form */}
-        <Grid container spacing={4} my={4}>
+        {/* <Grid container spacing={4} my={4}>
           <Grid item xs={12}>
             <Paper elevation={3} sx={{ p: 2 }}>
               <Typography variant="h5" component="h3" gutterBottom>
@@ -225,7 +225,7 @@ const MeditatorProfile = () => {
               </form>
             </Paper>
           </Grid>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Grid>
   );

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Box,
-  Container,
   Card,
   Typography,
   Button,
@@ -12,64 +11,45 @@ import {
 
 const AnyUserProfileUpdate = () => {
   const [profileData, setProfileData] = useState({});
-  const [userId, setUserId] = useState("");
   const [profileEditMode, setProfileEditMode] = useState(false);
-  const [buyerName, setBuyerName] = useState("");
-  const [buyerEmail, setBuyerEmail] = useState("");
+  const [bio, setBio] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [initialProfileData, setInitialProfileData] = useState({});
-  const [annyId, setAnnyId] = useState();
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    fetchUserId();
-  }, []);
-
-  // useEffect(() => {
-  //   if (userId) {
-  //     fetchProfileData();
-  //   }
-  // }, [userId]);
-
-  const fetchUserId = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:8000/sushtiti/account/auth/user/",
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-
-        setUserId(data.id);
-        setBuyerName(data.username);
-        setBuyerEmail(data.email);
-      } else {
-        setError("Failed to fetch user ID");
-      }
-    } catch (error) {
-      setError("Error fetching user ID");
-    }
-  };
-
   const [userIds, setUserIds] = useState([]);
 
   useEffect(() => {
-    // Fetch data from API
-    fetch("http://localhost:8000/sushtiti/account/users/self")
-      .then((response) => response.json())
-      .then((data) => {
-        // Extract annonyuser_id values from the response
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/sushtiti/account/users/self", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
         const ids = data.map((user) => user.annonyuser_id);
-        setUserIds(ids); // Store IDs in state
-      })
-      .catch((error) => console.error("Error fetching data:", error));
+        setUserIds(ids);
+        setProfileData(data[0]); // Assuming first user object for simplicity
+        setInitialProfileData(data[0]);
+        setBio(data[0].bio);
+        setPhoneNumber(data[0].phone_number);
+        localStorage.setItem("Aid", data[0].annonyuser_id); // Ensure Aid is set
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setError("Error fetching data");
+      }
+    };
+
+    fetchData();
   }, []);
 
   const handleLogout = () => {
@@ -85,10 +65,6 @@ const AnyUserProfileUpdate = () => {
     window.location.href = "/";
   };
 
-  const handleEditProfile = () => {
-    setProfileEditMode(true);
-  };
-
   const handleSaveProfile = async () => {
     setLoading(true);
     try {
@@ -99,9 +75,12 @@ const AnyUserProfileUpdate = () => {
       formData.append("address", profileData.address);
       formData.append("phone_number", profileData.phone_number);
       formData.append("bio", profileData.bio);
-      let Aaaid = localStorage.getItem("Aid");
+      const Aaaid = localStorage.getItem("Aid");
+      if (!Aaaid) {
+        throw new Error("Anonymous user ID is missing.");
+      }
       const response = await fetch(
-        `http://localhost:8000/sushtiti/account/anonymous-users/1/`,
+        `http://localhost:8000/sushtiti/account/anonymous-users/${Aaaid}/`,
         {
           method: "PUT",
           headers: {
@@ -118,6 +97,7 @@ const AnyUserProfileUpdate = () => {
       }
     } catch (error) {
       setMessage("Error updating profile data");
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -143,7 +123,6 @@ const AnyUserProfileUpdate = () => {
   const handleImageChange = (e) => {
     setImageFile(e.target.files[0]);
 
-    // Update the image preview immediately
     const reader = new FileReader();
     reader.onload = (e) => {
       setProfileData((prevData) => ({
@@ -196,7 +175,7 @@ const AnyUserProfileUpdate = () => {
             />
 
             {profileEditMode && (
-              <TextField
+              <input
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
@@ -213,22 +192,12 @@ const AnyUserProfileUpdate = () => {
           </Box>
           <span>Click on the Image to Change the picture.</span>
 
-          <Typography variant="h5" style={{ marginBottom: "8px" }}>
-            {buyerName}
-          </Typography>
-          <Typography variant="subtitle1" style={{ marginBottom: "8px" }}>
-            {buyerEmail}
-          </Typography>
-          <Typography variant="body1" style={{ marginBottom: "16px" }}>
-            ID: #{profileData.annonyuser_id}
-          </Typography>
-
           <Typography variant="body1" style={{ marginBottom: "16px" }}>
             Address:{" "}
             {profileEditMode ? (
               <TextField
                 name="address"
-                value={profileData.address}
+                value={profileData.address || ""}
                 onChange={handleInputChange}
                 style={{ width: "100%" }}
               />
@@ -242,7 +211,7 @@ const AnyUserProfileUpdate = () => {
             {profileEditMode ? (
               <TextField
                 name="phone_number"
-                value={profileData.phone_number}
+                value={profileData.phone_number || ""}
                 onChange={handleInputChange}
                 style={{ width: "100%" }}
               />
@@ -259,7 +228,7 @@ const AnyUserProfileUpdate = () => {
             {profileEditMode ? (
               <TextField
                 name="bio"
-                value={profileData.bio}
+                value={profileData.bio || ""}
                 onChange={handleInputChange}
                 style={{ width: "100%" }}
               />

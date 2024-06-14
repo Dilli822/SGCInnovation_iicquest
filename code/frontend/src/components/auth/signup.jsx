@@ -192,7 +192,7 @@ export default function SignUp() {
                     label="User Type"
                   >
                     <MenuItem value="is_annoymousUser"> Annoymous User </MenuItem>
-                    <MenuItem value="is_Doctor">Doctor </MenuItem>
+                    <MenuItem value="is_doctor">Doctor </MenuItem>
                     <MenuItem value="is_mediatationTeacher">Mediatation Teacher</MenuItem>
                   </Select>
                 </FormControl>

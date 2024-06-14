@@ -1,4 +1,36 @@
-import React, { useState } from "react";
+
+// import AppFooter from '../Footer/AppFooter'
+import HeaderNav from "../header/header";
+import Banner from "../Banner/Banner";
+import TipsCards from "../TipsCards/TipsCards";
+import AppFooter from "../footer/footer";
+import Notification from "../Notifications/Notifications";
+import HeaderPublic from "../header/header_public";
+import { useNavigate } from "react-router-dom";
+import LandingPage from "../LandingPage/LadingPage";
+import React, { useState, useEffect } from "react";
+
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Container,
+  IconButton,
+  Drawer,
+  List,
+  Grid,
+  Card,
+  CardContent,
+  CardActionArea,
+  CardMedia,
+  ListItem,
+  ListItemText,
+  TextField,
+  Menu,
+  MenuItem,
+  useMediaQuery,
+  createTheme, // Import createTheme
+} from "@mui/material";
 import "./quizGame.css";
 const quizQuestions = [
   {
@@ -254,7 +286,16 @@ function Quiz() {
   };
 
   return (
+    <Container> 
+
+    <hr />
+    <br />
+
     <div className="quiz-container">
+    <h4>
+            Quiz Time
+            </h4>
+
       {!showScore ? (
         <div className="question-section">
           <h2>Question {currentQuestion + 1}</h2>
@@ -287,6 +328,7 @@ function Quiz() {
         </p>
       </div>
     </div>
+    </Container>
   );
 }
 

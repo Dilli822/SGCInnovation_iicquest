@@ -213,9 +213,7 @@ const FreeTimeSlots = () => {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
-
-      {displayCount < timeSlots.length && (
+        {displayCount < timeSlots.length && (
         <Box textAlign="center" mt={2}>
           <Button
             variant="contained"
@@ -227,6 +225,12 @@ const FreeTimeSlots = () => {
         </Box>
       )}
 
+      <br />
+
+
+      </TableContainer>
+
+   
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}

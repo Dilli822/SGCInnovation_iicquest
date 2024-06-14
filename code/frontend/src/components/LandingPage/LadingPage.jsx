@@ -6,13 +6,16 @@ import {
   AccordionSummary,
   AccordionDetails,
   Container,
+  Link, 
+  Button,
   Grid,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Emergency from "../Emergency/Emergency";
 import Widget from "../Widget/Widget";
 import Projects from "../Project/Projects";
-
+import Join from "../Join/Join"
+import DoctorsList from "../nearby/doctorsNearby";
 export default function LandingPage() {
   return (
     <>
@@ -59,6 +62,18 @@ export default function LandingPage() {
 
       <br />
       <br />
+      <br />
+
+
+      <Join/>
+
+      <br />
+      <DoctorsList/>
+
+      <br />
+      <br />
+      <br />
+    
     
       <Box color="white" p={4}>
       <hr />
@@ -86,8 +101,12 @@ export default function LandingPage() {
         <hr />
         <br />
         <br />
+
+        
   
         <Box>
+
+          
           <Accordion sx={{ backgroundColor: "#fff", color: "black", mb: 2 }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -212,6 +231,9 @@ export default function LandingPage() {
           </Accordion>
         </Box>
       </Box>
+
+
+
     </>
   );
 }

@@ -20,7 +20,7 @@ function AppFooter() {
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Typography variant="body1" align="center">
-              Develoved By SGC Innovation
+              Developed By SGC Innovation
             </Typography>
           </Grid>
           <Grid item xs={12}>

@@ -13,6 +13,7 @@ import Feed from "./components/home/feed";
 import AptitudeTest from "./components/aptitudeTest/appitudeComp";
 import MediatatorProfile from "./components/MeditationInstructor/MeditatorProfile"
 import AnnoyUser from "./components/Profile/User/AnonyUser"
+import Quiz from "./components/engagements/quizGame";
 
 export default function MainRouter() {
   return (
@@ -20,7 +21,7 @@ export default function MainRouter() {
       <Route path="/" element={<Home />} />
       <Route path="*" element={<PageNotFound />} />
       <Route path="/engagement" element={<MasterEngagement />} />
-      <Route path="signup" element={<SignUp />} />
+      <Route path="/signup" element={<SignUp />} />
       <Route path="/login" element={<Login />} />
       <Route path="/community" element={<Community />} />
       <Route path="/payment" element={<PaymentPage />} />
@@ -30,7 +31,7 @@ export default function MainRouter() {
       <Route path="/feed" element={<Feed />} />
       <Route path="/aptitude-test" element={<AptitudeTest />} />
       <Route path="/feed" element={<Feed />} />
-
+      <Route path="/quiz" element={<Quiz />} />
     </Routes>
   );
 }

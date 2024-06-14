@@ -4,23 +4,14 @@ import { Close as CloseIcon } from "@material-ui/icons";
 import Notification from "../Notifications/Notifications";
 import {
   AppBar,
-  Toolbar,
   Button,
-  Typography,
   Container,
   IconButton,
   Drawer,
   List,
   Grid,
-  Card,
-  CardContent,
-  CardActionArea,
-  CardMedia,
   ListItem,
   ListItemText,
-  TextField,
-  Menu,
-  MenuItem,
   useMediaQuery,
   createTheme, // Import createTheme
 } from "@mui/material";
@@ -89,7 +80,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = () => {
   const classes = useStyles();
-
   const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -152,8 +142,7 @@ const Header = () => {
   };
 
   const isDoctor = localStorage.getItem("is_doctor") === "true";
-  const is_mediatationTeacher =
-    localStorage.getItem("is_mediatationTeacher") === "true";
+  const is_mediatationTeacher = localStorage.getItem("is_mediatationTeacher") === "true";
   const AnnoyUser = localStorage.getItem("is_annoymousUser") === "true";
 
   const profileLink = isDoctor
@@ -186,75 +175,77 @@ const Header = () => {
   return (
     <>
       <AppBar position="sticky" sx={{ bgcolor: "#FFFFFF", color: "#000" }}>
-        <Grid container style={{ display: "flex", alignItems: "center" }} id="mobileNav">
+        <Grid
+          container
+          style={{ display: "flex", alignItems: "center",  }}
+          id="mobileNav"
+        >
           <Grid item xs={6}>
+          <Link to="/feed">
             <img
               src="https://raw.githubusercontent.com/aakashstha1/Susthiti/main/Logo.png"
               alt=""
               style={{ width: "150px" }}
             />
+            </Link>
           </Grid>
 
           <Grid item xs={6}>
-            <Grid container style={{ display: "flex", justifyContent: "flex-end"}}>
-              <Grid item>
-              <Link to="/aptitude-test" underline="none">
-              <Button
-              variant="text"
-              sx={{
-                color: "inherit",
-                textTransform: "none",
-                "&:hover": {
-                  backgroundColor: "transparent",
-                },
-              }}
+            <Grid
+              container
+              style={{ display: "flex", justifyContent: "flex-end" }}
             >
-
-              Apitutde Test
-            </Button>
-            </Link>
+              <Grid item>
+                <Link to="/aptitude-test" underline="none">
+                  <Button
+                    variant="text"
+                    sx={{
+                      color: "inherit",
+                      textTransform: "none",
+                      "&:hover": {
+                        backgroundColor: "transparent",
+                      },
+                    }}
+                  >
+                    Apitutde Test
+                  </Button>
+                </Link>
               </Grid>
 
               <Grid item>
-              <Link to="/community" underline="none">
-              <Button
-              variant="text"
-              sx={{
-                color: "inherit",
-                textTransform: "none",
-                "&:hover": {
-                  backgroundColor: "transparent",
-                },
-              }}
-            >
-              Join Our Community
-            </Button>
-            </Link>
+                <Link to="/community" underline="none">
+                  <Button
+                    variant="text"
+                    sx={{
+                      color: "inherit",
+                      textTransform: "none",
+                      "&:hover": {
+                        backgroundColor: "transparent",
+                      },
+                    }}
+                  >
+                    Join Our Community
+                  </Button>
+                </Link>
               </Grid>
-
 
               <Grid item>
-              <Link to="/login" underline="none">
-              <Button
-              variant="text"
-              sx={{
-                color: "inherit",
-                textTransform: "none",
-                "&:hover": {
-                  backgroundColor: "transparent",
-                },
-              }}
-            >
-              {/* Login/Register */}Profile
-            </Button>
-            </Link>
+                <Link to="/profile/user" underline="none">
+                  <Button
+                    variant="text"
+                    sx={{
+                      color: "inherit",
+                      textTransform: "none",
+                      "&:hover": {
+                        backgroundColor: "transparent",
+                      },
+                    }}
+                  >
+                    {/* Login/Register */}Profile
+                  </Button>
+                </Link>
               </Grid>
-
             </Grid>
-           
-
-
-
           </Grid>
         </Grid>
 
