@@ -177,105 +177,107 @@ const HeaderPublic = () => {
   return (
     <>
       <AppBar position="sticky" sx={{ bgcolor: "#FFFFFF", color: "#000" }}>
-        <Grid
-          container
-          style={{ display: "flex", alignItems: "center" }}
-          id="mobileNav"
-        >
-          <Grid item xs={6}>
-            <Link to="/">
-              <img
-                src="https://raw.githubusercontent.com/aakashstha1/Susthiti/main/Logo.png"
-                alt=""
-                style={{ width: "150px" }}
-              />
-            </Link>
-          </Grid>
-
-          <Grid item xs={6}>
-            <Grid
-              container
-              style={{ display: "flex", justifyContent: "flex-end" }}
-            >
-              <Grid item>
-                <Link to="/aptitude-test" underline="none">
-                  <Button
-                    variant="text"
-                    sx={{
-                      color: "inherit",
-                      textTransform: "none",
-                      "&:hover": {
-                        backgroundColor: "transparent",
-                      },
-                    }}
-                  >
-                    Apitutde Test
-                  </Button>
-                </Link>
-              </Grid>
-
-              <Grid item>
-                <Link to="/community" underline="none">
-                  <Button
-                    variant="text"
-                    sx={{
-                      color: "inherit",
-                      textTransform: "none",
-                      "&:hover": {
-                        backgroundColor: "transparent",
-                      },
-                    }}
-                  >
-                    Join Our Community
-                  </Button>
-                </Link>
-              </Grid>
-
-              <Grid item>
-                <Link to="/login" underline="none">
-                  <Button
-                    variant="text"
-                    sx={{
-                      color: "inherit",
-                      textTransform: "none",
-                      "&:hover": {
-                        backgroundColor: "transparent",
-                      },
-                    }}
-                  >
-                    {/* Login/Register */}Login/Signup
-                  </Button>
-                </Link>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-
-        <Container> 
-        {isMobile && (
-          <Grid container >
+        <Container maxWidth={"lg"}>
+          <Grid
+            container
+            style={{ display: "flex", alignItems: "center" }}
+            id="mobileNav"
+          >
             <Grid item xs={6}>
-              <img
-                src="https://raw.githubusercontent.com/aakashstha1/Susthiti/main/Logo.png"
-                alt=""
-                style={{ width: "150px" }}
-              />
+              <Link to="/">
+                <img
+                  src="https://raw.githubusercontent.com/aakashstha1/Susthiti/main/Logo.png"
+                  alt=""
+                  style={{ width: "150px" }}
+                />
+              </Link>
             </Grid>
 
             <Grid item xs={6}>
-              <div style={{ float: "right" }}>
-                <IconButton
-                  color="inherit"
-                  aria-label="open drawer"
-                  edge="start"
-                  onClick={toggleDrawer}
-                >
-                  <MenuIcon />
-                </IconButton>
-              </div>
+              <Grid
+                container
+                style={{ display: "flex", justifyContent: "flex-end" }}
+              >
+                <Grid item>
+                  <Link to="/aptitude-test" underline="none">
+                    <Button
+                      variant="text"
+                      sx={{
+                        color: "inherit",
+                        textTransform: "none",
+                        "&:hover": {
+                          backgroundColor: "transparent",
+                        },
+                      }}
+                    >
+                      Apitutde Test
+                    </Button>
+                  </Link>
+                </Grid>
+
+                <Grid item>
+                  <Link to="/community" underline="none">
+                    <Button
+                      variant="text"
+                      sx={{
+                        color: "inherit",
+                        textTransform: "none",
+                        "&:hover": {
+                          backgroundColor: "transparent",
+                        },
+                      }}
+                    >
+                      Join Our Community
+                    </Button>
+                  </Link>
+                </Grid>
+
+                <Grid item>
+                  <Link to="/login" underline="none">
+                    <Button
+                      variant="text"
+                      sx={{
+                        color: "inherit",
+                        textTransform: "none",
+                        "&:hover": {
+                          backgroundColor: "transparent",
+                        },
+                      }}
+                    >
+                      {/* Login/Register */}Login/Signup
+                    </Button>
+                  </Link>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
-        )}
+
+          <Container>
+            {isMobile && (
+              <Grid container>
+                <Grid item xs={6}>
+                  <img
+                    src="https://raw.githubusercontent.com/aakashstha1/Susthiti/main/Logo.png"
+                    alt=""
+                    style={{ width: "150px" }}
+                  />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <div style={{ float: "right" }}>
+                    <IconButton
+                      color="inherit"
+                      aria-label="open drawer"
+                      edge="start"
+                      onClick={toggleDrawer}
+                    >
+                      <MenuIcon />
+                    </IconButton>
+                  </div>
+                </Grid>
+              </Grid>
+            )}
+          </Container>
         </Container>
       </AppBar>
       <Container>

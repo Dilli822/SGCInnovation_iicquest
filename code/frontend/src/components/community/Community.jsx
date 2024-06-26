@@ -9,6 +9,7 @@ import {
   Typography,
   Divider,
   IconButton,
+  Container,
   Grid,
   InputAdornment,
   TextField,
@@ -225,6 +226,7 @@ function Community() {
   return (
     <>
       {accessToken ? <Header /> : <HeaderPublic />}
+      <Container maxWidth={"lg"}> 
       <Box p={4}>
         <Typography variant="h3" fontWeight="bold" spacing={2}>
           Community & Support
@@ -387,7 +389,9 @@ function Community() {
         <AppFooter>
 
         </AppFooter>
+        
       </Box>
+      </Container>
     </>
   );
 }

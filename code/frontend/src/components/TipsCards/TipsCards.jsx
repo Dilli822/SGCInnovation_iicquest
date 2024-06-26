@@ -44,10 +44,15 @@ const TipsCards = () => {
       style={{ position: "fixed", bottom: "24px", right: "24px" }}
     >
       <SnackbarContent
-        style={{ backgroundColor: "#4FC3F7", color: "#000", maxWidth: "400px" }}
+        style={{
+          border: "0px solid #4FC3F7",
+          backgroundColor: "#fff",
+          color: "#000",
+          maxWidth: "400px",
+        }}
         message={
           <div style={{ display: "flex", alignItems: "center" }}>
-            <span style={{ marginRight: "auto" }}>
+            <span style={{ marginRight: "auto",fontWeight: "530", letterSpacing: "1px" }}>
               {quotes[currentQuoteIndex]}
             </span>
             <IconButton
@@ -55,7 +60,7 @@ const TipsCards = () => {
               aria-label="close"
               color="inherit"
               onClick={handleClose}
-              style={{ marginLeft: "16px", color: "#999" }}
+              style={{ marginLeft: "0px", color: "black",  }}
             >
               <CloseIcon fontSize="small" />
             </IconButton>

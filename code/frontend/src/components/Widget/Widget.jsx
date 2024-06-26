@@ -2,75 +2,131 @@ import React from "react";
 import { Typography, Button, Grid, Box } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const theme = createTheme();
 
 const Widget = () => {
   return (
-    <Grid container spacing={2} alignItems="center" padding={4}>
-      <Grid
-        item
-        xs={12}
-        md={7}
-        sx={{ display: "flex", justifyContent: "center" }}
-      >
-        <Box position="relative" display="inline-block">
-          <Box
-            sx={{
-              position: "absolute",
-              bottom: "-4px",
-              left: "-4px",
-              width: "32rem", // Increased width
-              height: "20rem", // Increased height
-              backgroundColor: "#4FC3F7",
-              transform: "rotate(12deg)",
-              zIndex: -1,
-            }}
-          ></Box>
-          <Box
-            component="img"
-            src="https://media.istockphoto.com/id/1428194995/vector/idea-concept-with-one-line-bulbs-innovation-idea-process-of-untangling-wire-to-supply.jpg?s=612x612&w=0&k=20&c=955im8MKedyPep1Yd6z9myTWZM05p8iO8HSC5jzEU4k="
-            alt="Smiling person"
-            sx={{
-              width: "34rem", // Increased width
-              height: "20rem", // Increased height
-              objectFit: "cover",
-              borderRadius: "0.75rem",
-              zIndex: 1,
-              position: "relative",
-            }}
-          />
-        </Box>
+    <>
+      <Grid container spacing={2} alignItems="center" padding={4}>
+        <Grid
+          item
+          xs={12}
+          md={7}
+          sx={{ display: "flex", justifyContent: "center" }}
+        >
+          <Box position="relative" display="inline-block">
+            <Box
+              sx={{
+                position: "absolute",
+                bottom: "-4px",
+                left: "-4px",
+                width: "32rem", // Increased width
+                height: "20rem", // Increased height
+                backgroundColor: "#4FC3F7",
+                transform: "rotate(12deg)",
+                zIndex: -1,
+              }}
+            ></Box>
+            <Box
+              component="img"
+              src="https://media.istockphoto.com/id/1428194995/vector/idea-concept-with-one-line-bulbs-innovation-idea-process-of-untangling-wire-to-supply.jpg?s=612x612&w=0&k=20&c=955im8MKedyPep1Yd6z9myTWZM05p8iO8HSC5jzEU4k="
+              alt="Smiling person"
+              sx={{
+                width: "34rem", // Increased width
+                height: "20rem", // Increased height
+                objectFit: "cover",
+                borderRadius: "0.75rem",
+                zIndex: 1,
+                position: "relative",
+              }}
+            />
+          </Box>
+        </Grid>
+        <Grid item xs={12} md={5}>
+          <Typography gutterBottom sx={{ fontSize: "32px", fontWeight: "" }}>
+            Take Care of Your Mental Health and Well-being
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            Your mental health is just as important as your physical health.
+            It's essential to take time to care for your emotional well-being
+            and strengthen your resilience. Whether you're feeling stressed,
+            anxious, or simply need a moment to recharge, remember that there
+            are steps you can take to support yourself and others around you.
+          </Typography>
+
+          <br />
+        </Grid>
       </Grid>
-      <Grid item xs={12} md={4}>
-        <Typography gutterBottom sx={{ fontSize: "32px", fontWeight: "" }}>
-          Take Care of Your Mental Health and Well-being
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          Your mental health is just as important as your physical health. It's
-          essential to take time to care for your emotional well-being and
-          strengthen your resilience. Whether you're feeling stressed, anxious,
-          or simply need a moment to recharge, remember that there are steps you
-          can take to support yourself and others around you.
-        </Typography>
-        <span> We have Some Exercises For You! </span>
-        <Box mt={2}>
-          <Link to="/engagement">
-            <Button
-              variant="contained"
-              sx={{ mr: 2, backgroundColor: "#4FC3F7" }}
-            >
-              FOR YOU
-            </Button>
-          </Link>
-          <Link to="/community">
-            <Button variant="outlined" sx={{ color: "#4FC3F7" }}>
-              FOR A FRIEND
-            </Button>
-          </Link>
-        </Box>
+
+      <Grid mt={"3rem"}>
+        <hr />
+        <Grid
+          container
+          mt={"1rem"}
+          style={{ display: "flex", alignItems: "center" }}
+        >
+          <Grid item md={7}>
+            <Typography gutterBottom sx={{ fontSize: "32px", fontWeight: "", marginBottom: 0 }}>
+              Games, Exercises & Mediatation
+            </Typography>
+            <Typography variant="h6">
+            Every Step Counts Towards a Healthier You. Be Active, Be Alive.
+            </Typography>
+<br />
+            <Link to="/engagement">
+              <Button
+                variant="contained"
+   
+                sx={{ mr: 2, backgroundColor: "#4FC3F7" }}
+              >
+                FOR YOU
+              </Button>
+            </Link>
+            <Link to="/community">
+              <Button variant="outlined" sx={{ color: "#4FC3F7" }}>
+                FOR A FRIEND
+              </Button>
+            </Link>
+          </Grid>
+
+          <Grid item md={5}>
+            <Carousel showThumbs={false} infiniteLoop autoPlay>
+              <div>
+                <img
+
+                   src="https://cdn.dribbble.com/users/10810972/screenshots/18542066/media/3cd49e2098374a6cb382c12ba68b851e.gif"
+                  alt=""
+                  style={{ width: "100%", borderRadius: "1%" }}
+                />
+              </div>
+              <div>
+                <img
+                  src="https://media0.giphy.com/media/YrnNyUKBAIjBTgGBtu/giphy.gif"
+                  alt=""
+                  style={{
+                    width: "100%",
+                    borderRadius: "1%",
+                    background: "#fff",
+                  }}
+                />
+              </div>
+              <div>
+                <img
+                  // src="https://cdn.dribbble.com/users/1162077/screenshots/5473505/meditation-animation.gif"
+                                  //  src="https://i.pinimg.com/originals/a5/71/3e/a5713ede7f4ec30ed8c994edccf02ed3.gif"
+                                  src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/9c0734100731535.5f0f2ac318fee.gif"
+                  alt=""
+                  style={{ width: "100%", borderRadius: "1%" }}
+                />
+              </div>
+            </Carousel>
+          </Grid>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 

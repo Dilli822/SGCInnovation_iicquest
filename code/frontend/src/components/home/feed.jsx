@@ -82,10 +82,7 @@ function Feed() {
       <Grid container spacing={2}></Grid>
       <LandingPage />
       <GeolocationComponent />
-
-
       <TipsCards />
-
       <AppFooter />
     </>
   );

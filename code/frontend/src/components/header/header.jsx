@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     "&:hover, &:focus": {
       borderColor: theme.palette.primary.main,
     },
-  },
+    },
 
   searchResults: {
     backgroundColor: theme.palette.background.paper,
@@ -76,6 +76,12 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.action.hover,
     },
   },
+
+  linkBlack: {
+    textDecoration: "none",
+    color: "black",
+  },
+
 }));
 
 const Header = () => {
@@ -174,7 +180,9 @@ const Header = () => {
 
   return (
     <>
+
       <AppBar position="sticky" sx={{ bgcolor: "#FFFFFF", color: "#000" }}>
+      <Container maxWidth={"lg"}>
         <Grid
           container
           style={{ display: "flex", alignItems: "center",  }}
@@ -200,7 +208,7 @@ const Header = () => {
                   <Button
                     variant="text"
                     sx={{
-                      color: "inherit",
+                      color: "#000",
                       textTransform: "none",
                       "&:hover": {
                         backgroundColor: "transparent",
@@ -217,7 +225,7 @@ const Header = () => {
                   <Button
                     variant="text"
                     sx={{
-                      color: "inherit",
+                      color: "#000",
                       textTransform: "none",
                       "&:hover": {
                         backgroundColor: "transparent",
@@ -234,14 +242,14 @@ const Header = () => {
                   <Button
                     variant="text"
                     sx={{
-                      color: "inherit",
+                      color: "#000",
                       textTransform: "none",
                       "&:hover": {
                         backgroundColor: "transparent",
                       },
                     }}
                   >
-                    {/* Login/Register */}Profile
+                    {/* Login/Register */} Profile
                   </Button>
                 </Link>
               </Grid>
@@ -273,6 +281,7 @@ const Header = () => {
             </Grid>
           </Grid>
         )}
+                 </Container>
       </AppBar>
       <Container>
         <Grid container>
@@ -295,6 +304,7 @@ const Header = () => {
           </div>
         </Drawer>
       )}
+   
     </>
   );
 };

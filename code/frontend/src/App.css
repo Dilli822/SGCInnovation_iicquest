@@ -1,11 +1,11 @@
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
 @media (max-width: 903px) {
-  #mobileNav{
-    display: none!important;
+  #mobileNav {
+    display: none !important;
   }
 }

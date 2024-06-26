@@ -1,6 +1,3 @@
-
-
-
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -176,8 +173,10 @@ const Appointment = () => {
         <Typography variant="h5" component="h3" gutterBottom>
           Add Available Slots
         </Typography>
+        Start TimeStamp:
         <Grid container spacing={2}>
           <Grid item xs={5}>
+            <br />
             <TextField
               label="Date"
               type="date"
@@ -189,7 +188,9 @@ const Appointment = () => {
               }}
             />
           </Grid>
+
           <Grid item xs={5}>
+            <br />
             <TextField
               label="Time"
               type="time"
@@ -201,16 +202,48 @@ const Appointment = () => {
               }}
             />
           </Grid>
-          <Grid item xs={2}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleAddSlot}
+        </Grid>
+        <br />
+        End TimeStamp:
+        <Grid container spacing={2}>
+          <Grid item xs={5}>
+            <br />
+            <TextField
+              label="Date"
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
               fullWidth
-            >
-              Add
-            </Button>
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
           </Grid>
+
+          <Grid item xs={5}>
+            <br />
+            <TextField
+              label="Time"
+              type="time"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          </Grid>
+        </Grid>
+        <br />
+        <Grid item xs={2}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleAddSlot}
+            fullWidth
+          >
+            Add
+          </Button>
         </Grid>
       </Box>
 
