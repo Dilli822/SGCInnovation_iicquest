@@ -1,4 +1,5 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Typography,
   Box,
@@ -6,7 +7,6 @@ import {
   AccordionSummary,
   AccordionDetails,
   Container,
-  Link,
   Button,
   Grid,
 } from "@mui/material";
@@ -17,6 +17,8 @@ import Projects from "../Project/Projects";
 import Join from "../Join/Join";
 import DoctorsList from "../nearby/doctorsNearby";
 import brainImg from "../assets/brainImg.png";
+import EmergencySupport from "../Emergency/Emergency";
+
 export default function LandingPage() {
   return (
     <>
@@ -29,8 +31,8 @@ export default function LandingPage() {
           style={{ display: "flex", alignItems: "center" }}
         >
           <Grid item md={7}>
-          <Typography variant="h2">Health is Wealth !</Typography>
-            <Typography variant="h3">Stronger Minds, Together</Typography>
+          <Typography variant="h2">Health is Wealth!</Typography>
+            <Typography variant="h3">Stronger Minds,Together</Typography>
             <br />
 
             <Typography align="left" variant="body1">
@@ -50,33 +52,85 @@ export default function LandingPage() {
           <Grid item md={5}>
             <img src={brainImg} alt="" style={{ maxWidth: "100%" }} />
           </Grid>
-
-          {/* Add content inside the Grid if needed */}
+        {/* Add content inside the Grid if needed */}
         </Grid>
         <br />
         <br />
         <br />
         <br />
-        <Widget />
-
-        <br />
-        <br />
-        <br />
-
         <Join />
-
+ 
+        <br />
+        <br />
+        <br />
+        <Widget />
+        <hr/>
         <br />
         <DoctorsList />
+        <br />
+        <br />
+        <EmergencySupport/>
+        <br />
+        <br />
+        <Grid container spacing={2} alignItems="center" padding={4}>
+        <Grid
+          item
+          xs={12}
+          md={7}
+          sx={{ display: "flex", justifyContent: "center" }}
+        >
+          <Box position="relative" display="inline-block">
+            <Box
+              sx={{
+                position: "absolute",
+                bottom: "-4px",
+                left: "-4px",
+                width: "32rem", // Increased width
+                height: "20rem", // Increased height
+                backgroundColor: "#4FC3F7",
+                transform: "rotate(12deg)",
+                zIndex: -1,
+              }}
+            ></Box>
+            <Box
+              component="img"
+              src="https://media.istockphoto.com/id/1428194995/vector/idea-concept-with-one-line-bulbs-innovation-idea-process-of-untangling-wire-to-supply.jpg?s=612x612&w=0&k=20&c=955im8MKedyPep1Yd6z9myTWZM05p8iO8HSC5jzEU4k="
+              alt="Smiling person"
+              sx={{
+                width: "34rem", // Increased width
+                height: "20rem", // Increased height
+                objectFit: "cover",
+                borderRadius: "0.75rem",
+                zIndex: 1,
+                position: "relative",
+              }}
+            />
+          </Box>
+        </Grid>
+        <Grid item xs={12} md={5}>
+          <Typography gutterBottom sx={{ fontSize: "32px", fontWeight: "" }}>
+            Take Care of Your Mental Health and Well-being
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            Your mental health is just as important as your physical health.
+            It's essential to take time to care for your emotional well-being
+            and strengthen your resilience. Whether you're feeling stressed,
+            anxious, or simply need a moment to recharge, remember that there
+            are steps you can take to support yourself and others around you.
+          </Typography>
 
+          <br />
+        </Grid>
+      </Grid>
+      
         <br />
         <br />
         <br />
-
+       
         <Box color="white" p={4}>
           <hr />
           <br />
           <br />
-
           <Grid container>
             <Grid item md={11}>
               <Typography
@@ -102,7 +156,6 @@ export default function LandingPage() {
           <hr />
           <br />
           <br />
-
           <Box>
             <Accordion sx={{ backgroundColor: "#fff", color: "black", mb: 2 }}>
               <AccordionSummary

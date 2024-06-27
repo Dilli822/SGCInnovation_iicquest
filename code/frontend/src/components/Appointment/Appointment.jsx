@@ -18,8 +18,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 const Appointment = () => {
   const [availableSlots, setAvailableSlots] = useState([]);
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [appointments, setAppointments] = useState([]);
   const [slotSaved, setSlotSaved] = useState(false);
 
@@ -106,7 +108,7 @@ const Appointment = () => {
   };
 
   const handleAddSlot = async () => {
-    if (date && time) {
+    if (startDate && startTime && endDate && endTime) {
       try {
         const response = await fetch(
           "http://localhost:8000/sushtiti/account/doctor/free-time-slots/create/",
@@ -118,8 +120,8 @@ const Appointment = () => {
             },
             body: JSON.stringify({
               user: localStorage.getItem("userId"),
-              start_time: `${date}T${time}:00`,
-              end_time: `${date}T${time}:00`,
+              start_time: `${startDate}T${startTime}:00`,
+              end_time: `${endDate}T${endTime}:00`,
             }),
           }
         );
@@ -134,8 +136,10 @@ const Appointment = () => {
       } catch (error) {
         console.error("Error saving slot:", error);
       } finally {
-        setDate("");
-        setTime("");
+        setStartDate("");
+        setStartTime("");
+        setEndDate("");
+        setEndTime("");
       }
     }
   };
@@ -173,29 +177,25 @@ const Appointment = () => {
         <Typography variant="h5" component="h3" gutterBottom>
           Add Available Slots
         </Typography>
-        Start TimeStamp:
         <Grid container spacing={2}>
-          <Grid item xs={5}>
-            <br />
+          <Grid item xs={6}>
             <TextField
-              label="Date"
+              label="Start Date"
               type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
               fullWidth
               InputLabelProps={{
                 shrink: true,
               }}
             />
           </Grid>
-
-          <Grid item xs={5}>
-            <br />
+          <Grid item xs={6}>
             <TextField
-              label="Time"
+              label="Start Time"
               type="time"
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
               fullWidth
               InputLabelProps={{
                 shrink: true,
@@ -203,30 +203,25 @@ const Appointment = () => {
             />
           </Grid>
         </Grid>
-        <br />
-        End TimeStamp:
-        <Grid container spacing={2}>
-          <Grid item xs={5}>
-            <br />
+        <Grid container spacing={2} sx={{ mt: 2 }}>
+          <Grid item xs={6}>
             <TextField
-              label="Date"
+              label="End Date"
               type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
               fullWidth
               InputLabelProps={{
                 shrink: true,
               }}
             />
           </Grid>
-
-          <Grid item xs={5}>
-            <br />
+          <Grid item xs={6}>
             <TextField
-              label="Time"
+              label="End Time"
               type="time"
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
               fullWidth
               InputLabelProps={{
                 shrink: true,
@@ -234,18 +229,18 @@ const Appointment = () => {
             />
           </Grid>
         </Grid>
-        <br />
-        <Grid item xs={2}>
+        <Grid item xs={5} sx={{ mt: 2 }}>
           <Button
             variant="contained"
             color="primary"
             onClick={handleAddSlot}
             fullWidth
           >
-            Add
+            Add Your Appoints DateTime
           </Button>
         </Grid>
       </Box>
+      <hr />
 
       <Box sx={{ my: 4 }}>
         <Typography variant="h5" component="h3" gutterBottom>
@@ -280,7 +275,7 @@ const Appointment = () => {
           </Table>
         </TableContainer>
       </Box>
-
+      <hr />
       <Box sx={{ my: 4 }}>
         <Typography variant="h5" component="h3" gutterBottom>
           Appointments
@@ -302,7 +297,7 @@ const Appointment = () => {
                 <TableRow key={appointment.id}>
                   <TableCell>{appointment.user}</TableCell>
                   <TableCell>
-                    {new Date(appointment.booked_datetime).toLocaleString()}
+                    {new Date(appointment.booked_datetime)}
                   </TableCell>
                   <TableCell>{appointment.free_time_slot}</TableCell>
                   <TableCell>

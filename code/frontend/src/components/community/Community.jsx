@@ -385,13 +385,15 @@ function Community() {
             </CardContent>
           </Card>
         ))}
-
-        <AppFooter>
-
-        </AppFooter>
-        
-      </Box>
+              </Box>
       </Container>
+
+  
+
+      <AppFooter>
+
+</AppFooter>
+
     </>
   );
 }

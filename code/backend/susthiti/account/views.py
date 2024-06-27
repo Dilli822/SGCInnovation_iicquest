@@ -65,7 +65,8 @@ class DoctorProfileListCreate(generics.ListCreateAPIView):
     queryset = DoctorProfile.objects.all()
     serializer_class = DoctorProfileSerializer
     permission_classes = [IsAuthenticated]
-    
+
+
 
 class UserProfileList(generics.ListAPIView):
     serializer_class = AnnonymousUserSerializer
@@ -180,3 +181,23 @@ class NotificationDetailView(generics.RetrieveAPIView):
     def get_queryset(self):
         user_id = self.request.user.id
         return Notification.objects.filter(user_id=user_id)
+    
+    
+class DoctorProfileRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = DoctorProfileSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_object(self):
+        user = self.request.user
+        return DoctorProfile.objects.get(user=user)
+
+
+
+
+class DoctorProfileRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = DoctorProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        user = self.request.user
+        return DoctorProfile.objects.get(user=user)

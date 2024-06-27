@@ -76,11 +76,15 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.action.hover,
     },
   },
+
+  linkBlack: {
+    textDecoration: "none",
+    color: "black",
+  },
 }));
 
 const HeaderPublic = () => {
   const classes = useStyles();
-
   const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -203,14 +207,14 @@ const HeaderPublic = () => {
                     <Button
                       variant="text"
                       sx={{
-                        color: "inherit",
+                        color: "#000",
                         textTransform: "none",
                         "&:hover": {
                           backgroundColor: "transparent",
                         },
                       }}
                     >
-                      Apitutde Test
+                      Apitutde Test 🩺
                     </Button>
                   </Link>
                 </Grid>
@@ -220,33 +224,52 @@ const HeaderPublic = () => {
                     <Button
                       variant="text"
                       sx={{
-                        color: "inherit",
+                        color: "#000",
                         textTransform: "none",
                         "&:hover": {
                           backgroundColor: "transparent",
                         },
                       }}
                     >
-                      Join Our Community
+                      Join Our Community 💬
                     </Button>
                   </Link>
                 </Grid>
 
                 <Grid item>
-                  <Link to="/login" underline="none">
-                    <Button
-                      variant="text"
-                      sx={{
-                        color: "inherit",
-                        textTransform: "none",
-                        "&:hover": {
-                          backgroundColor: "transparent",
-                        },
-                      }}
-                    >
-                      {/* Login/Register */}Login/Signup
-                    </Button>
-                  </Link>
+                  <Grid item>
+                    {localStorage.getItem("accessToken") ? (
+                      <Link to={profileLink} underline="none">
+                        <Button
+                          variant="text"
+                          sx={{
+                            color: "#000",
+                            textTransform: "none",
+                            "&:hover": {
+                              backgroundColor: "transparent",
+                            },
+                          }}
+                        >
+                          Profile
+                        </Button>
+                      </Link>
+                    ) : (
+                      <Link to="/login" underline="none">
+                        <Button
+                          variant="text"
+                          sx={{
+                            color: "#000",
+                            textTransform: "none",
+                            "&:hover": {
+                              backgroundColor: "transparent",
+                            },
+                          }}
+                        >
+                          Login/Signup
+                        </Button>
+                      </Link>
+                    )}
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>

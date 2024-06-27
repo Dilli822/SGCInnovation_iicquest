@@ -18,7 +18,7 @@ const DoctorProfileUpdate = () => {
   const [imageFile, setImageFile] = useState(null);
   const [initialProfileData, setInitialProfileData] = useState({});
   const [open, setOpen] = useState(false);
-  const [doctorId, setDoctorId] = useState(0);
+  const doctorId = localStorage.getItem("doctorId");
 
   useEffect(() => {
     fetchDoctorData();
@@ -40,7 +40,6 @@ const DoctorProfileUpdate = () => {
         const data = await response.json();
         if (data.length > 0) {
           const doctorId = data[0].doctor_id; // Assuming there's only one doctor returned
-          setDoctorId(doctorId); // Set doctor_id in state
           localStorage.setItem("doctorId", doctorId); // Store doctor_id in localStorage
         }
       } else {
@@ -54,7 +53,7 @@ const DoctorProfileUpdate = () => {
   const fetchProfileData = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8000/sushtiti/account/doctors/${doctorId}/`,
+        `http://localhost:8000/sushtiti/account/doctors/edit/${doctorId}/`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -104,7 +103,7 @@ const DoctorProfileUpdate = () => {
       const doctorId = localStorage.getItem("doctorId");
 
       const response = await fetch(
-        `http://localhost:8000/sushtiti/account/doctors/edit/${doctorId}/`,
+        `http://localhost:8000/sushtiti/account/doctors/edit/1/`,
         {
           method: "PUT",
           headers: {
@@ -166,15 +165,16 @@ const DoctorProfileUpdate = () => {
             borderRadius: "8px",
           }}
         >
-          <Typography variant="h5">Doctor Profile</Typography>
+          <Typography variant="h5">Doctor's Profile</Typography>
+
 
           <Box display="flex" flexDirection="column">
             <Box
               display="flex"
               style={{
-                width: "200px",
-                height: "200px",
-                borderRadius: "50%",
+                maxWidth: "100%",
+                height: "300px",
+                borderRadius: "5%",
                 overflow: "hidden",
                 position: "relative",
                 marginBottom: "16px",
@@ -262,6 +262,8 @@ const DoctorProfileUpdate = () => {
                   value={profileData.bio}
                   onChange={handleInputChange}
                   style={{ width: "100%" }}
+                  multiline
+                  rows={7}
                 />
               ) : (
                 profileData.bio
@@ -271,7 +273,7 @@ const DoctorProfileUpdate = () => {
             <div
               style={{
                 display: "flex",
-                justifyContent: "center",
+                justifyContent: "",
                 marginTop: "16px",
                 width: "100%",
               }}

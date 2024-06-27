@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import DoctorProfileUpdate from "../Doctor/updateDoctor";
 import Appointment from "../../Appointment/Appointment";
 import AppHeader from "../../header/header";
-import { Grid } from "@mui/material";
+import { Grid,Container } from "@mui/material";
 import AnyUserProfileUpdate from "./updateAnonyUser";
 import FreeTimeSlots from "../../Appointment/Free_Slot_Time";
 import AppointmentPlacementsList from "../../Appointment/appoint_placed";
+
 
 const AnnoyUser = () => {
   const navigate = useNavigate();
@@ -45,11 +46,12 @@ const AnnoyUser = () => {
   return (
     <>
     <AppHeader/>
+    <Container maxWidth={"lg"}> 
       <Grid container spacing={3}>
-        <Grid item md={6}>
+        <Grid item md={4}>
           <AnyUserProfileUpdate />
         </Grid>
-        <Grid item md={6}>
+        <Grid item md={8}>
           <FreeTimeSlots />
         </Grid>
       </Grid>
@@ -57,6 +59,9 @@ const AnnoyUser = () => {
       <Grid item md={12}>
         <AppointmentPlacementsList />
       </Grid>
+      <br />
+      <br />
+      </Container>
     </>
   );
 };

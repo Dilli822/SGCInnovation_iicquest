@@ -237,7 +237,7 @@ export default function SignUp() {
                 animation: "fadeInOut 2s ease-in-out",
               }}
             >
-              <Typography variant="h3" color="success">
+              <Typography variant="h5" color="success">
                 Registration successful!
               </Typography>
               <Typography variant="body2" color="success" sx={{ mt: 1 }}>

@@ -2,6 +2,7 @@ import BreathingExercise from "./engadgement";
 import Quiz from "./quizGame";
 import { Typography, Button, Grid, Box } from "@mui/material";
 import { Route, Routes, Link } from "react-router-dom";
+import AppFooter from "../footer/footer"
 
 export default function MasterEngagement(){
     return(
@@ -12,14 +13,7 @@ export default function MasterEngagement(){
             <BreathingExercise/>
             <br />
             </Grid>
-
-  
-
-       
-
-           
-
-            <Quiz/>
+            <AppFooter/>
         </Grid>
    
         </>

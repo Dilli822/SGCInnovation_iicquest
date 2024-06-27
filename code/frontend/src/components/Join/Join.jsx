@@ -7,46 +7,11 @@ const Join = () => {
       <hr />
 
       <Grid container spacing={2} alignItems="center" padding={4}>
-        <Grid
-          item
-          xs={12}
-          md={5}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "",
-            alignItems: "",
-            textAlign: "",
-            padding: "0 2rem",
-          }}
-        >
-          <Typography
-            variant="h2"
-            gutterBottom
-            sx={{ fontSize: "32px", fontWeight: "" }}
-          >
-            Thrive Together: Wellness Hub
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            Empower yourself to take charge of your mental health. Join a
-            supportive community, access valuable resources, and find the
-            support you need to thrive in your journey.
-          </Typography>
 
-          <Link
-            mt={2}
-            href="http://localhost:9000/"
-            underline="none"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button variant="outlined" sx={{ color: "#4FC3F7" }}>Join Room</Button>
-          </Link>
-        </Grid>
-        <Grid
+      <Grid
           item
           xs={12}
-          md={7}
+          md={6}
           sx={{ display: "flex", justifyContent: "flex-end" }}
         >
           <Box position="relative" display="inline-block">
@@ -81,6 +46,43 @@ const Join = () => {
             />
           </Box>
         </Grid>
+        
+        <Grid
+          item
+          xs={12}
+          md={6}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "",
+            alignItems: "",
+            textAlign: "",
+            padding: "0 2rem",
+          }}
+        >
+          <Typography
+            variant="h3"
+            gutterBottom
+          >
+            Thrive Together: Wellness Hub
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            Empower yourself to take charge of your mental health. Join a
+            supportive community, access valuable resources, and find the
+            support you need to thrive in your journey.
+          </Typography>
+
+          <Link
+            mt={2}
+            href="http://localhost:3001/"
+            underline="none"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button variant="outlined" sx={{ color: "#4FC3F7" }}>Join Room</Button>
+          </Link>
+        </Grid>
+        
       </Grid>
     </>
   );

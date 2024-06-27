@@ -5,11 +5,11 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
 const quotes = [
-  "Practice mindfulness daily for inner peace and clarity.",
-  "Connect with loved ones for support and companionship.",
-  "Engage in regular physical activity for mental well-being.",
-  "Prioritize sufficient sleep for cognitive function and emotional balance.",
-  "Limit screen time to reduce stress and improve sleep quality.",
+  "Practice mindfulness daily for inner peace and clarity.🔆",
+  "Connect with loved ones for support and companionship.🍀",
+  "Engage in regular physical activity for mental well-being.🏃‍♂️",
+  "Prioritize sufficient sleep for cognitive function and emotional balance.✨💚",
+  "Limit screen time to reduce stress and improve sleep quality.💤",
   // Add more quotes as needed
 ];
 
@@ -41,7 +41,7 @@ const TipsCards = () => {
       onClose={handleClose}
       onExited={handleExited}
       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-      style={{ position: "fixed", bottom: "24px", right: "24px" }}
+      style={{ position: "fixed", bottom: "24px", right: "0" }}
     >
       <SnackbarContent
         style={{
@@ -52,7 +52,7 @@ const TipsCards = () => {
         }}
         message={
           <div style={{ display: "flex", alignItems: "center" }}>
-            <span style={{ marginRight: "auto",fontWeight: "530", letterSpacing: "1px" }}>
+            <span style={{ marginRight: "auto",fontWeight: "450", letterSpacing: "1px" }}>
               {quotes[currentQuoteIndex]}
             </span>
             <IconButton

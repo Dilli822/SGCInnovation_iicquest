@@ -1,12 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { Button, Box, Typography, Container } from "@mui/material";
-import "./engadgement.css";
+import { Button, Typography, Container, Grid } from "@mui/material";
+import DeepMeditate1 from "../assets/mp3/deep-meditation-1.mp3";
+import Quiz from "./quizGame";
+import PublicHeader from "../header/header_public";
 
 const BreathingExercise = () => {
   const [timer, setTimer] = useState(0);
   const [phase, setPhase] = useState("inhale");
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audio] = useState(new Audio(DeepMeditate1)); // Initialize audio element
+
+  // Handle starting audio playback
+  const handleStart = () => {
+    if (!isPlaying) {
+      audio.play().catch((error) => {
+        console.error("Audio playback error:", error);
+      });
+      setIsPlaying(true);
+    }
+  };
+
+  // Handle stopping audio playback
+  const handleEnd = () => {
+    if (isPlaying) {
+      audio.pause();
+      audio.currentTime = 0;
+      setIsPlaying(false);
+    }
+  };
 
   useEffect(() => {
+    // Function to manage timer and phase transitions
     let interval;
     if (phase === "inhale") {
       interval = setInterval(() => {
@@ -46,46 +70,64 @@ const BreathingExercise = () => {
     return () => clearInterval(interval);
   }, [phase]);
 
+  // Reset phase and timer when exercise starts
   const startExercise = () => {
     setPhase("inhale");
     setTimer(0);
   };
 
-  const calculateCircle = () => {
-    let size = 150;
-    let color = "#90ee90"; // Default color for inhale
-
-    if (phase === "hold") {
-      size = 100; // Decrease size during hold
-      color = "#ffcccb"; // Light pink for hold
-    } else if (phase === "exhale") {
-      size = 50; // Decrease size during exhale
-      color = "#add8e6"; // Light blue for exhale
-    }
-
-    return {
-      width: size,
-      height: size,
-      backgroundColor: color,
-      transition: "width 1s, height 1s, background-color 1s",
-    };
-  };
-
   return (
-    <Container className="breathing-exercise" maxWidth="sm">
-      <Typography variant="h4" component="h2" gutterBottom>
-        Breathing Exercise
-      </Typography>
-      <Box className="breathing-container" sx={{ mt: 4 }}>
-        <Box className="circle" style={calculateCircle()}></Box>
-        <Typography variant="h6" component="div" className="timer" sx={{ mt: 2 }}>
-          {timer}s
-        </Typography>
-      </Box>
-      <Button variant="contained" color="primary" onClick={startExercise} sx={{ mt: 4 }}>
-        Start Exercise
-      </Button>
+    <> 
+    <PublicHeader> </PublicHeader>
+    <br />    <br />
+    <Container className="breathing-exercise" maxWidth="lg">
+      <Grid container spacing={3} alignItems="center">
+        <Grid item md={6}>
+          <Typography variant="h5" component="h2" gutterBottom>
+            Meditation
+          </Typography>
+          <img
+            src="https://cdn.dribbble.com/users/3414434/screenshots/14616859/media/94814b2e5bcd1dd9f926bdd0d98eda5c.gif"
+            alt=""
+            style={{ maxWidth: "100%", height: "100%" }}
+          />
+       
+          <Button variant="outlined" onClick={handleStart}>
+            Start Meditation 
+          </Button>{" "}
+          &nbsp;
+          <Button
+            variant="outlined"
+            sx={{ border: "1px solid red", color: "red" }}
+            onClick={handleEnd}
+          >
+            End
+          </Button>
+        </Grid>
+        <Grid item md={6}>
+          <Typography variant="h5" component="h2" gutterBottom sx={{ textAlign: "center" }}>
+            Breathing Exercise
+          </Typography>
+          <img
+            src="https://cdn.doyou.com/articles/6a-1575918606525.gif=w1080"
+            alt="Breathing Exercise GIF"
+            style={{ height: "auto" }}
+          />
+          <Typography
+            variant="h3"
+            component="div"
+            className="timer"
+            sx={{ mt: 2, textAlign: "center" }}
+          >
+            {timer}s
+          </Typography>
+        </Grid>
+        
+      </Grid>
+      <br />
+      <Quiz />
     </Container>
+    </>
   );
 };
 

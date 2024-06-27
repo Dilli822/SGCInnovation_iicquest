@@ -1,37 +1,13 @@
-
-// import AppFooter from '../Footer/AppFooter'
-import HeaderNav from "../header/header";
-import Banner from "../Banner/Banner";
-import TipsCards from "../TipsCards/TipsCards";
-import AppFooter from "../footer/footer";
-import Notification from "../Notifications/Notifications";
-import HeaderPublic from "../header/header_public";
-import { useNavigate } from "react-router-dom";
-import LandingPage from "../LandingPage/LadingPage";
-import React, { useState, useEffect } from "react";
-
+import React, { useState } from "react";
 import {
-  AppBar,
-  Toolbar,
-  Typography,
   Container,
-  IconButton,
-  Drawer,
-  List,
-  Grid,
   Card,
   CardContent,
-  CardActionArea,
-  CardMedia,
-  ListItem,
-  ListItemText,
-  TextField,
-  Menu,
-  MenuItem,
-  useMediaQuery,
-  createTheme, // Import createTheme
+  Typography,
+  Button,
+  Grid,
 } from "@mui/material";
-import "./quizGame.css";
+
 const quizQuestions = [
   {
     id: 1,
@@ -43,7 +19,7 @@ const quizQuestions = [
     id: 2,
     question: "Who wrote 'To Kill a Mockingbird'?",
     options: [
-      "Harper Lee",      
+      "Harper Lee",
       "Mark Twain",
       "J.K. Rowling",
       "F. Scott Fitzgerald",
@@ -73,182 +49,9 @@ const quizQuestions = [
     ],
     correctAnswer: "Leonardo da Vinci",
   },
-  {
-    id: 6,
-    question: "What is the smallest bone in the human body?",
-    options: ["Stapes", "Femur", "Tibia", "Fibula"],
-    correctAnswer: "Stapes",
-  },
-  {
-    id: 7,
-    question: "Who is the author of '1984'?",
-    options: [
-      "George Orwell",
-      "Aldous Huxley",
-      "Ray Bradbury",
-      "J.R.R. Tolkien",
-    ],
-    correctAnswer: "George Orwell",
-  },
-  {
-    id: 8,
-    question: "What is the chemical symbol for gold?",
-    options: ["Au", "Ag", "Pb", "Fe"],
-    correctAnswer: "Au",
-  },
-  {
-    id: 9,
-    question: "Which planet is known as the Red Planet?",
-    options: ["Mars", "Venus", "Mercury", "Neptune"],
-    correctAnswer: "Mars",
-  },
-  {
-    id: 10,
-    question: "Who is credited with discovering penicillin?",
-    options: [
-      "Alexander Fleming",
-      "Marie Curie",
-      "Albert Einstein",
-      "Isaac Newton",
-    ],
-    correctAnswer: "Alexander Fleming",
-  },
-  {
-    id: 11,
-    question: "Who is the creator of the theory of relativity?",
-    options: [
-      "Albert Einstein",
-      "Isaac Newton",
-      "Stephen Hawking",
-      "Galileo Galilei",
-    ],
-    correctAnswer: "Albert Einstein",
-  },
-  {
-    id: 12,
-    question: "Which animal is known as the 'ship of the desert'?",
-    options: ["Camel", "Horse", "Elephant", "Giraffe"],
-    correctAnswer: "Camel",
-  },
-  {
-    id: 13,
-    question: "Who is the Greek god of the sea?",
-    options: ["Poseidon", "Zeus", "Hades", "Apollo"],
-    correctAnswer: "Poseidon",
-  },
-  {
-    id: 14,
-    question: "What is the largest ocean on Earth?",
-    options: [
-      "Pacific Ocean",
-      "Atlantic Ocean",
-      "Indian Ocean",
-      "Arctic Ocean",
-    ],
-    correctAnswer: "Pacific Ocean",
-  },
-  {
-    id: 15,
-    question: "Who composed 'Symphony No. 9'?",
-    options: [
-      "Ludwig van Beethoven",
-      "Wolfgang Amadeus Mozart",
-      "Johann Sebastian Bach",
-      "Franz Schubert",
-    ],
-    correctAnswer: "Ludwig van Beethoven",
-  },
-  {
-    id: 16,
-    question: "What is the capital of Japan?",
-    options: ["Tokyo", "Beijing", "Seoul", "Bangkok"],
-    correctAnswer: "Tokyo",
-  },
-  {
-    id: 17,
-    question: "Which country is famous for its tulips?",
-    options: ["Netherlands", "France", "Italy", "Spain"],
-    correctAnswer: "Netherlands",
-  },
-  {
-    id: 18,
-    question: "What is the main ingredient in guacamole?",
-    options: ["Avocado", "Tomato", "Onion", "Pepper"],
-    correctAnswer: "Avocado",
-  },
-  {
-    id: 19,
-    question: "What is the highest mountain in the world?",
-    options: ["Mount Everest", "K2", "Kangchenjunga", "Lhotse"],
-    correctAnswer: "Mount Everest",
-  },
-  {
-    id: 20,
-    question: "Who was the first man to step on the moon?",
-    options: ["Neil Armstrong", "Buzz Aldrin", "Yuri Gagarin", "John Glenn"],
-    correctAnswer: "Neil Armstrong",
-  },
-  {
-    id: 21,
-    question: "What is the chemical symbol for iron?",
-    options: ["Fe", "Ir", "In", "Au"],
-    correctAnswer: "Fe",
-  },
-  {
-    id: 22,
-    question: "What is the largest mammal in the world?",
-    options: ["Blue Whale", "Elephant", "Giraffe", "Hippopotamus"],
-    correctAnswer: "Blue Whale",
-  },
-  {
-    id: 23,
-    question: "Which country is famous for the Great Barrier Reef?",
-    options: ["Australia", "Brazil", "India", "Canada"],
-    correctAnswer: "Australia",
-  },
-  {
-    id: 24,
-    question: "Who wrote 'Hamlet'?",
-    options: [
-      "William Shakespeare",
-      "Charles Dickens",
-      "Jane Austen",
-      "Leo Tolstoy",
-    ],
-    correctAnswer: "William Shakespeare",
-  },
-  {
-    id: 25,
-    question: "What is the chemical symbol for sodium?",
-    options: ["Na", "Ni", "Ne", "No"],
-    correctAnswer: "Na",
-  },
-  {
-    id: 26,
-    question: "Which planet is known as the 'Morning Star'?",
-    options: ["Venus", "Mercury", "Mars", "Jupiter"],
-    correctAnswer: "Venus",
-  },
-  {
-    id: 27,
-    question: "Who is known as the 'Father of Computers'?",
-    options: ["Charles Babbage", "Alan Turing", "Bill Gates", "Steve Jobs"],
-    correctAnswer: "Charles Babbage",
-  },
-  {
-    id: 28,
-    question: "What is the largest organ in the human body?",
-    options: ["Skin", "Liver", "Heart", "Brain"],
-    correctAnswer: "Skin",
-  },
-  {
-    id: 29,
-    question: "What is the chemical symbol for silver?",
-    options: ["Ag", "Au", "Si", "Sv"],
-    correctAnswer: "Ag",
-  },
   // Add more questions here...
 ];
+
 
 const positiveAffirmations = [
   "You are capable of overcoming any challenge.",
@@ -262,7 +65,10 @@ function Quiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState("");
   const [score, setScore] = useState(0);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
+  const [incorrectAnswers, setIncorrectAnswers] = useState(0);
   const [showScore, setShowScore] = useState(false);
+  const [answeredCorrectly, setAnsweredCorrectly] = useState(false);
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
@@ -270,8 +76,14 @@ function Quiz() {
 
   const handleNextQuestion = () => {
     // Check if the selected option is correct
-    if (selectedOption === quizQuestions[currentQuestion].correctAnswer) {
+    const correctAnswer = quizQuestions[currentQuestion].correctAnswer;
+    if (selectedOption === correctAnswer) {
       setScore(score + 1);
+      setCorrectAnswers(correctAnswers + 1);
+      setAnsweredCorrectly(true);
+    } else {
+      setIncorrectAnswers(incorrectAnswers + 1);
+      setAnsweredCorrectly(false);
     }
 
     // Move to the next question
@@ -280,55 +92,151 @@ function Quiz() {
       setCurrentQuestion(nextQuestion);
       setSelectedOption("");
     } else {
-      // End of quiz, show score
       setShowScore(true);
     }
   };
 
+  const handleSkipQuestion = () => {
+    const nextQuestion = currentQuestion + 1;
+    if (nextQuestion < quizQuestions.length) {
+      setCurrentQuestion(nextQuestion);
+      setSelectedOption("");
+    } else {
+      setShowScore(true);
+    }
+  };
+
+  const isOptionSelected = (option) => {
+    return option === selectedOption;
+  };
+
+  const calculateScorePercentage = () => {
+    const totalQuestions = quizQuestions.length;
+    const percentage = (score / totalQuestions) * 100;
+    return percentage.toFixed(2);
+  };
+
   return (
-    <Container> 
+    <> 
+    <hr />     <br />
+                 <Typography variant="h4">
+                  Quiz Time 
+             
+              </Typography>
+         
+      <div className="quiz-container">
+      <br />
+        {!showScore ? (
+          <Card variant="outlined" className="question-section">
+            <CardContent>
+              <Typography variant="h6">
+                Question {currentQuestion + 1}
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                {quizQuestions[currentQuestion].question}
+              </Typography>
+              <Grid container spacing={2} alignItems="center">
+                {quizQuestions[currentQuestion].options.map((option, index) => (
+                  <Grid item xs={6} key={index}>
+                    <Button
+                      variant="outlined"
+                      fullWidth
+                      style={{
+                        borderColor: isOptionSelected(option)
+                          ? "#000"
+                          : "black",
+                        backgroundColor: isOptionSelected(option)
+                          ? "#00752f"
+                          : "#fff",
+                        borderWidth: "2px",
+                        borderRadius: "4px",
+                        color: isOptionSelected(option)
+                          ? "#fff"
+                          : "#000",
+                      }}
+                      onClick={() => handleOptionSelect(option)}
+                    >
+                      {option}
+                    </Button>
+                  </Grid>
+                ))}
+              </Grid>
+              <Grid
+                container
+                spacing={2}
+                justifyContent="space-between"
+                marginTop={2}
+              >
+                <Grid item>
+                  <Button
+                    variant="outlined"
+                    disabled={currentQuestion === quizQuestions.length - 1}
+                    onClick={handleSkipQuestion}
+                  >
+                    Skip
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleNextQuestion}
+                    disabled={!selectedOption}
+                  >
+                    Next
+                  </Button>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card variant="outlined" className="score-section">
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Quiz Results
+              </Typography>
+              <Typography variant="body1">
+                Correct Answers: {correctAnswers} / {quizQuestions.length}
+              </Typography>
+              <Typography variant="body1">
+                Incorrect Answers: {incorrectAnswers} / {quizQuestions.length}
+              </Typography>
+              <Typography variant="body1">
+                Total Score: {score} / {quizQuestions.length}
+              </Typography>
+              <Typography variant="body1">
+                Score Percentage: {calculateScorePercentage()}%
+              </Typography>
+            </CardContent>
+            {/* Display correct answers */}
+            <CardContent>
+              <Typography variant="h6" gutterBottom style={{ marginTop: "16px" }}>
+                Correct Answers:
+              </Typography>
+              {quizQuestions.map((question) => (
+                <Typography key={question.id} variant="body1" gutterBottom>
+                  {question.question} - {question.correctAnswer}
+                </Typography>
+              ))}
+            </CardContent>
+          </Card>
+        )}
 
-    <hr />
-    <br />
+        {/* Display positive affirmations */}
+        <br />
+        {/* <div className="affirmation-section">
+          <Typography variant="h6" gutterBottom>
+            Positive Affirmation:
+          </Typography>
+          <Typography variant="body1">
+            {positiveAffirmations[currentQuestion % positiveAffirmations.length]}
+          </Typography>
+        </div> */}
 
-    <div className="quiz-container">
-    <h4>
-            Quiz Time
-            </h4>
-
-      {!showScore ? (
-        <div className="question-section">
-          <h2>Question {currentQuestion + 1}</h2>
-          <div className="question-text">
-            {quizQuestions[currentQuestion].question}
-          </div>
-          <div className="options">
-            {quizQuestions[currentQuestion].options.map((option, index) => (
-              <button key={index} onClick={() => handleOptionSelect(option)}>
-                {option}
-              </button>
-            ))}
-          </div>
-          <button onClick={handleNextQuestion} disabled={!selectedOption}>
-            Next
-          </button>
-        </div>
-      ) : (
-        <div className="score-section">
-          <h2>Your Score: {score}</h2>
-          {/* Add options for the user, like restarting quiz, etc. */}
-        </div>
-      )}
-
-      {/* Display positive affirmations */}
-      <div className="affirmation-section">
-        <h3>Positive Affirmation:</h3>
-        <p>
-          {positiveAffirmations[currentQuestion % positiveAffirmations.length]}
-        </p>
       </div>
-    </div>
-    </Container>
+
+   
+    </>
   );
 }
 

@@ -21,7 +21,6 @@ urlpatterns = [
     path('mediator-teachers/', MediatatorTeacherProfileListCreate.as_view(), name='mediator-teacher-list-create'),
     path('mediator-teachers/<int:pk>/', MediatatorTeacherProfileRetrieveUpdateDestroy.as_view(), name='mediator-teacher-detail'),
     
-    
     path('doctor/free-time-slots/list/', FreeTimeSlotListCreateAPIView.as_view(), name='free-time-slot-list-create'),
     path('doctor/free-time-slots/create/', FreeTimeSlotListCreateAPIView.as_view(), name='free-time-slot-list-create'),
     path('doctor/free-time-slots/edit/<int:pk>/', FreeTimeSlotRetrieveUpdateDestroyAPIView.as_view(), name='free-time-slot-detail'),
@@ -37,5 +36,9 @@ urlpatterns = [
     
     path('notifications/', NotificationListView.as_view(), name='notification-list'),
     path('notifications/<int:pk>/', NotificationDetailView.as_view(), name='notification-detail'),
-    #########
+    ####################
+
+
+    path('api/doctor-profile/', DoctorProfileRetrieveUpdateDestroy.as_view(), name='doctor-profile-list'),
+    
 ]

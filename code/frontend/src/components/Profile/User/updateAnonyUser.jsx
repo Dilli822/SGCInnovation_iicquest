@@ -22,6 +22,8 @@ const AnyUserProfileUpdate = () => {
   const [open, setOpen] = useState(false);
   const [userIds, setUserIds] = useState([]);
 
+  const userId = localStorage.getItem("userId")
+  const Aaaid = localStorage.getItem("Aid");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -75,7 +77,7 @@ const AnyUserProfileUpdate = () => {
       formData.append("address", profileData.address);
       formData.append("phone_number", profileData.phone_number);
       formData.append("bio", profileData.bio);
-      const Aaaid = localStorage.getItem("Aid");
+
       if (!Aaaid) {
         throw new Error("Anonymous user ID is missing.");
       }
@@ -145,8 +147,9 @@ const AnyUserProfileUpdate = () => {
         }}
       >
         <Typography variant="h5">Anonymous Profile</Typography>
+        <hr />
 
-        <Box display="flex" flexDirection="column">
+        <Box display="flex" flexDirection="column" mt={2}>
           <Box
             display="flex"
             style={{
@@ -190,10 +193,28 @@ const AnyUserProfileUpdate = () => {
               />
             )}
           </Box>
-          <span>Click on the Image to Change the picture.</span>
+
+          <span>
+            <i>  Click on the Image to Change the picture. </i>
+          </span>
+          <hr />
+          <br />
+          <Typography variant="body1" style={{ marginBottom: "16px" }}>
+          <b> Nick Name:{" "} </b>
+            {profileEditMode ? (
+              <TextField
+                name="address"
+                value={profileData.username || ""}
+                onChange={handleInputChange}
+                style={{ width: "100%" }}
+              />
+            ) : (
+               <>{profileData.username }  </>
+            )}
+          </Typography>
 
           <Typography variant="body1" style={{ marginBottom: "16px" }}>
-            Address:{" "}
+          <b> Address:{" "} </b>
             {profileEditMode ? (
               <TextField
                 name="address"
@@ -202,12 +223,12 @@ const AnyUserProfileUpdate = () => {
                 style={{ width: "100%" }}
               />
             ) : (
-              profileData.address
+               <>{profileData.address }  </>
             )}
           </Typography>
 
           <Typography variant="body1" style={{ marginBottom: "16px" }}>
-            Phone Number:{" "}
+          <b>    Phone Number:{" "}</b>
             {profileEditMode ? (
               <TextField
                 name="phone_number"
@@ -216,7 +237,7 @@ const AnyUserProfileUpdate = () => {
                 style={{ width: "100%" }}
               />
             ) : (
-              profileData.phone_number
+            <> {profileData.phone_number}</>
             )}
           </Typography>
 
@@ -224,13 +245,15 @@ const AnyUserProfileUpdate = () => {
             variant="body1"
             style={{ marginBottom: "16px", textAlign: "left" }}
           >
-            Bio:{" "}
+           <b>Bio & Past Report Records:{" "} </b> 
             {profileEditMode ? (
               <TextField
                 name="bio"
                 value={profileData.bio || ""}
                 onChange={handleInputChange}
                 style={{ width: "100%" }}
+                multiline
+                rows={7}
               />
             ) : (
               profileData.bio
@@ -240,7 +263,7 @@ const AnyUserProfileUpdate = () => {
           <div
             style={{
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "",
               marginTop: "16px",
               width: "100%",
             }}
@@ -267,7 +290,7 @@ const AnyUserProfileUpdate = () => {
             ) : (
               <>
                 <Button
-                  variant="contained"
+                  variant="outlined"
                   color="primary"
                   onClick={handleEditButtonClick}
                   style={{ marginRight: "8px" }}
@@ -275,7 +298,8 @@ const AnyUserProfileUpdate = () => {
                   Edit
                 </Button>
                 <Button
-                  variant="contained"
+               variant="outlined"
+              color="error"
                   onClick={handleLogout}
                   style={{ marginLeft: "8px" }}
                 >
@@ -321,8 +345,8 @@ const AnyUserProfileUpdate = () => {
               Cancel
             </Button>
             <Button
-              variant="contained"
-              color="primary"
+              variant="outlined"
+              color="error"
               onClick={handleLogoutConfirm}
             >
               Logout

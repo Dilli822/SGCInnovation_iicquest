@@ -17,6 +17,9 @@ import {
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
 import HelpIcon from "@mui/icons-material/Help";
+import EmergencyShareIcon from '@mui/icons-material/EmergencyShare';
+import MedicalServicesOutlinedIcon from '@mui/icons-material/MedicalServicesOutlined';
+import MedicationIcon from '@mui/icons-material/Medication';
 
 const doctors = [
   {
@@ -71,11 +74,13 @@ const EmergencySupport = () => {
     <Card sx={{ margin: 2 }}>
       <CardContent>
 
-        <Grid container>
-          <Grid item md={6}>
-<HelpIcon color="error" fontSize="large" />
-          <Typography variant="h6" ml={2}>
-            Emergency Support
+        <Grid container style={{ display: "flex", alignItems: "center" }}>
+          <Grid item md={8}>
+
+
+<MedicalServicesOutlinedIcon color="error" style={{ fontSize: "5em" }} />
+          <Typography variant="h4">
+            Emergency Support <HelpIcon color="error" style={{ fontSize: "1.25em" }} />
           </Typography>
 
         <Typography variant="body1" mb={2}>
@@ -84,8 +89,9 @@ const EmergencySupport = () => {
         </Typography>
           </Grid>
 
-          <Grid item md={6}>
-          <Button
+          <Grid item md={4}>
+            <Grid>
+            <Button
               variant="contained"
               color="error"
               startIcon={<PhoneIcon />}
@@ -94,69 +100,28 @@ const EmergencySupport = () => {
             >
               Call Us
             </Button>
-          </Grid>
-          <Grid item xs={12} sm={6} md={2}>
+      
+            </Grid>
+
+            <Grid mt={1}>
             <Button
               variant="contained"
-              color="secondary"
+              color="primary"
               startIcon={<EmailIcon />}
               fullWidth
               onClick={handleClickOpen}
             >
               Email Us
             </Button>
-</Grid>
+            </Grid>
+
+
+          </Grid>
+
 
         </Grid>
 
-          
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={2}>
-           
-          </Grid>
-        </Grid>
-
-        <Box mt={4}>
-          <Typography variant="h6" mb={2}>
-            Nearby Doctors
-          </Typography>
-          <Grid container spacing={2}>
-            {doctors.map((doctor) => (
-              <Grid item xs={12} sm={6} md={2.4} key={doctor.id}>
-                <Card>
-                  <CardContent>
-                    <Box display="flex" alignItems="center" mb={2}>
-                      <Avatar
-                        alt={doctor.name}
-                        src={doctor.profilePic}
-                        sx={{ width: 56, height: 56, mr: 2 }}
-                      />
-                      <Box>
-                        <Typography variant="h6">{doctor.name}</Typography>
-                        <Typography color="textSecondary">
-                          {doctor.specialty}
-                        </Typography>
-                      </Box>
-                    </Box>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      fullWidth
-                      onClick={() => alert(`Contacting ${doctor.name}`)}
-                    >
-                      View Profile
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-          <Box mt={2} display="flex" justifyContent="center">
-            <Button variant="default" color="primary" onClick={handleViewMore}>
-              View More
-            </Button>
-          </Box>
-        </Box>
+        
       </CardContent>
 
       <Dialog open={open} onClose={handleClose}>

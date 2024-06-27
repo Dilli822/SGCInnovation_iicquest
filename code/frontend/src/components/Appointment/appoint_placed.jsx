@@ -11,6 +11,7 @@ import {
   Container,
   Dialog,
   DialogTitle,
+  Typography,
   DialogContent,
   DialogActions,
   DialogContentText,
@@ -30,6 +31,8 @@ const AppointmentPlacementsTable = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+
+
 
   useEffect(() => {
     const fetchAppointmentPlacements = async () => {
@@ -137,7 +140,11 @@ const AppointmentPlacementsTable = () => {
   }
 
   return (
-    <Container>
+    <> 
+    <Typography variant="h5" component="h3" gutterBottom>
+    Appointments Catalog
+  </Typography>
+
       <Grid item md={12}>
 
    
@@ -145,19 +152,18 @@ const AppointmentPlacementsTable = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>User</TableCell>
-              <TableCell>Doctor</TableCell>
+              <TableCell>Doctor ID: </TableCell>
               <TableCell>Start Time</TableCell>
-              <TableCell>End Time</TableCell>
+              <TableCell>Status</TableCell>
               <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {appointmentPlacements.slice(0, displayCount).map((appointment) => (
               <TableRow key={appointment.id}>
-                <TableCell>{appointment.user}</TableCell>
                 <TableCell>{appointment.doctor}</TableCell>
                 <TableCell>{new Date(appointment.booked_datetime).toLocaleString()}</TableCell>
+
                 <TableCell>{appointment.doctor_verify ? "Verified" : "Pending"}</TableCell>
                 <TableCell>
                   <Button
@@ -216,8 +222,10 @@ const AppointmentPlacementsTable = () => {
           {snackbarMessage}
         </Alert>
       </Snackbar>
+      
       </Grid>
-    </Container>
+      
+      </>
   );
 };
 

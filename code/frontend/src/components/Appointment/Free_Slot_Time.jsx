@@ -173,16 +173,23 @@ const FreeTimeSlots = () => {
   };
 
   return (
-    <Box sx={{ m: 2 }}>
-      <Typography variant="h4" component="h2" gutterBottom>
-        Doctor Available Free Time Slots
-      </Typography>
+    <Box sx={{ mt: 2 }}>
+      <div style={{ display: "flex", alignItems: "baseLine" }}>
+        <Typography variant="h4" component="h2" gutterBottom>
+          Appoint Your Doctor |
+        </Typography>
+        &nbsp;
+        <Typography variant="h5" component="h2" gutterBottom>
+          Doctor's Avaiable DateTime Slots
+        </Typography>
+      </div>
+      <hr />
 
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Date</TableCell>
+              <TableCell>Doctor's Id: </TableCell>
               <TableCell>Start Time</TableCell>
               <TableCell>End Time</TableCell>
               <TableCell>Action</TableCell>
@@ -191,22 +198,41 @@ const FreeTimeSlots = () => {
           <TableBody>
             {timeSlots.slice(0, displayCount).map((slot) => (
               <TableRow key={slot.id}>
-                <TableCell>
-                  {new Date(slot.start_time).toLocaleDateString()}
+                <TableCell>{slot.user}</TableCell>
+
+                <TableCell sx={{ fontSize: "auto" }}>
+                  {new Intl.DateTimeFormat("en-US", {
+                    timeZone: "Asia/Kathmandu",
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                    second: "numeric",
+                  }).format(new Date(slot.start_time))}
                 </TableCell>
                 <TableCell>
-                  {new Date(slot.start_time).toLocaleTimeString()}
+                  {new Intl.DateTimeFormat("en-US", {
+                    timeZone: "Asia/Kathmandu",
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                    second: "numeric",
+                  }).format(new Date(slot.end_time))}
                 </TableCell>
-                <TableCell>
-                  {new Date(slot.end_time).toLocaleTimeString()}
-                </TableCell>
+
                 <TableCell>
                   <Button
                     variant="contained"
                     color="primary"
                     onClick={() => handlePlaceAppointment(slot)}
+                    fullWidth
                   >
-                    Place Appointment
+                    Reserve
                   </Button>
                 </TableCell>
               </TableRow>
@@ -214,23 +240,20 @@ const FreeTimeSlots = () => {
           </TableBody>
         </Table>
         {displayCount < timeSlots.length && (
-        <Box textAlign="center" mt={2}>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={handleViewMore}
-          >
-            View More
-          </Button>
-        </Box>
-      )}
+          <Box textAlign="center" mt={2}>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleViewMore}
+            >
+              View More
+            </Button>
+          </Box>
+        )}
 
-      <br />
-
-
+        <br />
       </TableContainer>
 
-   
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
