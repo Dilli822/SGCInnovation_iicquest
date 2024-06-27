@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Close as CloseIcon } from "@material-ui/icons";
 import Notification from "../Notifications/Notifications";
+import AppLogo from "../assets/img/Logo.png"
 import {
   AppBar,
   Button,
@@ -190,7 +191,8 @@ const Header = () => {
             <Grid item xs={6}>
               <Link to="/feed">
                 <img
-                  src="https://raw.githubusercontent.com/aakashstha1/Susthiti/main/Logo.png"
+                  // src="https://raw.githubusercontent.com/aakashstha1/Susthiti/main/Logo.png"
+                  src={AppLogo}
                   alt=""
                   style={{ width: "150px" }}
                 />

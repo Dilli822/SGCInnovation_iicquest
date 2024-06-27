@@ -12,6 +12,10 @@ from .serializers import UserSerializer
 from .models import UserData
 from .permissions import *
 from rest_framework.generics import RetrieveAPIView
+from django.utils import timezone
+from datetime import timedelta
+from django.shortcuts import get_object_or_404
+
 
 class RegisterView(APIView):
     def post(self, request):
@@ -122,15 +126,32 @@ class UserDeleteAPIView(APIView):
         return Response({"message": "Account deleted successfully."})
     
     
+# class FreeTimeSlotListCreateAPIView(generics.ListCreateAPIView):
+#     serializer_class = FreeTimeSlotSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self):
+#         if self.request.user.is_doctor:
+#             return FreeTimeSlot.objects.filter(user=self.request.user)
+#         else:
+#             return FreeTimeSlot.objects.all()
+
+#     def perform_create(self, serializer):
+#         if self.request.user.is_doctor:
+#             serializer.save(user=self.request.user)
+#         else:
+#             serializer.save()
+
 class FreeTimeSlotListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = FreeTimeSlotSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        current_datetime = timezone.now()
         if self.request.user.is_doctor:
-            return FreeTimeSlot.objects.filter(user=self.request.user)
+            return FreeTimeSlot.objects.filter(user=self.request.user, end_time__gte=current_datetime)
         else:
-            return FreeTimeSlot.objects.all()
+            return FreeTimeSlot.objects.filter(end_time__gte=current_datetime)
 
     def perform_create(self, serializer):
         if self.request.user.is_doctor:
@@ -152,17 +173,44 @@ class AppointmentListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Appointment.objects.filter(user=self.request.user)
+        # return Appointment.objects.filter(user=self.request.user)
+        return Appointment.objects.all()
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+    
+# class AppointmentListCreateView(generics.ListCreateAPIView):
+#     serializer_class = AppointmentSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self):
+#         return Appointment.objects.filter(user=self.request.user)
+
+#     def perform_create(self, serializer):
+#         user = self.request.user
+#         current_time = timezone.now()
+#         # Calculate 12 hours ago from current time
+#         twelve_hours_ago = current_time - timedelta(hours=12)
+        
+#         # Check if the user has any appointments within the last 12 hours on the same day
+#         existing_appointments = Appointment.objects.filter(
+#             user=user,
+#             booked_datetime__gte=twelve_hours_ago.date(),  # Only consider date part
+#             booked_datetime__lt=current_time.date(),  # Only consider date part
+#         )
+        
+#         if existing_appointments.exists():
+#             return Response({"error": "Cannot place appointment. You already have an appointment within the last 12 hours."}, status=status.HTTP_400_BAD_REQUEST)
+        
+#         # Proceed to save the new appointment
+#         serializer.save(user=user)
 
 class AppointmentDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AppointmentSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Appointment.objects.filter(user=self.request.user)
+        return Appointment.objects.all()
     
 class NotificationListView(generics.ListAPIView):
     serializer_class = NotificationSerializer
@@ -191,9 +239,6 @@ class DoctorProfileRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
         user = self.request.user
         return DoctorProfile.objects.get(user=user)
 
-
-
-
 class DoctorProfileRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DoctorProfileSerializer
     permission_classes = [IsAuthenticated]
@@ -201,3 +246,5 @@ class DoctorProfileRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
         user = self.request.user
         return DoctorProfile.objects.get(user=user)
+    
+    

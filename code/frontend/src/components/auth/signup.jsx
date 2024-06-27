@@ -76,7 +76,7 @@ export default function SignUp() {
         event.target.reset();
         setTimeout(() => {
           navigate("/login");
-        }, 5000); // 1000 milliseconds = 1 second
+        }, 3000); // 1000 milliseconds = 1 second
       } else {
         const errorData = await response.json();
         setShowErrorMessage(true);

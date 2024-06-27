@@ -31,7 +31,7 @@ const doctors = [
   },
   {
     id: 6,
-    name: "Dr.Shreya Rai",
+    name: "Dr.Neena Rai",
     address: "Itahari-9, Life Guard Hospital",
     image:
       "https://rhythmofmymind.com/wp-content/uploads/2022/07/1627917313Dr.-Neena-Rai.jpg",

@@ -53,11 +53,13 @@ const AnnoyUser = () => {
         </Grid>
         <Grid item md={8}>
           <FreeTimeSlots />
+          <br />
+          <AppointmentPlacementsList />
         </Grid>
       </Grid>
 
       <Grid item md={12}>
-        <AppointmentPlacementsList />
+       
       </Grid>
       <br />
       <br />

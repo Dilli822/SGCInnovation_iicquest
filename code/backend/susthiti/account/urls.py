@@ -25,7 +25,7 @@ urlpatterns = [
     path('doctor/free-time-slots/create/', FreeTimeSlotListCreateAPIView.as_view(), name='free-time-slot-list-create'),
     path('doctor/free-time-slots/edit/<int:pk>/', FreeTimeSlotRetrieveUpdateDestroyAPIView.as_view(), name='free-time-slot-detail'),
     
-    # buyer place the appointment to the doctor
+    # user place the appointment to the doctor
     path('users/appointments-to-doctor/create/', AppointmentListCreateView.as_view(), name='appointment-list-create'),
     path('users/appointments-to-doctor/list/', AppointmentListCreateView.as_view(), name='appointment-list-create'),
     path('users/appointments-to-doctor/<int:pk>/', AppointmentDetailView.as_view(), name='appointment-detail'),

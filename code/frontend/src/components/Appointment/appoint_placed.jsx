@@ -166,14 +166,24 @@ const AppointmentPlacementsTable = () => {
 
                 <TableCell>{appointment.doctor_verify ? "Verified" : "Pending"}</TableCell>
                 <TableCell>
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    startIcon={<Cancel />}
-                    onClick={() => handleCancelAppointment(appointment.id)}
-                  >
-                    Cancel
-                  </Button>
+                {!appointment.doctor_verify ? (
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        startIcon={<Cancel />}
+                        onClick={() => handleCancelAppointment(appointment.id)}
+                      >
+                        Cancel
+                      </Button>
+                    ) : (
+                      appointment.google_meetLink ? (
+                        <a href={appointment.google_meetLink} target="_blank" rel="noopener noreferrer">
+                          Google Meet Link
+                        </a>
+                      ) : (
+                        <span style={{ color: 'grey' }}>No Meet Link</span>
+                      )
+                    )}
                 </TableCell>
               </TableRow>
             ))}

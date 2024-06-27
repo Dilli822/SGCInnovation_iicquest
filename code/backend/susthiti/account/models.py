@@ -6,6 +6,8 @@ from rest_framework.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from django.utils import timezone
+
 
 class UserManager(BaseUserManager):
     use_in_migration = True
@@ -153,7 +155,6 @@ class MediatatorTeacherProfile(models.Model):
             self.email = self.user.email
         super().save(*args, **kwargs)
 
-
 class FreeTimeSlot(models.Model):
     user = models.ForeignKey(UserData, on_delete=models.CASCADE, related_name='free_time_slots')
     start_time = models.DateTimeField()
@@ -162,18 +163,38 @@ class FreeTimeSlot(models.Model):
     def __str__(self):
         return f"Free Time Slot for {self.user.username} from {self.start_time} to {self.end_time}"
 
+    def clean(self):
+        # Get the latest end_time for existing FreeTimeSlots of the same user
+        latest_end_time = FreeTimeSlot.objects.filter(
+            user=self.user
+        ).exclude(id=self.id if self.id else None).order_by('-end_time').values_list('end_time', flat=True).first()
+
+        if latest_end_time:
+            # Calculate the minimum allowed end_time
+            min_allowed_end_time = latest_end_time + timezone.timedelta(hours=1)
+
+            # Compare with the proposed end_time
+            if self.end_time <= min_allowed_end_time:
+                raise ValidationError(_('End time must be at least 1 hour greater than the latest end time of existing FreeTimeSlots for the same user.'))
+
+    class Meta:
+        unique_together = [['user', 'start_time', 'end_time']]
+        
 class Appointment(models.Model):
     doctor = models.ForeignKey(UserData, on_delete=models.CASCADE, related_name='appointments_as_doctor')
     free_time_slot = models.ForeignKey(FreeTimeSlot, on_delete=models.CASCADE, related_name='appointments')
+    booked_datetime = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(UserData, on_delete=models.CASCADE, related_name='appointments')
-    booked_datetime = models.DateTimeField(auto_now_add=True)
+    booked_startDateTime = models.DateTimeField()
+    booked_endDateTime = models.DateTimeField()
     doctor_verify = models.BooleanField(default=False)
+    google_meetLink = models.CharField(max_length=500, default="", blank=True)
 
     def __str__(self):
         return f"Appointment for {self.user.username} with {self.doctor.username} at {self.free_time_slot.start_time}"
 
-    class Meta:
-        ordering = ['-booked_datetime']
+    # class Meta:
+    #     ordering = ['-']
     
 
 class Notification(models.Model):

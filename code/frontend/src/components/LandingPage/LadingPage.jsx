@@ -18,6 +18,7 @@ import Join from "../Join/Join";
 import DoctorsList from "../nearby/doctorsNearby";
 import brainImg from "../assets/brainImg.png";
 import EmergencySupport from "../Emergency/Emergency";
+import HopeLight from "../assets/img/mix/IdeaHopeLight.jpg"
 
 export default function LandingPage() {
   return (
@@ -94,7 +95,8 @@ export default function LandingPage() {
             ></Box>
             <Box
               component="img"
-              src="https://media.istockphoto.com/id/1428194995/vector/idea-concept-with-one-line-bulbs-innovation-idea-process-of-untangling-wire-to-supply.jpg?s=612x612&w=0&k=20&c=955im8MKedyPep1Yd6z9myTWZM05p8iO8HSC5jzEU4k="
+              // src="https://media.istockphoto.com/id/1428194995/vector/idea-concept-with-one-line-bulbs-innovation-idea-process-of-untangling-wire-to-supply.jpg?s=612x612&w=0&k=20&c=955im8MKedyPep1Yd6z9myTWZM05p8iO8HSC5jzEU4k="
+              src={HopeLight}
               alt="Smiling person"
               sx={{
                 width: "34rem", // Increased width

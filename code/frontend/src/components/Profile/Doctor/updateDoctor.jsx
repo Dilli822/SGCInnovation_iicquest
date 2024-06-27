@@ -100,10 +100,10 @@ const DoctorProfileUpdate = () => {
       formData.append("phone_number", profileData.phone_number);
       formData.append("bio", profileData.bio);
 
-      const doctorId = localStorage.getItem("doctorId");
+   
 
       const response = await fetch(
-        `http://localhost:8000/sushtiti/account/doctors/edit/1/`,
+        `http://localhost:8000/sushtiti/account/doctors/edit/${doctorId}`,
         {
           method: "PUT",
           headers: {
