@@ -426,14 +426,59 @@ const Appointment = () => {
               {appointments.map((appointment) => (
                 <TableRow key={appointment.id}>
                   <TableCell>{appointment.user}</TableCell>
-                  <TableCell>
+                  {/* <TableCell>
                     {new Date(
                       appointment.booked_startDateTime
                     ).toLocaleString()}
                   </TableCell>
                   <TableCell>
                     {new Date(appointment.booked_endDateTime).toLocaleString()}
+                  </TableCell> */}
+
+<TableCell>
+                    {new Date(appointment.booked_startDateTime).toISOString().split("T")[0]} |{" "}
+                    {(() => {
+                      const timeString = new Date(appointment.booked_startDateTime)
+                        .toISOString()
+                        .split("T")[1]
+                        .split(".")[0];
+                      const [hours, minutes] = timeString.split(":");
+                      let period = "AM";
+                      let hour = parseInt(hours, 10);
+                      if (hour >= 12) {
+                        period = "PM";
+                        if (hour > 12) {
+                          hour -= 12;
+                        }
+                      }
+    
+                      return `${hour}:${minutes} ${period}`;
+                    })()}
                   </TableCell>
+    
+                  <TableCell>
+                    {new Date(appointment.booked_endDateTime).toISOString().split("T")[0]} |{" "}
+                    {(() => {
+                      const timeString = new Date(appointment.booked_endDateTime)
+                        .toISOString()
+                        .split("T")[1]
+                        .split(".")[0];
+                      const [hours, minutes] = timeString.split(":");
+                      let period = "AM";
+                      let hour = parseInt(hours, 10);
+    
+                      if (hour >= 12) {
+                        period = "PM";
+                        if (hour > 12) {
+                          hour -= 12;
+                        }
+                      }
+    
+                      return `${hour}:${minutes} ${period}`;
+                    })()}
+                  </TableCell>
+    
+
                   <TableCell>{appointment.free_time_slot}</TableCell>
                   <TableCell>
                     {appointment.doctor_verify ? "Verified" : "Pending"}
