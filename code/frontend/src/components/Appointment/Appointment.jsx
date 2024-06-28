@@ -15,6 +15,7 @@ import {
   Paper,
   IconButton,
 } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const Appointment = () => {
@@ -418,6 +419,7 @@ const Appointment = () => {
                 <TableCell>   Slot ID</TableCell>
     
                 <TableCell>Status</TableCell>
+                <TableCell>Google Meet Link </TableCell>
                 <TableCell>Action </TableCell>
     
               </TableRow>
@@ -480,10 +482,18 @@ const Appointment = () => {
     
 
                   <TableCell>{appointment.free_time_slot}</TableCell>
+
+
+
                   <TableCell>
                     {appointment.doctor_verify ? "Verified" : "Pending"}
                   </TableCell>
                   <TableCell>
+                  <a href={appointment.google_meetLink} target="_blank" rel="noopener noreferrer">
+                          Google Meet Link
+                        </a>
+    </TableCell>
+    <TableCell>
                     {!appointment.doctor_verify && (
                       <Button
                         variant="contained"
@@ -522,11 +532,12 @@ const Appointment = () => {
           }}
         >
           <Typography variant="h6" id="zoom-link-modal-title" gutterBottom>
-            Send Zoom Link
+            Send Google Meet Link
           </Typography>
           <Typography variant="body1" id="zoom-link-modal-description">
-            Enter the Zoom link for the appointment:
+            Enter the Google Meet link for the appointment:
           </Typography>
+          <br />
           <TextField
             label="Zoom Link"
             value={zoomLink}

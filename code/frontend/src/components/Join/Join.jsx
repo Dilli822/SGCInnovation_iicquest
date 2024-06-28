@@ -7,8 +7,7 @@ const Join = () => {
       <hr />
 
       <Grid container spacing={2} alignItems="center" padding={4}>
-
-      <Grid
+        <Grid
           item
           xs={12}
           md={6}
@@ -33,7 +32,7 @@ const Join = () => {
               // src="https://i.pinimg.com/originals/63/fd/ff/63fdff4b7c1964f08c3c16f18f581bd7.gif"
               // src="https://cdn.dribbble.com/users/20368/screenshots/3949907/live_chat_anim_2.gif"
 
-                  src="https://i.pinimg.com/originals/e3/1b/75/e31b752875679b64fce009922f9f0dda.gif"
+              src="https://i.pinimg.com/originals/e3/1b/75/e31b752875679b64fce009922f9f0dda.gif"
               alt="Placeholder"
               sx={{
                 width: "34rem",
@@ -46,7 +45,7 @@ const Join = () => {
             />
           </Box>
         </Grid>
-        
+
         <Grid
           item
           xs={12}
@@ -60,10 +59,7 @@ const Join = () => {
             padding: "0 2rem",
           }}
         >
-          <Typography
-            variant="h3"
-            gutterBottom
-          >
+          <Typography variant="h3" gutterBottom>
             Thrive Together: Wellness Hub
           </Typography>
           <Typography variant="body1" gutterBottom>
@@ -79,10 +75,11 @@ const Join = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Button variant="outlined" sx={{ color: "#4FC3F7" }}>Join Room</Button>
+            <Button variant="outlined" sx={{ color: "#4FC3F7" }}>
+              Join Room
+            </Button>
           </Link>
         </Grid>
-        
       </Grid>
     </>
   );
