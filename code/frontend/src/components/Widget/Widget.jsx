@@ -9,9 +9,7 @@ const theme = createTheme();
 
 const Widget = () => {
   return (
-    <>
-
-    
+<>
 <Grid mt={"3rem"}>
         <hr />
         <Grid
@@ -42,7 +40,7 @@ const Widget = () => {
             <Link to="/aptitude-test">
               <Button
                 variant="outlined"
-                sx={{ mr: 2, borderColor: "#4FC3F7" }}
+                sx={{ mr: 2, borderColor: "#4FC3F7", color: "#000" }}
               >
                 Mental Status Exam
               </Button>

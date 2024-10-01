@@ -44,7 +44,7 @@ export default function LandingPage() {
             </Typography>
             <br />
             <Link to="/community">
-              <Button variant="outlined" sx={{ color: "#4FC3F7" }}>
+              <Button variant="contained" sx={{ color: "#fff" }}>
                 Let's Get Started
               </Button>
             </Link>

@@ -75,7 +75,8 @@ const Join = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Button variant="outlined" sx={{ color: "#4FC3F7" }}>
+            {/* #4FC3F7 */}
+            <Button variant="contained" sx={{ color: "#fff" }}>
               Join Room
             </Button>
           </Link>

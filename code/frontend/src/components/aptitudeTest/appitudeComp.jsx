@@ -15,7 +15,7 @@ import PieChartComponent from "../charts/pieChart";
 import { Pie } from "react-chartjs-2";
 
 
-const questionsData = {
+const questionsDataSet1 = {
   questions: [
     {
       id: 1,
@@ -176,6 +176,486 @@ const questionsData = {
     },
   ],
 };
+
+
+const questionsDataSet2 = {
+  questions: [
+    {
+      id: 21,
+      question:
+        "How often do you feel overwhelmed with your schoolwork and extracurricular activities?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "stress",
+    },
+    {
+      id: 22,
+      question:
+        "In the past month, how often have you felt nervous or stressed?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "anxiety",
+    },
+    {
+      id: 23,
+      question:
+        "How often do you find it difficult to concentrate on your studies due to stress?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "stress",
+    },
+    {
+      id: 24,
+      question:
+        "Do you often feel tired or lack energy even after sleeping well?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "depression",
+    },
+    {
+      id: 25,
+      question:
+        "How often do you worry about your future or college applications?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "anxiety",
+    },
+    {
+      id: 26,
+      question:
+        "Do you experience headaches or other physical symptoms due to stress?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "stress",
+    },
+    {
+      id: 27,
+      question: "How often do you feel you have too many responsibilities?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "stress",
+    },
+    {
+      id: 28,
+      question:
+        "Do you feel you have a healthy balance between schoolwork and leisure activities?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 3,
+      category: "normal",
+    },
+    {
+      id: 29,
+      question:
+        "How often do you feel you lack control over the important things in your life?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "depression",
+    },
+    {
+      id: 30,
+      question: "Do you have trouble sleeping due to stress or anxiety?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "anxiety",
+    },
+    {
+      id: 31,
+      question:
+        "How often do you feel under pressure to perform well academically?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "stress",
+    },
+    {
+      id: 32,
+      question:
+        "Do you feel supported by friends or family when you are stressed?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 3,
+      category: "normal",
+    },
+    {
+      id: 33,
+      question:
+        "How often do you find yourself irritable or angry due to stress?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "stress",
+    },
+    {
+      id: 34,
+      question:
+        "Do you find it hard to relax or calm down when you're stressed?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "anxiety",
+    },
+    {
+      id: 35,
+      question: "How often do you feel lonely or isolated when stressed?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "depression",
+    },
+    {
+      id: 36,
+      question:
+        "Do you find it difficult to keep up with your hobbies or interests due to stress?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 3,
+      category: "normal",
+    },
+    {
+      id: 37,
+      question:
+        "How often do you experience changes in your appetite due to stress?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 3,
+      category: "depression",
+    },
+    {
+      id: 38,
+      question:
+        "Do you feel confident in your ability to handle personal problems?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 3,
+      category: "normal",
+    },
+    {
+      id: 39,
+      question:
+        "How often do you feel that stress affects your relationships with friends or family?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "stress",
+    },
+    {
+      id: 40,
+      question:
+        "Do you feel you have enough time for yourself despite your responsibilities?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 3,
+      category: "normal",
+    },
+  ],
+};
+
+const questionsDataSet3 = {
+  questions: [
+    // Anxiety category
+    {
+      id: 41,
+      question: "How often do you feel in control of your emotions?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "anxiety",
+    },
+    {
+      id: 42,
+      question: "Do you find it easy to express your feelings to others?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "anxiety",
+    },
+    {
+      id: 43,
+      question: "How often do you experience sudden feelings of nervousness?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "anxiety",
+    },
+    {
+      id: 44,
+      question: "Do you feel anxious when faced with unfamiliar situations?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "anxiety",
+    },
+    {
+      id: 45,
+      question: "How often do you feel restless or on edge?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "anxiety",
+    },
+
+    // Stress category
+    {
+      id: 46,
+      question: "Do you feel overwhelmed by your responsibilities?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 3,
+      category: "stress",
+    },
+    {
+      id: 47,
+      question: "How often do you struggle with time management?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "stress",
+    },
+    {
+      id: 48,
+      question: "Do you feel your stress affects your health?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "stress",
+    },
+    {
+      id: 49,
+      question: "How often do you feel tense or under pressure?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "stress",
+    },
+    {
+      id: 50,
+      question: "Do you find it hard to relax after a stressful day?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 3,
+      category: "stress",
+    },
+
+    // Normal category
+    {
+      id: 51,
+      question: "How often do you experience feelings of gratitude?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "normal",
+    },
+    {
+      id: 52,
+      question: "Do you feel satisfied with your current routine?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "normal",
+    },
+    {
+      id: 53,
+      question: "How often do you reflect on positive experiences in your life?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "normal",
+    },
+    {
+      id: 54,
+      question: "Do you feel content with your relationships?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "normal",
+    },
+    {
+      id: 55,
+      question: "How often do you feel confident in your abilities?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "normal",
+    },
+
+    // Depression category
+    {
+      id: 56,
+      question: "Do you feel that you are growing personally and emotionally?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "depression",
+    },
+    {
+      id: 57,
+      question: "How often do you feel a lack of motivation to engage in activities?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "depression",
+    },
+    {
+      id: 58,
+      question: "Do you feel disconnected from people around you?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "depression",
+    },
+    {
+      id: 59,
+      question: "How often do you experience feelings of sadness or hopelessness?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "depression",
+    },
+    {
+      id: 60,
+      question: "Do you find it difficult to enjoy activities you used to like?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "depression",
+    },
+  ],
+};
+
+
+const questionsDataSet4  = {
+  questions: [
+    // Anxiety category
+    {
+      id: 61,
+      question: "How often do you feel like avoiding social situations?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "anxiety",
+    },
+    {
+      id: 62,
+      question: "Do you experience panic or fear without a clear reason?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "anxiety",
+    },
+    {
+      id: 63,
+      question: "How often do you worry excessively about daily tasks?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "anxiety",
+    },
+    {
+      id: 64,
+      question: "Do you feel like your mind is constantly racing with thoughts?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "anxiety",
+    },
+    {
+      id: 65,
+      question: "How often do you feel a sense of dread or impending danger?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "anxiety",
+    },
+
+    // Stress category
+    {
+      id: 66,
+      question: "Do you feel physically exhausted even when you haven't done much?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 3,
+      category: "stress",
+    },
+    {
+      id: 67,
+      question: "How often do you have trouble sleeping due to stress?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "stress",
+    },
+    {
+      id: 68,
+      question: "Do you find it hard to concentrate when you're stressed?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "stress",
+    },
+    {
+      id: 69,
+      question: "How often do you feel irritable or angry when under pressure?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "stress",
+    },
+    {
+      id: 70,
+      question: "Do you frequently experience headaches or muscle tension?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 3,
+      category: "stress",
+    },
+
+    // Normal category
+    {
+      id: 71,
+      question: "How often do you engage in hobbies or activities you enjoy?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "normal",
+    },
+    {
+      id: 72,
+      question: "Do you feel a sense of balance between work and relaxation?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "normal",
+    },
+    {
+      id: 73,
+      question: "How often do you find yourself laughing or smiling throughout the day?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "normal",
+    },
+    {
+      id: 74,
+      question: "Do you feel that you have meaningful connections with others?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "normal",
+    },
+    {
+      id: 75,
+      question: "How often do you wake up feeling rested and energized?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "normal",
+    },
+
+    // Depression category
+    {
+      id: 76,
+      question: "Do you often feel emotionally numb or detached?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "depression",
+    },
+    {
+      id: 77,
+      question: "How often do you experience feelings of guilt or worthlessness?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "depression",
+    },
+    {
+      id: 78,
+      question: "Do you have trouble concentrating or making decisions?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "depression",
+    },
+    {
+      id: 79,
+      question: "How often do you feel like life has no purpose or meaning?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 5,
+      category: "depression",
+    },
+    {
+      id: 80,
+      question: "Do you find yourself withdrawing from family and friends?",
+      options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
+      weightage: 4,
+      category: "depression",
+    },
+  ],
+};
+
+
+
+  // Step 2: Function to select a random array
+  const getRandomArray = () => {
+    const arrays = [questionsDataSet1, questionsDataSet2, questionsDataSet3, questionsDataSet4];
+    const randomIndex = Math.floor(Math.random() * arrays.length);
+    return arrays[randomIndex];
+  };
+
+  // Use getRandomArray() wherever you need to work with questionsData
+  const questionsData = getRandomArray();
 
 const AptitudeTest = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -373,3 +853,5 @@ const AptitudeTest = () => {
 };
 
 export default AptitudeTest;
+
+
