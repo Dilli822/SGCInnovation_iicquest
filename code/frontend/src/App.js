@@ -13,6 +13,7 @@ export default function MainApp() {
        <ThemeProvider theme={theme}>
       <MainRouter />
       </ThemeProvider>
+
       {/* <TipsCards/> */}
     </Router>
   );

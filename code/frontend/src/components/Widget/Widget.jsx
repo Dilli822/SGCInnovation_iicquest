@@ -51,14 +51,14 @@ const Widget = () => {
             <Carousel showThumbs={false} infiniteLoop autoPlay>
               <div>
                 <img
-                  src="https://cdn.dribbble.com/users/10810972/screenshots/18542066/media/3cd49e2098374a6cb382c12ba68b851e.gif"
+                  src="https://i.pinimg.com/originals/a7/78/19/a778193d04758b169fca966fe0655645.gif"
                   alt=""
                   style={{ width: "100%", borderRadius: "1%" }}
                 />
               </div>
               <div>
                 <img
-                  src="https://media0.giphy.com/media/YrnNyUKBAIjBTgGBtu/giphy.gif"
+                  src="https://media3.giphy.com/media/OsgloXApFBtFyuFcJV/giphy.gif"
                   alt=""
                   style={{
                     width: "100%",

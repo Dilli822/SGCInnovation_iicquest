@@ -124,7 +124,10 @@ function Community() {
     const token = localStorage.getItem("accessToken");
 
     if (!token) {
-      alert("Please log in to add a comment.");
+      // Show success Snackbar
+      setSnackbarMessage("Please Login/Sign up!");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
       return;
     }
 
@@ -165,6 +168,11 @@ function Community() {
           ...newComments,
           [postId]: "", // Clear comment input for the specific post
         });
+
+        // Show success Snackbar
+        setSnackbarMessage("Comment Added successfully!");
+        setSnackbarSeverity("success");
+        setSnackbarOpen(true);
       } else {
         console.error("Failed to add comment");
       }
@@ -181,7 +189,10 @@ function Community() {
 
     // Check if there is an access token
     if (!token) {
-      alert("You need to log in to post.");
+      // Show success Snackbar
+      setSnackbarMessage("Please Login/Sign up!");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
       return;
     }
 
@@ -210,6 +221,11 @@ function Community() {
         setPosts([...posts, { post: addedPost, comments: [] }]);
         setNewPost(""); // Clear new post input
         setNewPostTitle(""); // Clear new post title input
+
+        // Show success Snackbar
+        setSnackbarMessage("Post created successfully!");
+        setSnackbarSeverity("success");
+        setSnackbarOpen(true);
       } else {
         console.error("Failed to add post");
       }
@@ -240,9 +256,11 @@ function Community() {
 
   // Function to handle sharing a post
   const handleShare = (slug) => {
-    alert(`Shared post with slug: ${slug}`);
+    // Show success Snackbar
+    setSnackbarMessage(`Shared post with slug: ${slug}`);
+    setSnackbarSeverity("success");
+    setSnackbarOpen(true);
   };
-  
 
   const accessToken = localStorage.getItem("accessToken");
 
@@ -307,115 +325,137 @@ function Community() {
           </Box>
 
           {/* Display Filtered Posts */}
-          {filteredPosts.map(({ post, comments }) => (
-            <Card key={post.id} sx={{ mb: 4 }}>
-              <CardContent>
-                <Box display="flex" alignItems="center" mb={2}>
-                  <Avatar
-                    alt="User Avatar"
-                    src="https://placehold.co/40x40"
-                    sx={{ mr: 2 }}
-                  />
-                  <Box>
-                    <Typography variant="body1" fontWeight="bold">
-                      {post.author}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      {post.title} -{" "}
-                      {new Date(post.created_at).toLocaleDateString()}
-                    </Typography>
+          {filteredPosts
+            .sort(
+              (a, b) =>
+                new Date(b.post.created_at) - new Date(a.post.created_at)
+            )
+            .map(({ post, comments }) => (
+              <Card key={post.id} sx={{ mb: 4 }}>
+                <CardContent>
+                  <Box display="flex" alignItems="center" mb={2}>
+                    <Avatar
+                      alt="User Avatar"
+                      src="https://placehold.co/40x40"
+                      sx={{ mr: 2 }}
+                    />
+                    <Box>
+                      <Typography variant="body1" fontWeight="bold">
+                        {post.author}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        {post.title} -{" "}
+                        {new Date(post.created_at).toLocaleDateString()}
+                      </Typography>
+                    </Box>
                   </Box>
-                </Box>
-                <Typography variant="body2" color="textSecondary" mb={2}>
-                  {post.content}
-                </Typography>
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Button color="primary" onClick={() => handleExpand(post.id)}>
-                    {expandedPostId === post.id ? "Close" : "Read more"}
-                  </Button>
-                  <Box>
-                    <IconButton
-                      color="inherit"
+                  <Typography variant="body2" color="textSecondary" mb={2}>
+                    {post.content}
+                  </Typography>
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Button
+                      color="primary"
                       onClick={() => handleExpand(post.id)}
                     >
-                      <CommentIcon />
-                      <Typography variant="body2" sx={{ ml: 1 }}>
-                        {expandedPostId === post.id
-                          ? "Hide Comments"
-                          : "Show Comments"}
-                      </Typography>
-                    </IconButton>
-                    <IconButton
-                      color="inherit"
-                      // onClick={() => handleShare(post.post.slug)}
-                    >
-                      <ShareIcon />
-                      <Typography variant="body2" sx={{ ml: 1 }}>
-                        Share
-                      </Typography>
-                    </IconButton>
-                  </Box>
-                </Box>
-                {expandedPostId === post.id && (
-                  <>
-                    <Divider sx={{ my: 2 }} />
-                    {comments.length > 0 ? (
-                      comments.map((comment) => (
-                        <Box
-                          key={comment.id}
-                          display="flex"
-                          alignItems="center"
-                          mb={1}
-                        >
-                          <Avatar
-                            alt="User Avatar"
-                            src="https://placehold.co/40x40"
-                            sx={{ mr: 2 }}
-                          />
-                          <Typography variant="body2" color="textSecondary">
-                            {comment.text} -{" "}
-                            {new Date(comment.created_at).toLocaleDateString()}
-                          </Typography>
-                        </Box>
-                      ))
-                    ) : (
-                      <Typography variant="body2" color="textSecondary">
-                        No comments yet.
-                      </Typography>
-                    )}
-                    <Box mt={2} display="flex" alignItems="center">
-                      <TextField
-                        label="Add a comment"
-                        variant="outlined"
-                        size="small"
-                        fullWidth
-                        value={newComments[post.id] || ""}
-                        onChange={(event) =>
-                          handleNewCommentChange(post.id, event)
-                        }
-                      />
-                      <Button
-                        color="primary"
-                        variant="contained"
-                        sx={{ ml: 2 }}
-                        onClick={() => handleAddComment(post.id)}
+                      {expandedPostId === post.id ? "Close" : "Read more"}
+                    </Button>
+                    <Box>
+                      <IconButton
+                        color="inherit"
+                        onClick={() => handleExpand(post.id)}
                       >
-                        Submit
-                      </Button>
+                        <CommentIcon />
+                        <Typography variant="body2" sx={{ ml: 1 }}>
+                          {expandedPostId === post.id
+                            ? "Hide Comments"
+                            : "Show Comments"}
+                        </Typography>
+                      </IconButton>
+                      <IconButton color="inherit">
+                        <ShareIcon />
+                        <Typography variant="body2" sx={{ ml: 1 }}>
+                          Share
+                        </Typography>
+                      </IconButton>
                     </Box>
-                  </>
-                )}
-              </CardContent>
-            </Card>
-          ))}
+                  </Box>
+                  {expandedPostId === post.id && (
+                    <>
+                      <Divider sx={{ my: 2 }} />
+                      {comments.length > 0 ? (
+                        comments.map((comment) => (
+                          <Box
+                            key={comment.id}
+                            display="flex"
+                            alignItems="center"
+                            mb={1}
+                          >
+                            <Avatar
+                              alt="User Avatar"
+                              src="https://placehold.co/40x40"
+                              sx={{ mr: 2 }}
+                            />
+                            <Typography variant="body2" color="textSecondary">
+                              {comment.text} -{" "}
+                              {new Date(
+                                comment.created_at
+                              ).toLocaleDateString()}
+                            </Typography>
+                          </Box>
+                        ))
+                      ) : (
+                        <Typography variant="body2" color="textSecondary">
+                          No comments yet.
+                        </Typography>
+                      )}
+                      <Box mt={2} display="flex" alignItems="center">
+                        <TextField
+                          label="Add a comment"
+                          variant="outlined"
+                          size="small"
+                          fullWidth
+                          value={newComments[post.id] || ""}
+                          onChange={(event) =>
+                            handleNewCommentChange(post.id, event)
+                          }
+                        />
+                        <Button
+                          color="primary"
+                          variant="contained"
+                          sx={{ ml: 2 }}
+                          onClick={() => handleAddComment(post.id)}
+                        >
+                          Submit
+                        </Button>
+                      </Box>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
         </Box>
       </Container>
 
       <AppFooter></AppFooter>
+
+      {/* Snackbar for success alerts */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000} // Snackbar will disappear after 6 seconds
+        onClose={() => setSnackbarOpen(false)} // Close Snackbar after duration
+      >
+        <Alert
+          onClose={() => setSnackbarOpen(false)}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 }

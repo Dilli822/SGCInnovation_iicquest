@@ -43,7 +43,7 @@ export default function LandingPage() {
               journey to becoming the best versions of ourselves.
             </Typography>
             <br />
-            <Link to="/community">
+            <Link to="/login">
               <Button variant="contained" sx={{ color: "#fff" }}>
                 Let's Get Started
               </Button>

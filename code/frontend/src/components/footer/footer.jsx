@@ -35,9 +35,6 @@ function AppFooter() {
                 Contact Us
               </Link>
               <Link href="#" color="inherit" underline="none" sx={{ mx: 2 }}>
-                Projects
-              </Link>
-              <Link href="#" color="inherit" underline="none" sx={{ mx: 2 }}>
                 FAQ
               </Link>
               <Link href="#" color="inherit" underline="none" sx={{ mx: 2 }}>
