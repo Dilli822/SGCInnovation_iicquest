@@ -145,13 +145,19 @@ const DoctorProfileUpdate = () => {
           borderRadius: "8px",
         }}
       >
-        <Typography variant="h5">Doctor's Profile</Typography>
+        <Typography variant="h5">Doctor's Profile
+        </Typography>
+        <Typography variant="p">
+        #Doctor ID: {profileData.doctor_id} | #User ID: {profileData.user}
+        </Typography>
+  
         <Box
           display="flex"
           flexDirection="column"
           alignItems="center"
           style={{ marginTop: "12px" }}
         >
+    
           <form onSubmit={handleSubmit} style={{ width: "100%" }}>
             <Box
               style={{

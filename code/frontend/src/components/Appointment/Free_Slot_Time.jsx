@@ -162,6 +162,18 @@ const FreeTimeSlots = () => {
         );
       }
 
+      const postData = {
+        time_slot_id: selectedSlot.id,
+        free_time_slot: selectedSlot.id,
+        user: parseInt(userId),
+        doctor: selectedSlot.user,
+        booked_startDateTime: `${startDate}T${startTime}:00.000Z`, // Include selected start date-time
+        booked_endDateTime: `${endDate}T${endTime}:00.000Z`, // Include selected end date-time
+      };
+
+      // Log the posted data
+console.log("Data being posted:", postData);
+
       // Proceed to place appointment if no conflict
       const responsePlacement = await fetch(
         "http://localhost:8000/sushtiti/account/users/appointments-to-doctor/create/",
@@ -171,19 +183,19 @@ const FreeTimeSlots = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
-          body: JSON.stringify({
-            time_slot_id: selectedSlot.id,
-            free_time_slot: selectedSlot.id,
-            user: parseInt(userId),
-            doctor: appointMentDoctors,
-            booked_startDateTime: `${startDate}T${startTime}:00.000Z`, // Include selected start date-time
-            booked_endDateTime: `${endDate}T${endTime}:00.000Z`, // Include selected end date-time
-          }),
+          body: JSON.stringify(postData),
+
+   
+          
         }
       );
 
       if(responsePlacement.ok){
+        console.log("Data being posted:", postData);
+        alert(postData)
+        
         window.location.reload(); // This will reload the entire page
+    
       }
 
       if (!responsePlacement.ok) {

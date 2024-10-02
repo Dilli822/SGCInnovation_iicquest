@@ -147,6 +147,9 @@ const AnyUserProfileUpdate = () => {
         }}
       >
         <Typography variant="h5">Anonymous Profile</Typography>
+        <Typography variant="p">
+        #Anonymous User ID: {profileData.annonyuser_id} | #User ID: {profileData.user}
+        </Typography>
         <hr />
 
         <Box display="flex" flexDirection="column" mt={2}>

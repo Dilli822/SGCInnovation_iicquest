@@ -32,6 +32,8 @@ urlpatterns = [
     
     # doctor list the received appoints from the user
     path('appointments-to-doctor/list/', AppointmentListCreateView.as_view(), name='appointment-list-create'),
+
+    
     path('appointments/<int:pk>/', AppointmentDetailView.as_view(), name='appointment-detail'),
     
     path('notifications/', NotificationListView.as_view(), name='notification-list'),
@@ -40,5 +42,7 @@ urlpatterns = [
 
 
     path('api/doctor-profile/', DoctorProfileRetrieveUpdateDestroy.as_view(), name='doctor-profile-list'),
+    
+
     
 ]

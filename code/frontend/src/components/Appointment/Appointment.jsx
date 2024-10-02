@@ -553,9 +553,11 @@ const Appointment = () => {
             href="https://meet.google.com/"
             target="_blank"
             rel="noopener noreferrer"
+ 
           >
-            Generate Zoom Link
+            Generate Google Meet Link for you and your patient
           </a>
+          <br />
     
           <Button
             variant="contained"

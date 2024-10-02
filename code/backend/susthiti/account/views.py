@@ -168,17 +168,33 @@ class FreeTimeSlotRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPI
         serializer.save(user=self.request.user)
 
 # Appointment Views
+# class AppointmentListCreateView(generics.ListCreateAPIView):
+#     serializer_class = AppointmentSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self):
+#         return Appointment.objects.filter(user=self.request.user)
+#         return Appointment.objects.all()
+
+#     def perform_create(self, serializer):
+#         serializer.save(user=self.request.user)
+
+
 class AppointmentListCreateView(generics.ListCreateAPIView):
     serializer_class = AppointmentSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        # return Appointment.objects.filter(user=self.request.user)
-        return Appointment.objects.all()
+        user = self.request.user
+        # Filter appointments where the user is either the doctor or the patient
+        return Appointment.objects.filter(
+            models.Q(user=user) | models.Q(doctor=user)
+        )
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-    
+        
+        
 # class AppointmentListCreateView(generics.ListCreateAPIView):
 #     serializer_class = AppointmentSerializer
 #     permission_classes = [IsAuthenticated]
