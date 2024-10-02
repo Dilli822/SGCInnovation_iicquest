@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -34,7 +33,10 @@ const FreeTimeSlots = () => {
   const [startTime, setStartTime] = useState(""); // State for selected start time
   const [endDate, setEndDate] = useState(""); // State for selected end date
   const [endTime, setEndTime] = useState(""); // State for selected end time
-  const [appointMentDoctors, setAppointMentDoctors] = useState("")
+  const [appointMentDoctors, setAppointMentDoctors] = useState("");
+  // for refreshing the api call after successful reserve
+  const [key, setKey] = useState(0); // Add this state to your component
+
 
   useEffect(() => {
     fetchTimeSlots();
@@ -58,8 +60,7 @@ const FreeTimeSlots = () => {
       const data = await response.json();
       setTimeSlots(data);
       setAppointMentDoctors(data[0].user);
-      console.log(data[0].user)
-      
+      console.log(data[0].user);
     } catch (error) {
       console.error("Error fetching time slots:", error);
     }
@@ -77,77 +78,90 @@ const FreeTimeSlots = () => {
       // Check if start and end dates are within the allowed range
       if (
         !(
-          new Date(`${startDate}T${startTime}:00.000Z`) >= appointmentStartTime &&
+          new Date(`${startDate}T${startTime}:00.000Z`) >=
+            appointmentStartTime &&
           new Date(`${endDate}T${endTime}:00.000Z`) <= appointmentEndTime
         )
       ) {
         throw new Error(
           `Selected appointment dates must be within the range ${
             appointmentStartTime
-              ? `${new Date(appointmentStartTime).toISOString().split('T')[0]} | ${
-                  (() => {
-                    const timeString = new Date(appointmentStartTime).toISOString().split('T')[1].split('.')[0];
-                    const [hours, minutes] = timeString.split(':');
-                    let period = 'AM';
-                    let hour = parseInt(hours, 10);
-        
-                    if (hour >= 12) {
-                      period = 'PM';
-                      if (hour > 12) {
-                        hour -= 12;
-                      }
+              ? `${
+                  new Date(appointmentStartTime).toISOString().split("T")[0]
+                } | ${(() => {
+                  const timeString = new Date(appointmentStartTime)
+                    .toISOString()
+                    .split("T")[1]
+                    .split(".")[0];
+                  const [hours, minutes] = timeString.split(":");
+                  let period = "AM";
+                  let hour = parseInt(hours, 10);
+
+                  if (hour >= 12) {
+                    period = "PM";
+                    if (hour > 12) {
+                      hour -= 12;
                     }
-        
-                    return `${hour}:${minutes} ${period}`;
-                  })()
-                }`
+                  }
+
+                  return `${hour}:${minutes} ${period}`;
+                })()}`
               : ""
           } to ${
             appointmentEndTime
-              ? `${new Date(appointmentEndTime).toISOString().split('T')[0]} | ${
-                  (() => {
-                    const timeString = new Date(appointmentEndTime).toISOString().split('T')[1].split('.')[0];
-                    const [hours, minutes] = timeString.split(':');
-                    let period = 'AM';
-                    let hour = parseInt(hours, 10);
-        
-                    if (hour >= 12) {
-                      period = 'PM';
-                      if (hour > 12) {
-                        hour -= 12;
-                      }
+              ? `${
+                  new Date(appointmentEndTime).toISOString().split("T")[0]
+                } | ${(() => {
+                  const timeString = new Date(appointmentEndTime)
+                    .toISOString()
+                    .split("T")[1]
+                    .split(".")[0];
+                  const [hours, minutes] = timeString.split(":");
+                  let period = "AM";
+                  let hour = parseInt(hours, 10);
+
+                  if (hour >= 12) {
+                    period = "PM";
+                    if (hour > 12) {
+                      hour -= 12;
                     }
-        
-                    return `${hour}:${minutes} ${period}`;
-                  })()
-                }`
+                  }
+
+                  return `${hour}:${minutes} ${period}`;
+                })()}`
               : ""
           }`
         );
-        
       }
-  
+
       const userId = localStorage.getItem("userId");
       const doctorOrTeacherId = selectedSlot.doctor_or_teacher;
-  
+
       // Fetch existing appointments for the user
       const existingAppointments = await fetchAppointments();
-  
+
       // Check if user already has an appointment on the same day
-      const selectedDate = new Date(selectedSlot.start_time).toLocaleDateString();
-      const hasExistingAppointment = existingAppointments.some((appointment) => {
-        const appointmentDate = new Date(appointment.start_time).toLocaleDateString();
-        return (
-          appointment.user === parseInt(userId) && appointmentDate === selectedDate
-        );
-      });
-  
+      const selectedDate = new Date(
+        selectedSlot.start_time
+      ).toLocaleDateString();
+      const hasExistingAppointment = existingAppointments.some(
+        (appointment) => {
+          const appointmentDate = new Date(
+            appointment.start_time
+          ).toLocaleDateString();
+          return (
+            appointment.user === parseInt(userId) &&
+            appointmentDate === selectedDate
+          );
+        }
+      );
+
       if (hasExistingAppointment) {
         throw new Error(
           "Cannot place appointment. You already have an appointment on the same day."
         );
       }
-  
+
       // Proceed to place appointment if no conflict
       const responsePlacement = await fetch(
         "http://localhost:8000/sushtiti/account/users/appointments-to-doctor/create/",
@@ -167,11 +181,15 @@ const FreeTimeSlots = () => {
           }),
         }
       );
-  
+
+      if(responsePlacement.ok){
+        window.location.reload(); // This will reload the entire page
+      }
+
       if (!responsePlacement.ok) {
         throw new Error("Failed to place appointment");
       }
-  
+
       setSnackbarMessage("Appointment placed successfully");
       setSnackbarOpen(true);
       setConfirmationOpen(false);
@@ -260,44 +278,49 @@ const FreeTimeSlots = () => {
               <TableRow key={slot.id}>
                 <TableCell>{slot.user}</TableCell>
 
-     
                 <TableCell>
-  {new Date(slot.start_time).toISOString().split('T')[0]} |{' '}
-  {(() => {
-    const timeString = new Date(slot.start_time).toISOString().split('T')[1].split('.')[0];
-    const [hours, minutes] = timeString.split(':');
-    let period = 'AM';
-    let hour = parseInt(hours, 10);
+                  {new Date(slot.start_time).toISOString().split("T")[0]} |{" "}
+                  {(() => {
+                    const timeString = new Date(slot.start_time)
+                      .toISOString()
+                      .split("T")[1]
+                      .split(".")[0];
+                    const [hours, minutes] = timeString.split(":");
+                    let period = "AM";
+                    let hour = parseInt(hours, 10);
 
-    if (hour >= 12) {
-      period = 'PM';
-      if (hour > 12) {
-        hour -= 12;
-      }
-    }
+                    if (hour >= 12) {
+                      period = "PM";
+                      if (hour > 12) {
+                        hour -= 12;
+                      }
+                    }
 
-    return `${hour}:${minutes} ${period}`;
-  })()}
-</TableCell>
+                    return `${hour}:${minutes} ${period}`;
+                  })()}
+                </TableCell>
 
-<TableCell>
-  {new Date(slot.end_time).toISOString().split('T')[0]} |{' '}
-  {(() => {
-    const timeString = new Date(slot.end_time).toISOString().split('T')[1].split('.')[0];
-    const [hours, minutes] = timeString.split(':');
-    let period = 'AM';
-    let hour = parseInt(hours, 10);
+                <TableCell>
+                  {new Date(slot.end_time).toISOString().split("T")[0]} |{" "}
+                  {(() => {
+                    const timeString = new Date(slot.end_time)
+                      .toISOString()
+                      .split("T")[1]
+                      .split(".")[0];
+                    const [hours, minutes] = timeString.split(":");
+                    let period = "AM";
+                    let hour = parseInt(hours, 10);
 
-    if (hour >= 12) {
-      period = 'PM';
-      if (hour > 12) {
-        hour -= 12;
-      }
-    }
+                    if (hour >= 12) {
+                      period = "PM";
+                      if (hour > 12) {
+                        hour -= 12;
+                      }
+                    }
 
-    return `${hour}:${minutes} ${period}`;
-  })()}
-</TableCell>
+                    return `${hour}:${minutes} ${period}`;
+                  })()}
+                </TableCell>
 
                 <TableCell>
                   <Button
@@ -338,48 +361,54 @@ const FreeTimeSlots = () => {
       <Dialog open={confirmationOpen} onClose={handleCloseConfirmation}>
         <DialogTitle>Confirm Appointment</DialogTitle>
         <DialogContent>
-        <Typography>
-  Are you sure you want to place an appointment from{" "}
-  {appointmentStartTime
-    ? `${new Date(appointmentStartTime).toISOString().split('T')[0]} | ${
-        (() => {
-          const timeString = new Date(appointmentStartTime).toISOString().split('T')[1].split('.')[0];
-          const [hours, minutes] = timeString.split(':');
-          let period = 'AM';
-          let hour = parseInt(hours, 10);
+          <Typography>
+            Are you sure you want to place an appointment from{" "}
+            {appointmentStartTime
+              ? `${
+                  new Date(appointmentStartTime).toISOString().split("T")[0]
+                } | ${(() => {
+                  const timeString = new Date(appointmentStartTime)
+                    .toISOString()
+                    .split("T")[1]
+                    .split(".")[0];
+                  const [hours, minutes] = timeString.split(":");
+                  let period = "AM";
+                  let hour = parseInt(hours, 10);
 
-          if (hour >= 12) {
-            period = 'PM';
-            if (hour > 12) {
-              hour -= 12;
-            }
-          }
+                  if (hour >= 12) {
+                    period = "PM";
+                    if (hour > 12) {
+                      hour -= 12;
+                    }
+                  }
 
-          return `${hour}:${minutes} ${period}`;
-        })()
-      }`
-    : ""}{" "}
-  to{" "}
-  {appointmentEndTime
-    ? `${new Date(appointmentEndTime).toISOString().split('T')[0]} | ${
-        (() => {
-          const timeString = new Date(appointmentEndTime).toISOString().split('T')[1].split('.')[0];
-          const [hours, minutes] = timeString.split(':');
-          let period = 'AM';
-          let hour = parseInt(hours, 10);
+                  return `${hour}:${minutes} ${period}`;
+                })()}`
+              : ""}{" "}
+            to{" "}
+            {appointmentEndTime
+              ? `${
+                  new Date(appointmentEndTime).toISOString().split("T")[0]
+                } | ${(() => {
+                  const timeString = new Date(appointmentEndTime)
+                    .toISOString()
+                    .split("T")[1]
+                    .split(".")[0];
+                  const [hours, minutes] = timeString.split(":");
+                  let period = "AM";
+                  let hour = parseInt(hours, 10);
 
-          if (hour >= 12) {
-            period = 'PM';
-            if (hour > 12) {
-              hour -= 12;
-            }
-          }
+                  if (hour >= 12) {
+                    period = "PM";
+                    if (hour > 12) {
+                      hour -= 12;
+                    }
+                  }
 
-          return `${hour}:${minutes} ${period}`;
-        })()
-      }`
-    : ""}
-</Typography>
+                  return `${hour}:${minutes} ${period}`;
+                })()}`
+              : ""}
+          </Typography>
 
           <hr />
           <Typography variant="h6">Start DateTime</Typography>
@@ -449,10 +478,8 @@ const FreeTimeSlots = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
     </Box>
   );
 };
 
 export default FreeTimeSlots;
-
