@@ -5,70 +5,61 @@ import {
   Card,
   Typography,
   Button,
-  TextField,
-  CircularProgress,
   Modal,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
-import Header from "../../header/header";
 
 const DoctorProfileUpdate = () => {
-  const [profileData, setProfileData] = useState({});
-  const [profileEditMode, setProfileEditMode] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [imageFile, setImageFile] = useState(null);
-  const [initialProfileData, setInitialProfileData] = useState({});
+  const [profileData, setProfileData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
-  const doctorId = localStorage.getItem("doctorId");
+  const [readOnly, setReadOnly] = useState(true);
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    address: "",
+    phone_number: "",
+    bio: "",
+  });
+  const [profileImage, setProfileImage] = useState(null); // State for the new profile image
 
   useEffect(() => {
-    fetchDoctorData();
     fetchProfileData();
   }, []);
 
-  const fetchDoctorData = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:8000/sushtiti/account/doctors/self",
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.length > 0) {
-          const doctorId = data[0].doctor_id; // Assuming there's only one doctor returned
-          localStorage.setItem("doctorId", doctorId); // Store doctor_id in localStorage
-        }
-      } else {
-        console.error("Failed to fetch doctor data");
-      }
-    } catch (error) {
-      console.error("Error fetching doctor data:", error);
-    }
-  };
-
   const fetchProfileData = async () => {
+    const url = "http://localhost:8000/sushtiti/account/doctors/self"; // Your API endpoint
+
     try {
-      const response = await fetch(
-        `http://localhost:8000/sushtiti/account/doctors/edit/${doctorId}/`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
+
       if (response.ok) {
         const data = await response.json();
-        setProfileData(data);
-        setInitialProfileData(data);
+        setProfileData(data[0]); // Access the first object in the array
+        setFormData({
+          username: data[0].username,
+          email: data[0].email,
+          address: data[0].address,
+          phone_number: data[0].phone_number,
+          bio: data[0].bio,
+        });
       } else {
         console.error("Failed to fetch profile data");
+        setProfileData(null);
       }
     } catch (error) {
       console.error("Error fetching profile data:", error);
+      setProfileData(null);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -76,295 +67,241 @@ const DoctorProfileUpdate = () => {
     setOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const handleLogoutConfirm = () => {
     localStorage.clear();
     window.location.href = "/";
   };
 
-  const handleEditProfile = () => {
-    setProfileEditMode(true);
+  const handleEdit = () => {
+    setReadOnly(!readOnly); // Toggle editing
   };
 
-  const handleSaveProfile = async () => {
-    setLoading(true);
-    try {
-      const formData = new FormData();
-      if (imageFile) {
-        formData.append("image", imageFile);
-      }
-      formData.append("address", profileData.address);
-      formData.append("phone_number", profileData.phone_number);
-      formData.append("bio", profileData.bio);
-
-   
-
-      const response = await fetch(
-        `http://localhost:8000/sushtiti/account/doctors/edit/${doctorId}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-          body: formData,
-        }
-      );
-      if (response.ok) {
-        setProfileEditMode(false);
-        // Optionally, fetch updated profile data after save if needed
-        fetchProfileData();
-      } else {
-        console.error("Failed to update profile data");
-      }
-    } catch (error) {
-      console.error("Error updating profile data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setProfileData(initialProfileData);
-    setProfileEditMode(false);
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setProfileData((prevData) => ({
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  const handleImageChange = (e) => {
-    setImageFile(e.target.files[0]);
-
-    // Update the image preview immediately
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      setProfileData((prevData) => ({
-        ...prevData,
-        image: e.target.result,
-      }));
-    };
-    reader.readAsDataURL(e.target.files[0]);
+  const handleImageChange = (event) => {
+    setProfileImage(event.target.files[0]); // Set the selected image
   };
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const doctorId = profileData.doctor_id;
+    const url = `http://localhost:8000/sushtiti/account/doctors/edit/${doctorId}/`;
+
+    // Create FormData to handle file upload
+    const formDataToSend = new FormData();
+    formDataToSend.append("username", formData.username);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("address", formData.address);
+    formDataToSend.append("phone_number", formData.phone_number);
+    formDataToSend.append("bio", formData.bio);
+    if (profileImage) {
+      formDataToSend.append("image", profileImage); // Append the image file
+    }
+
+    try {
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+        body: formDataToSend,
+      });
+
+      if (response.ok) {
+        const updatedData = await response.json();
+        setProfileData(updatedData);
+        setReadOnly(true); // Disable editing after submission
+      } else {
+        console.error("Failed to update profile data");
+      }
+    } catch (error) {
+      console.error("Error updating profile data:", error);
+    }
+  };
+
+  // Handle loading and no data states
+  if (loading) {
+    return <Typography>Loading...</Typography>;
+  }
+
+  if (!profileData) {
+    return <Typography>No profile data available.</Typography>;
+  }
+
   return (
-    <>
-      <Container>
-        <Card
-          style={{
-            padding: "24px",
-            maxWidth: "600px",
-            margin: "24px auto",
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-            borderRadius: "8px",
-          }}
+    <Container>
+      <Card
+        style={{
+          padding: "24px",
+          maxWidth: "600px",
+          margin: "24px auto",
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+          borderRadius: "8px",
+        }}
+      >
+        <Typography variant="h5">Doctor's Profile</Typography>
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          style={{ marginTop: "12px" }}
         >
-          <Typography variant="h5">Doctor's Profile</Typography>
-
-
-          <Box display="flex" flexDirection="column">
+          <form onSubmit={handleSubmit} style={{ width: "100%" }}>
             <Box
-              display="flex"
               style={{
                 maxWidth: "100%",
                 height: "300px",
                 borderRadius: "5%",
                 overflow: "hidden",
-                position: "relative",
                 marginBottom: "16px",
                 boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
               }}
             >
               <img
-                key={profileData.image}
-                src={
-                  imageFile
-                    ? URL.createObjectURL(imageFile)
-                    : `${profileData.image}`
-                }
+                src={profileData.image || "default_image_url.jpg"} // Default image if no profile image
                 alt="Profile"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
-
-              {profileEditMode && (
-                <TextField
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  style={{
-                    position: "absolute",
-                    bottom: "8px",
-                    right: "8px",
-                    zIndex: 1,
-                    opacity: 0,
-                    cursor: "pointer",
-                  }}
-                />
-              )}
             </Box>
 
-            <Typography variant="h5" style={{ marginBottom: "8px" }}>
-              {profileData.buyerName}
-            </Typography>
-            <Typography variant="subtitle1" style={{ marginBottom: "8px" }}>
-              {profileData.buyerEmail}
-            </Typography>
-            <Typography variant="body1" style={{ marginBottom: "16px" }}>
-              ID: #{profileData.doctor_id}
-            </Typography>
+            {/* Conditionally Render File Input for Profile Image */}
+            {!readOnly && (
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                style={{ marginBottom: "16px" }}
+              />
+            )}
 
-            <Typography variant="body1" style={{ marginBottom: "16px" }}>
-              Address:{" "}
-              {profileEditMode ? (
-                <TextField
-                  name="address"
-                  value={profileData.address}
-                  onChange={handleInputChange}
-                  style={{ width: "100%" }}
-                />
-              ) : (
-                profileData.address
-              )}
-            </Typography>
-
-            <Typography variant="body1" style={{ marginBottom: "16px" }}>
-              Phone Number:{" "}
-              {profileEditMode ? (
-                <TextField
-                  name="phone_number"
-                  value={profileData.phone_number}
-                  onChange={handleInputChange}
-                  style={{ width: "100%" }}
-                />
-              ) : (
-                profileData.phone_number
-              )}
-            </Typography>
-
-            <Typography
-              variant="body1"
-              style={{ marginBottom: "16px", textAlign: "left" }}
-            >
-              Bio:{" "}
-              {profileEditMode ? (
-                <TextField
-                  name="bio"
-                  value={profileData.bio}
-                  onChange={handleInputChange}
-                  style={{ width: "100%" }}
-                  multiline
-                  rows={7}
-                />
-              ) : (
-                profileData.bio
-              )}
-            </Typography>
-
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "",
-                marginTop: "16px",
-                width: "100%",
+            <TextField
+              label="Username"
+              name="username"
+              value={formData.username}
+              onChange={handleInputChange}
+              fullWidth
+              margin="normal"
+              inputProps={{
+                readOnly: readOnly,
               }}
-            >
-              {profileEditMode ? (
-                <>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSaveProfile}
-                    disabled={loading}
-                    style={{ marginRight: "8px" }}
-                  >
-                    {loading ? <CircularProgress size={24} /> : "Save"}
-                  </Button>
-                  <Button
-                    variant="contained"
-                    onClick={handleCancelEdit}
-                    style={{ marginLeft: "8px" }}
-                  >
-                    Cancel
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleEditProfile}
-                    style={{ marginRight: "8px" }}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="contained"
-                    onClick={handleLogout}
-                    style={{ marginLeft: "8px" }}
-                  >
-                    Logout
-                  </Button>
-                </>
-              )}
-            </div>
-          </Box>
-        </Card>
-
-        <Modal open={open} onClose={handleClose}>
-          <Box
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: "300px",
-              backgroundColor: "#ffffff",
-              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0)",
-              padding: "24px",
-              outline: "none",
-              borderRadius: "8px",
-              textAlign: "center",
-            }}
-          >
-            <Typography variant="h6" gutterBottom>
-              Are you sure you want to logout?
-            </Typography>
-            <Box
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "24px",
+              InputProps={{
+                style: {
+                  color: readOnly ? "#000" : "darkgreen",
+                },
               }}
-            >
-              <Button
-                variant="contained"
-                onClick={handleClose}
-                style={{ marginRight: "16px" }}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleLogoutConfirm}
-              >
-                Logout
-              </Button>
+            />
+            <TextField
+              label="Email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              fullWidth
+              margin="normal"
+              inputProps={{
+                readOnly: readOnly,
+              }}
+              InputProps={{
+                style: {
+                  color: readOnly ? "#000" : "darkgreen",
+                },
+              }}
+            />
+            <TextField
+              label="Address"
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              fullWidth
+              margin="normal"
+              inputProps={{
+                readOnly: readOnly,
+              }}
+              InputProps={{
+                style: {
+                  color: readOnly ? "#000" : "darkgreen",
+                },
+              }}
+            />
+            <TextField
+              label="Phone Number"
+              name="phone_number"
+              value={formData.phone_number}
+              onChange={handleInputChange}
+              fullWidth
+              margin="normal"
+              inputProps={{
+                readOnly: readOnly,
+              }}
+              InputProps={{
+                style: {
+                  color: readOnly ? "#000" : "darkgreen",
+                },
+              }}
+            />
+            <TextField
+              label="Bio"
+              name="bio"
+              value={formData.bio}
+              onChange={handleInputChange}
+              fullWidth
+              margin="normal"
+              multiline
+
+              inputProps={{
+                readOnly: readOnly,
+              }}
+              InputProps={{
+                style: {
+                  color: readOnly ? "#000" : "darkgreen",
+                },
+              }}
+            />
+            <Box display="flex" justifyContent="space-between" marginTop={0}>
+              {/* Conditionally Render Submit Button */}
+              {!readOnly && (
+                <Button type="submit" variant="contained" color="primary">
+                  Save Changes
+                </Button>
+              )}
             </Box>
-          </Box>
-        </Modal>
-      </Container>
-    </>
+            <br />
+            <Button
+              variant="contained"
+              color={readOnly ? "primary" : "secondary"}
+              onClick={handleEdit} // Toggle edit mode
+            >
+              {readOnly ? "Edit Profile" : "Cancel Edit"}
+            </Button>
+          </form>
+        </Box>
+        <br />
+        <Button variant="contained" color="secondary" onClick={handleLogout}>
+          Logout
+        </Button>
+      </Card>
+
+      {/* Updated Logout Dialog */}
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>Confirm Logout</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to logout?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleLogoutConfirm} color="primary">
+            Yes
+          </Button>
+          <Button onClick={() => setOpen(false)} color="secondary">
+            No
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Container>
   );
 };
 

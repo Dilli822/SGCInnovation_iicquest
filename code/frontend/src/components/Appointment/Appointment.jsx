@@ -173,6 +173,7 @@ const Appointment = () => {
       if (response.ok) {
         console.log("Slot deleted successfully");
         setAvailableSlots(availableSlots.filter((slot) => slot.id !== id));
+        console.log(availableSlots.filter((slot) => slot.id !== id))
       } else {
         console.error("Failed to delete slot");
       }
@@ -416,6 +417,7 @@ const Appointment = () => {
                 <TableCell>User ID</TableCell>
                 <TableCell>Booked DateTime</TableCell>
                 <TableCell>Free Time</TableCell>
+                <TableCell>Doctor ID </TableCell>
                 <TableCell>   Slot ID</TableCell>
     
                 <TableCell>Status</TableCell>
@@ -479,7 +481,7 @@ const Appointment = () => {
                       return `${hour}:${minutes} ${period}`;
                     })()}
                   </TableCell>
-    
+                  <TableCell>{appointment.doctor}</TableCell>
 
                   <TableCell>{appointment.free_time_slot}</TableCell>
 

@@ -14,7 +14,6 @@ import Question from "./appitude"; // Assuming you have a Question component
 import PieChartComponent from "../charts/pieChart";
 import { Pie } from "react-chartjs-2";
 
-
 const questionsDataSet1 = {
   questions: [
     {
@@ -176,7 +175,6 @@ const questionsDataSet1 = {
     },
   ],
 };
-
 
 const questionsDataSet2 = {
   questions: [
@@ -433,7 +431,8 @@ const questionsDataSet3 = {
     },
     {
       id: 53,
-      question: "How often do you reflect on positive experiences in your life?",
+      question:
+        "How often do you reflect on positive experiences in your life?",
       options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
       weightage: 5,
       category: "normal",
@@ -463,7 +462,8 @@ const questionsDataSet3 = {
     },
     {
       id: 57,
-      question: "How often do you feel a lack of motivation to engage in activities?",
+      question:
+        "How often do you feel a lack of motivation to engage in activities?",
       options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
       weightage: 5,
       category: "depression",
@@ -477,14 +477,16 @@ const questionsDataSet3 = {
     },
     {
       id: 59,
-      question: "How often do you experience feelings of sadness or hopelessness?",
+      question:
+        "How often do you experience feelings of sadness or hopelessness?",
       options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
       weightage: 5,
       category: "depression",
     },
     {
       id: 60,
-      question: "Do you find it difficult to enjoy activities you used to like?",
+      question:
+        "Do you find it difficult to enjoy activities you used to like?",
       options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
       weightage: 4,
       category: "depression",
@@ -492,8 +494,7 @@ const questionsDataSet3 = {
   ],
 };
 
-
-const questionsDataSet4  = {
+const questionsDataSet4 = {
   questions: [
     // Anxiety category
     {
@@ -519,7 +520,8 @@ const questionsDataSet4  = {
     },
     {
       id: 64,
-      question: "Do you feel like your mind is constantly racing with thoughts?",
+      question:
+        "Do you feel like your mind is constantly racing with thoughts?",
       options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
       weightage: 4,
       category: "anxiety",
@@ -535,7 +537,8 @@ const questionsDataSet4  = {
     // Stress category
     {
       id: 66,
-      question: "Do you feel physically exhausted even when you haven't done much?",
+      question:
+        "Do you feel physically exhausted even when you haven't done much?",
       options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
       weightage: 3,
       category: "stress",
@@ -586,7 +589,8 @@ const questionsDataSet4  = {
     },
     {
       id: 73,
-      question: "How often do you find yourself laughing or smiling throughout the day?",
+      question:
+        "How often do you find yourself laughing or smiling throughout the day?",
       options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
       weightage: 5,
       category: "normal",
@@ -616,7 +620,8 @@ const questionsDataSet4  = {
     },
     {
       id: 77,
-      question: "How often do you experience feelings of guilt or worthlessness?",
+      question:
+        "How often do you experience feelings of guilt or worthlessness?",
       options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
       weightage: 5,
       category: "depression",
@@ -645,17 +650,20 @@ const questionsDataSet4  = {
   ],
 };
 
+// Step 2: Function to select a random array
+const getRandomArray = () => {
+  const arrays = [
+    questionsDataSet1,
+    questionsDataSet2,
+    questionsDataSet3,
+    questionsDataSet4,
+  ];
+  const randomIndex = Math.floor(Math.random() * arrays.length);
+  return arrays[randomIndex];
+};
 
-
-  // Step 2: Function to select a random array
-  const getRandomArray = () => {
-    const arrays = [questionsDataSet1, questionsDataSet2, questionsDataSet3, questionsDataSet4];
-    const randomIndex = Math.floor(Math.random() * arrays.length);
-    return arrays[randomIndex];
-  };
-
-  // Use getRandomArray() wherever you need to work with questionsData
-  const questionsData = getRandomArray();
+// Use getRandomArray() wherever you need to work with questionsData
+const questionsData = getRandomArray();
 
 const AptitudeTest = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -735,7 +743,9 @@ const AptitudeTest = () => {
     const percentageScores = {
       stress: ((categoryScores.stress / totalWeightage) * 60).toFixed(2),
       anxiety: ((categoryScores.anxiety / totalWeightage) * 60).toFixed(2),
-      depression: ((categoryScores.depression / totalWeightage) * 60).toFixed(2),
+      depression: ((categoryScores.depression / totalWeightage) * 60).toFixed(
+        2
+      ),
       normal: 40,
     };
 
@@ -758,36 +768,47 @@ const AptitudeTest = () => {
 
     return (
       <>
-      <HeaderPublic/>
-      <br /> <br />
-      <Container maxWidth={"lg"}>
-          <Grid container sx={{ display: "flex", alignItems: "center"}}>
-          <Grid item md={7}>
-          <Typography variant="h3">Aptitude Test Results</Typography>
-          <Typography variant="h5">
-            Your score breakdown:
-          </Typography>
-          <Typography variant="h6">
-            Stress: {percentageScores.stress}% | Anxiety:{" "}  {percentageScores.anxiety}% | Depression:{" "} {percentageScores.depression}% | Normal: {percentageScores.normal}% 
-          </Typography>
-          <br />
-          <Link to="/">
-            <Button variant="outlined">
-              Back to Home
-            </Button>
-          </Link>
-          </Grid>
-
-          <Grid item md={5} sx={{ mt: 3 }}>
-              <Pie data={data} />
+        <HeaderPublic />
+        <br /> <br />
+        <Container maxWidth={"lg"}>
+          <Grid container sx={{ display: "flex", alignItems: "center" }}>
+            <Grid item md={7}>
+              <Typography variant="h3">Aptitude Test Results</Typography>
+              <Typography variant="h5">Your score breakdown:</Typography>
+              <Typography variant="h6">
+                Stress: {percentageScores.stress}% | Anxiety:{" "}
+                {percentageScores.anxiety}% | Depression:{" "}
+                {percentageScores.depression}% | Normal:{" "}
+                {percentageScores.normal}%
+              </Typography>
+              <br />
+              <hr />
+              <Typography style={{ fontSize: "12px" }}>
+                <i>
+                  It's important to note that there is no test for mental health
+                  that guarantees 100% accuracy. The assessment provided here
+                  relies on self-reported answers from users, which can vary
+                  based on personal experiences and perceptions. This means that
+                  while the results can provide insights, they should not
+                  replace professional evaluation or treatment. Always consult
+                  with a mental health professional for a comprehensive
+                  assessment.
+                </i>
+              </Typography>
+              <br />
+              <Link to="/">
+                <Button variant="outlined">Back to Home</Button>
+              </Link>
             </Grid>
 
-
-        </Grid>
-      </Container>
-      <br /> <br />
-            <AppFooter />
-            </>
+            <Grid item md={5} sx={{ mt: 3 }}>
+              <Pie data={data} />
+            </Grid>
+          </Grid>
+        </Container>
+        <br /> <br />
+        <AppFooter />
+      </>
     );
   }
 
@@ -795,13 +816,11 @@ const AptitudeTest = () => {
 
   return (
     <>
-
       <Question
         question={`${currentQuestion.id}. ${currentQuestion.question}`}
         options={currentQuestion.options}
         selectedOption={answers[currentQuestionIndex] || ""}
         onChange={handleOptionChange}
-       
       />
       <Container>
         <Box mt={2}>
@@ -853,5 +872,3 @@ const AptitudeTest = () => {
 };
 
 export default AptitudeTest;
-
-

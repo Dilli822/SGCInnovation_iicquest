@@ -74,6 +74,19 @@ class CommentListCreateAPIView(generics.ListCreateAPIView):
         # Automatically set the user and post for the new comment
         serializer.save(user=self.request.user, post_id=self.kwargs['post_id'])
 
+
+# View for updating and deleting comments
+class CommentDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        # Retrieve the comment object based on post_id and comment_id from URL parameters
+        post_id = self.kwargs['post_id']
+        comment_id = self.kwargs['comment_id']
+        return generics.get_object_or_404(Comment, id=comment_id, post_id=post_id)
+    
 from rest_framework.views import APIView
 
 

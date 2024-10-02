@@ -5,457 +5,730 @@ import {
   Button,
   Card,
   CardContent,
-  InputBase,
   Typography,
   Divider,
   IconButton,
   Container,
-  Grid,
-  InputAdornment,
   TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Menu,
+  MenuItem,
+  InputAdornment,
+  Snackbar,
+  Alert,
 } from "@mui/material";
+
 import {
   Search as SearchIcon,
   Comment as CommentIcon,
   Share as ShareIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
 } from "@mui/icons-material";
+
 import Header from "../header/header";
 import HeaderPublic from "../header/header_public";
 import AppFooter from "../footer/footer";
-import { Snackbar, Alert } from "@mui/material";
+
+const API_BASE_URL = "http://localhost:8000/sushtiti";
 
 function Community() {
-  // State to hold the posts fetched from the API
+  // User state
+  const [currentUser, setCurrentUser] = useState(null);
+  const accessToken = localStorage.getItem("accessToken");
+
+  // Post states
   const [posts, setPosts] = useState([]);
-
-  // State to manage expanded post details
   const [expandedPostId, setExpandedPostId] = useState(null);
+  const [newPost, setNewPost] = useState({ title: "", content: "" });
 
-  // State for handling search input
-  const [searchTerm, setSearchTerm] = useState("");
+  // Edit states
+  const [editingPost, setEditingPost] = useState(null);
+  const [editingComment, setEditingComment] = useState(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editedContent, setEditedContent] = useState({ title: "", content: "" });
 
-  // State for handling new comments input
+  // Comment states
   const [newComments, setNewComments] = useState({});
 
-  // State for handling new post input
-  const [newPost, setNewPost] = useState("");
-  const [newPostTitle, setNewPostTitle] = useState("");
+  // UI states
+  const [searchTerm, setSearchTerm] = useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedPost, setSelectedPost] = useState(null);
+  
+  // Confirmation dialog states
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmType, setConfirmType] = useState(null);
+  const [confirmationData, setConfirmationData] = useState(null);
 
-  // State for Snackbar visibility
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  // Snackbar state
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
-  // Fetch posts from API on component mount
+  // Initial data fetch
   useEffect(() => {
+    fetchCurrentUser();
     fetchPosts();
-    fetchUserData();
   }, []);
 
-  // Function to fetch posts from API
-  const fetchPosts = async () => {
+  // API Functions
+  const fetchCurrentUser = async () => {
+    if (!accessToken) return;
+    
     try {
-      const response = await fetch(
-        "http://localhost:8000/sushtiti/community/api/posts/public/list/"
-      );
+      const response = await fetch(`${API_BASE_URL}/account/auth/user/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       if (response.ok) {
-        const data = await response.json();
-        setPosts(data);
-      } else {
-        console.error("Failed to fetch posts");
-      }
-    } catch (error) {
-      console.error("Error fetching posts:", error);
-    }
-  };
-
-  // Function to fetch user data and store user ID in localStorage
-  const fetchUserData = async () => {
-    try {
-      const token = localStorage.getItem("accessToken");
-      const response = await fetch(
-        "http://localhost:8000/sushtiti/account/auth/user/",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        const userId = data.id;
-        localStorage.setItem("userId", userId);
-      } else {
-        console.error("Failed to fetch user data");
+        const userData = await response.json();
+        setCurrentUser(userData);
+        localStorage.setItem("userId", userData.id);
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
+      showSnackbar("Failed to fetch user data", "error");
     }
   };
 
-  // Function to handle search input change
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
+  const fetchPosts = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/community/api/posts/public/list/`);
+      if (response.ok) {
+        const data = await response.json();
+        setPosts(data);
+      }
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+      showSnackbar("Failed to load posts", "error");
+    }
   };
 
-  // Function to handle new comment input change for a specific post
-  const handleNewCommentChange = (postId, event) => {
-    setNewComments({
-      ...newComments,
-      [postId]: event.target.value,
+  // Confirmation Dialog Handlers
+  const openConfirmDialog = (type, data) => {
+    setConfirmType(type);
+    setConfirmationData(data);
+    setConfirmOpen(true);
+  };
+
+  const handleConfirmClose = () => {
+    setConfirmOpen(false);
+    setConfirmType(null);
+    setConfirmationData(null);
+  };
+
+  const getConfirmationContent = () => {
+    switch (confirmType) {
+      case "createPost":
+        return "Are you sure you want to create this post?";
+      case "editPost":
+        return "Are you sure you want to save these changes to the post?";
+      case "deletePost":
+        return "Are you sure you want to delete this post? This action cannot be undone.";
+      case "createComment":
+        return "Are you sure you want to post this comment?";
+      case "editComment":
+        return "Are you sure you want to save these changes to the comment?";
+      case "deleteComment":
+        return "Are you sure you want to delete this comment? This action cannot be undone.";
+      default:
+        return "Are you sure you want to proceed?";
+    }
+  };
+
+  // Post Operations
+  const createPost = () => {
+    if (!accessToken) {
+      showSnackbar("Please login to create a post", "error");
+      return;
+    }
+    openConfirmDialog("createPost");
+  };
+
+  const handleConfirmCreatePost = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/community/api/posts/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          title: newPost.title,
+          content: newPost.content,
+          author: currentUser.id,
+        }),
+      });
+
+      if (response.ok) {
+        const createdPost = await response.json();
+        setPosts([{ post: createdPost, comments: [] }, ...posts]);
+        setNewPost({ title: "", content: "" });
+        showSnackbar("Post created successfully!");
+      } else {
+        showSnackbar("Failed to create post", "error");
+      }
+    } catch (error) {
+      console.error("Error creating post:", error);
+      showSnackbar("Failed to create post", "error");
+    }
+    handleConfirmClose();
+  };
+
+  const updatePost = async () => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/community/api/posts/${editingPost.id}/`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify(editedContent),
+        }
+      );
+
+      if (response.ok) {
+        const updatedPost = await response.json();
+        setPosts(
+          posts.map((post) =>
+            post.post.id === editingPost.id
+              ? { ...post, post: updatedPost }
+              : post
+          )
+        );
+        setEditDialogOpen(false);
+        setEditingPost(null);
+        showSnackbar("Post updated successfully!");
+      }
+    } catch (error) {
+      console.error("Error updating post:", error);
+      showSnackbar("Failed to update post", "error");
+    }
+    handleConfirmClose();
+  };
+
+  const deletePost = async (postId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/community/api/posts/${postId}/`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (response.ok) {
+        setPosts(posts.filter((post) => post.post.id !== postId));
+        showSnackbar("Post deleted successfully!");
+      }
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      showSnackbar("Failed to delete post", "error");
+    }
+    handleConfirmClose();
+  };
+
+  // Comment Operations
+  const createComment = async (postId) => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/community/api/posts/${postId}/comments/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({
+            post: postId,
+            text: newComments[postId],
+            user: currentUser.id,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        const newComment = await response.json();
+        setPosts(
+          posts.map((post) =>
+            post.post.id === postId
+              ? { ...post, comments: [...post.comments, newComment] }
+              : post
+          )
+        );
+        setNewComments({ ...newComments, [postId]: "" });
+        showSnackbar("Comment added successfully!");
+      }
+    } catch (error) {
+      console.error("Error creating comment:", error);
+      showSnackbar("Failed to add comment", "error");
+    }
+    handleConfirmClose();
+  };
+
+  const updateComment = async (postId, commentId, newText) => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/community/api/posts/${postId}/comments/${commentId}/`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({ text: newText, user: currentUser.id }),
+        }
+      );
+
+      if (response.ok) {
+        const updatedComment = await response.json();
+        setPosts(
+          posts.map((post) =>
+            post.post.id === postId
+              ? {
+                  ...post,
+                  comments: post.comments.map((comment) =>
+                    comment.id === commentId ? updatedComment : comment
+                  ),
+                }
+              : post
+          )
+        );
+        setEditingComment(null);
+        showSnackbar("Comment updated successfully!");
+      }
+    } catch (error) {
+      console.error("Error updating comment:", error);
+      showSnackbar("Failed to update comment", "error");
+    }
+    handleConfirmClose();
+  };
+
+  const deleteComment = async (postId, commentId) => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/community/api/posts/${postId}/comments/${commentId}/`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        setPosts(
+          posts.map((post) =>
+            post.post.id === postId
+              ? {
+                  ...post,
+                  comments: post.comments.filter(
+                    (comment) => comment.id !== commentId
+                  ),
+                }
+              : post
+          )
+        );
+        showSnackbar("Comment deleted successfully!");
+      }
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+      showSnackbar("Failed to delete comment", "error");
+    }
+    handleConfirmClose();
+  };
+
+  // UI Helper Functions
+  const showSnackbar = (message, severity = "success") => {
+    setSnackbar({
+      open: true,
+      message,
+      severity,
     });
   };
 
-  // Function to handle new post input change
-  const handleNewPostChange = (event) => {
-    setNewPost(event.target.value);
+  const handlePostMenuOpen = (event, post) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedPost(post);
   };
 
-  // Function to handle new post title input change
-  const handleNewPostTitleChange = (event) => {
-    setNewPostTitle(event.target.value);
+  const handlePostMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedPost(null);
   };
 
-  // Function to submit a new comment for a specific post
-  // Function to submit a new comment for a specific post
-  const handleAddComment = async (postId) => {
-    const token = localStorage.getItem("accessToken");
+  const handleEditClick = (post) => {
+    setEditingPost(post);
+    setEditedContent({
+      title: post.title,
+      content: post.content,
+    });
+    setEditDialogOpen(true);
+    handlePostMenuClose();
+  };
 
-    if (!token) {
-      // Show success Snackbar
-      setSnackbarMessage("Please Login/Sign up!");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
-      return;
-    }
-
-    const commentData = {
-      post: postId,
-      text: newComments[postId],
-      user: localStorage.getItem("userId"),
-    };
-
-    try {
-      const response = await fetch(
-        `http://localhost:8000/sushtiti/community/api/posts/${postId}/comments/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(commentData),
-        }
-      );
-
-      if (response.ok) {
-        const addedComment = await response.json();
-        // Update local state to reflect new comment
-        setPosts(
-          posts.map((post) => {
-            if (post.post.id === postId) {
-              return {
-                ...post,
-                comments: [...post.comments, addedComment],
-              };
+  // Render Functions
+  const renderComment = (postId, comment) => (
+    <Box key={comment.id} sx={{ mb: 2 }}>
+      {editingComment?.id === comment.id ? (
+        <Box display="flex" alignItems="center">
+          <TextField
+            fullWidth
+            value={editingComment.text}
+            onChange={(e) =>
+              setEditingComment({ ...editingComment, text: e.target.value })
             }
-            return post;
-          })
-        );
-        setNewComments({
-          ...newComments,
-          [postId]: "", // Clear comment input for the specific post
-        });
+            size="small"
+          />
+          <Button
+            onClick={() => openConfirmDialog("editComment", { postId, comment: editingComment })}
+          >
+            Save
+          </Button>
+          <Button onClick={() => setEditingComment(null)}>Cancel</Button>
+        </Box>
+      ) : (
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Box display="flex" alignItems="center">
+            <Avatar sx={{ mr: 2 }} />
+            <Box>
+              <Typography variant="body2">{comment.text}</Typography>
+              <Typography variant="caption" color="textSecondary">
+                {new Date(comment.created_at).toLocaleDateString()}
+              </Typography>
+            </Box>
+          </Box>
+          {currentUser?.id === comment.user && (
+            <Box>
+              <IconButton
+                size="small"
+                onClick={() => setEditingComment({ ...comment })}
+              >
+                <EditIcon fontSize="small" />
+              </IconButton>
+              <IconButton
+                size="small"
+                onClick={() => openConfirmDialog("deleteComment", { postId, commentId: comment.id })}
+              >
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            </Box>
+          )}
+        </Box>
+      )}
+    </Box>
+  );
 
-        // Show success Snackbar
-        setSnackbarMessage("Comment Added successfully!");
-        setSnackbarSeverity("success");
-        setSnackbarOpen(true);
-      } else {
-        console.error("Failed to add comment");
-      }
-    } catch (error) {
-      console.error("Error adding comment:", error);
-    }
-  };
+  const renderPost = ({ post, comments }) => (
+    <Card key={post.id} sx={{ mb: 4 }}>
+      <CardContent>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Box display="flex" alignItems="center">
+            <Avatar sx={{ mr: 2 }} />
+            <Box>
+              <Typography variant="h6">{post.title}</Typography>
+              <Typography variant="caption" color="textSecondary">
+                Posted by {post.author} on{" "}
+                {new Date(post.created_at).toLocaleDateString()}
+              </Typography>
+            </Box>
+          </Box>
+          
+          {currentUser?.id === post.author && (
+            <Box display="flex" alignItems="center">
+              <IconButton onClick={() => handleEditClick(post)}>
+                <EditIcon fontSize="small" />
+              </IconButton>
+              <IconButton onClick={() => openConfirmDialog("deletePost", { postId: post.id })}>
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            </Box>
+          )}
+        </Box>
 
-  // Function to submit a new post
+        <Typography variant="body1" sx={{ my: 2 }}>
+          {post.content}
+        </Typography>
 
-  // Function to submit a new post
-  const handleAddPost = async () => {
-    const token = localStorage.getItem("accessToken");
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Button
+            startIcon={<CommentIcon />}
+            onClick={() =>
+              setExpandedPostId(expandedPostId === post.id ? null : post.id)
+            }
+          >
+            {comments.length} Comments
+          </Button>
+          <IconButton>
+            {/* <ShareIcon /> */}
+          </IconButton>
+        </Box>
 
-    // Check if there is an access token
-    if (!token) {
-      // Show success Snackbar
-      setSnackbarMessage("Please Login/Sign up!");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
-      return;
-    }
+        {expandedPostId === post.id && (
+          <Box sx={{ mt: 2 }}>
+            <Divider sx={{ mb: 2 }} />
+            {comments.map((comment) => renderComment(post.id, comment))}
+            <Box display="flex" alignItems="center" sx={{ mt: 2 }}>
+              <TextField
+                fullWidth
+                size="small"
+                placeholder="Add a comment..."
+                value={newComments[post.id] || ""}
+                onChange={(e) =>
+                  setNewComments({
+                    ...newComments,
+                    [post.id]: e.target.value,
+                  })
+                }
+              />
+              <Button
+                variant="contained"
+                sx={{ ml: 1 }}
+                onClick={() => openConfirmDialog("createComment", { postId: post.id })}
+              >
+                Post
+              </Button>
+            </Box>
+          </Box>
+        )}
+      </CardContent>
+    </Card>
+  );
 
-    const postData = {
-      title: newPostTitle,
-      content: newPost,
-      author: localStorage.getItem("userId"),
-    };
-
-    try {
-      const response = await fetch(
-        "http://localhost:8000/sushtiti/community/api/posts/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(postData),
-        }
-      );
-
-      if (response.ok) {
-        const addedPost = await response.json();
-        // Update local state to reflect new post
-        setPosts([...posts, { post: addedPost, comments: [] }]);
-        setNewPost(""); // Clear new post input
-        setNewPostTitle(""); // Clear new post title input
-
-        // Show success Snackbar
-        setSnackbarMessage("Post created successfully!");
-        setSnackbarSeverity("success");
-        setSnackbarOpen(true);
-      } else {
-        console.error("Failed to add post");
-      }
-    } catch (error) {
-      console.error("Error adding post:", error);
-    }
-  };
-
-  // Filter posts based on search term
+  // Filter posts based on search
   const filteredPosts = posts.filter((post) => {
-    const { title, content } = post.post;
-    const lowerCaseSearch = searchTerm.toLowerCase();
+    const searchLower = searchTerm.toLowerCase();
     return (
-      title.toLowerCase().includes(lowerCaseSearch) ||
-      content.toLowerCase().includes(lowerCaseSearch)
+      post.post.title.toLowerCase().includes(searchLower) ||
+      post.post.content.toLowerCase().includes(searchLower)
     );
   });
 
-  // Function to handle expanding/collapsing post details
-  const handleExpand = (postId) => {
-    setExpandedPostId(postId === expandedPostId ? null : postId);
+  // Handle confirmation actions
+  const handleConfirm = async () => {
+    try {
+      switch (confirmType) {
+        case "createPost":
+          await handleConfirmCreatePost();
+          break;
+        case "editPost":
+          await updatePost();
+          break;
+        case "deletePost":
+          await deletePost(confirmationData.postId);
+          break;
+        case "createComment":
+          await createComment(confirmationData.postId);
+          break;
+        case "editComment":
+          await updateComment(
+            confirmationData.postId,
+            confirmationData.comment.id,
+            confirmationData.comment.text
+          );
+          break;
+        case "deleteComment":
+          await deleteComment(confirmationData.postId, confirmationData.commentId);
+          break;
+        default:
+          console.error("Unknown confirmation type:", confirmType);
+      }
+    } catch (error) {
+      console.error("Error during confirmation:", error);
+      showSnackbar("Operation failed", "error");
+    }
   };
-
-  // Function to handle showing/hiding comments for a post
-  const handleShowComments = (postId) => {
-    setExpandedPostId(postId === expandedPostId ? null : postId);
-  };
-
-  // Function to handle sharing a post
-  const handleShare = (slug) => {
-    // Show success Snackbar
-    setSnackbarMessage(`Shared post with slug: ${slug}`);
-    setSnackbarSeverity("success");
-    setSnackbarOpen(true);
-  };
-
-  const accessToken = localStorage.getItem("accessToken");
 
   return (
     <>
       {accessToken ? <Header /> : <HeaderPublic />}
-      <Container maxWidth={"lg"}>
+      <Container maxWidth="lg">
         <Box p={4}>
-          <Typography variant="h3" fontWeight="bold" spacing={2}>
+          <Typography variant="h4" gutterBottom>
             Community & Support
           </Typography>
 
-          <Typography variant="h5" fontWeight="bold" mb={4}>
-            Activity Feed
-          </Typography>
-
-          {/* Search Input */}
-          <Box mb={4}>
-            <InputBase
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              startAdornment={
+          {/* Search Bar */}
+          <TextField
+            fullWidth
+            placeholder="Search posts..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            InputProps={{
+              startAdornment: (
                 <InputAdornment position="start">
                   <SearchIcon />
                 </InputAdornment>
-              }
-              sx={{ p: 1, border: "1px solid #ccc", borderRadius: 1 }}
-              fullWidth
-            />
-          </Box>
+              ),
+            }}
+            sx={{ mb: 4 }}
+          />
 
-          {/* New Post Input */}
-          <Box mb={4} display="flex" flexDirection="column">
-            <TextField
-              label="Title"
-              variant="outlined"
-              value={newPostTitle}
-              onChange={handleNewPostTitleChange}
-              sx={{ mb: 2 }}
-              fullWidth
-            />
-            <TextField
-              label="Ask a question or share your thoughts"
-              variant="outlined"
-              multiline
-              rows={4}
-              value={newPost}
-              onChange={handleNewPostChange}
-              sx={{ mb: 2 }}
-              fullWidth
-            />
-            <Grid item md={3}>
+          {/* New Post Form */}
+          <Card sx={{ mb: 4 }}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Create a New Post
+              </Typography>
+              <TextField
+                fullWidth
+                label="Title"
+                value={newPost.title}
+                onChange={(e) =>
+                  setNewPost({ ...newPost, title: e.target.value })
+                }
+                sx={{ mb: 2 }}
+              />
+              <TextField
+                fullWidth
+                label="Content"
+                multiline
+                rows={4}
+                value={newPost.content}
+                onChange={(e) =>
+                  setNewPost({ ...newPost, content: e.target.value })
+                }
+                sx={{ mb: 2 }}
+              />
               <Button
-                color="primary"
                 variant="contained"
-                onClick={handleAddPost}
+                color="primary"
+                onClick={createPost}
+                disabled={!newPost.title || !newPost.content}
               >
-                Post
+                Create Post
               </Button>
-            </Grid>
-          </Box>
+            </CardContent>
+          </Card>
 
-          {/* Display Filtered Posts */}
+          {/* Posts List */}
           {filteredPosts
-            .sort(
-              (a, b) =>
-                new Date(b.post.created_at) - new Date(a.post.created_at)
-            )
-            .map(({ post, comments }) => (
-              <Card key={post.id} sx={{ mb: 4 }}>
-                <CardContent>
-                  <Box display="flex" alignItems="center" mb={2}>
-                    <Avatar
-                      alt="User Avatar"
-                      src="https://placehold.co/40x40"
-                      sx={{ mr: 2 }}
-                    />
-                    <Box>
-                      <Typography variant="body1" fontWeight="bold">
-                        {post.author}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        {post.title} -{" "}
-                        {new Date(post.created_at).toLocaleDateString()}
-                      </Typography>
-                    </Box>
-                  </Box>
-                  <Typography variant="body2" color="textSecondary" mb={2}>
-                    {post.content}
-                  </Typography>
-                  <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
-                    <Button
-                      color="primary"
-                      onClick={() => handleExpand(post.id)}
-                    >
-                      {expandedPostId === post.id ? "Close" : "Read more"}
-                    </Button>
-                    <Box>
-                      <IconButton
-                        color="inherit"
-                        onClick={() => handleExpand(post.id)}
-                      >
-                        <CommentIcon />
-                        <Typography variant="body2" sx={{ ml: 1 }}>
-                          {expandedPostId === post.id
-                            ? "Hide Comments"
-                            : "Show Comments"}
-                        </Typography>
-                      </IconButton>
-                      <IconButton color="inherit">
-                        <ShareIcon />
-                        <Typography variant="body2" sx={{ ml: 1 }}>
-                          Share
-                        </Typography>
-                      </IconButton>
-                    </Box>
-                  </Box>
-                  {expandedPostId === post.id && (
-                    <>
-                      <Divider sx={{ my: 2 }} />
-                      {comments.length > 0 ? (
-                        comments.map((comment) => (
-                          <Box
-                            key={comment.id}
-                            display="flex"
-                            alignItems="center"
-                            mb={1}
-                          >
-                            <Avatar
-                              alt="User Avatar"
-                              src="https://placehold.co/40x40"
-                              sx={{ mr: 2 }}
-                            />
-                            <Typography variant="body2" color="textSecondary">
-                              {comment.text} -{" "}
-                              {new Date(
-                                comment.created_at
-                              ).toLocaleDateString()}
-                            </Typography>
-                          </Box>
-                        ))
-                      ) : (
-                        <Typography variant="body2" color="textSecondary">
-                          No comments yet.
-                        </Typography>
-                      )}
-                      <Box mt={2} display="flex" alignItems="center">
-                        <TextField
-                          label="Add a comment"
-                          variant="outlined"
-                          size="small"
-                          fullWidth
-                          value={newComments[post.id] || ""}
-                          onChange={(event) =>
-                            handleNewCommentChange(post.id, event)
-                          }
-                        />
-                        <Button
-                          color="primary"
-                          variant="contained"
-                          sx={{ ml: 2 }}
-                          onClick={() => handleAddComment(post.id)}
-                        >
-                          Submit
-                        </Button>
-                      </Box>
-                    </>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
+            .sort((a, b) => new Date(b.post.created_at) - new Date(a.post.created_at))
+            .map(renderPost)}
         </Box>
       </Container>
 
-      <AppFooter></AppFooter>
+      {/* Post Options Menu */}
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handlePostMenuClose}
+      >
+        <MenuItem onClick={() => handleEditClick(selectedPost)}>
+          <EditIcon fontSize="small" sx={{ mr: 1 }} />
+          Edit Post
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            openConfirmDialog("deletePost", { postId: selectedPost?.id });
+            handlePostMenuClose();
+          }}
+          sx={{ color: "error.main" }}
+        >
+          <DeleteIcon fontSize="small" sx={{ mr: 1 }} />
+          Delete Post
+        </MenuItem>
+      </Menu>
 
-      {/* Snackbar for success alerts */}
+      {/* Edit Post Dialog */}
+      <Dialog
+        open={editDialogOpen}
+        onClose={() => setEditDialogOpen(false)}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>Edit Post</DialogTitle>
+        <DialogContent>
+          <TextField
+            fullWidth
+            label="Title"
+            value={editedContent.title}
+            onChange={(e) =>
+              setEditedContent({ ...editedContent, title: e.target.value })
+            }
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            label="Content"
+            multiline
+            rows={4}
+            value={editedContent.content}
+            onChange={(e) =>
+              setEditedContent({ ...editedContent, content: e.target.value })
+            }
+            margin="normal"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEditDialogOpen(false)}>Cancel</Button>
+          <Button
+            onClick={() => openConfirmDialog("editPost")}
+            color="primary"
+            disabled={!editedContent.title || !editedContent.content}
+          >
+            Save Changes
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Universal Confirmation Dialog */}
+      <Dialog 
+        open={confirmOpen} 
+        onClose={handleConfirmClose}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          {confirmType === "deletePost" || confirmType === "deleteComment" 
+            ? "Confirm Deletion" 
+            : "Confirm Action"}
+        </DialogTitle>
+        <DialogContent>
+          <Typography>
+            {getConfirmationContent()}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirmClose} color="primary">
+            Cancel
+          </Button>
+          <Button 
+            onClick={handleConfirm} 
+            color={confirmType?.includes("delete") ? "error" : "primary"}
+            variant="contained"
+          >
+            {confirmType?.includes("delete") ? "Delete" : "Confirm"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Snackbar for notifications */}
       <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000} // Snackbar will disappear after 6 seconds
-        onClose={() => setSnackbarOpen(false)} // Close Snackbar after duration
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
         <Alert
-          onClose={() => setSnackbarOpen(false)}
-          severity={snackbarSeverity}
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          severity={snackbar.severity}
+          variant="filled"
           sx={{ width: "100%" }}
         >
-          {snackbarMessage}
+          {snackbar.message}
         </Alert>
       </Snackbar>
+
+      <AppFooter />
     </>
   );
 }
