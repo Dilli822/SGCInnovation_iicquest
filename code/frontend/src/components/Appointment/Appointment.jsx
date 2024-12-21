@@ -341,66 +341,11 @@ const Appointment = () => {
               <TableRow>
                 <TableCell>Start Time</TableCell>
                 <TableCell>End Time</TableCell>
+                <TableCell>Appointment DateTime Status</TableCell>
                 <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {availableSlots.map((slot) => (
-                <TableRow key={slot.id}>
-                  <TableCell>
-                    {new Date(slot.start_time).toISOString().split("T")[0]} |{" "}
-                    {(() => {
-                      const timeString = new Date(slot.start_time)
-                        .toISOString()
-                        .split("T")[1]
-                        .split(".")[0];
-                      const [hours, minutes] = timeString.split(":");
-                      let period = "AM";
-                      let hour = parseInt(hours, 10);
-                      if (hour >= 12) {
-                        period = "PM";
-                        if (hour > 12) {
-                          hour -= 12;
-                        }
-                      }
-    
-                      return `${hour}:${minutes} ${period}`;
-                    })()}
-                  </TableCell>
-    
-                  <TableCell>
-                    {new Date(slot.end_time).toISOString().split("T")[0]} |{" "}
-                    {(() => {
-                      const timeString = new Date(slot.end_time)
-                        .toISOString()
-                        .split("T")[1]
-                        .split(".")[0];
-                      const [hours, minutes] = timeString.split(":");
-                      let period = "AM";
-                      let hour = parseInt(hours, 10);
-    
-                      if (hour >= 12) {
-                        period = "PM";
-                        if (hour > 12) {
-                          hour -= 12;
-                        }
-                      }
-    
-                      return `${hour}:${minutes} ${period}`;
-                    })()}
-                  </TableCell>
-    
-                  <TableCell>
-                    <IconButton
-                      aria-label="delete"
-                      onClick={() => handleDeleteSlot(slot.id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
+            
           </Table>
         </TableContainer>
       </Box>

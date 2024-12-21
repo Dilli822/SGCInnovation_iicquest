@@ -12,28 +12,28 @@ import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
   textField: {
-    color: '#000!important', // Default color
+    color: "#000!important", // Default color
   },
   editTextField: {
-    color: 'darkgreen', // Color when in edit mode
+    color: "darkgreen", // Color when in edit mode
   },
   noEditTextField: {
-    color: '#000!important', // Color when not in edit mode
+    color: "#000!important", // Color when not in edit mode
   },
 }));
 const DoctorProfileUpdate = () => {
-    const classes = useStyles(); // Use styles
-    const [profileData, setProfileData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [open, setOpen] = useState(false);
-    const [editMode, setEditMode] = useState(false);
-    const [formData, setFormData] = useState({
-      username: '',
-      email: '',
-      address: '',
-      phone_number: '',
-      bio: '',
-    });
+  const classes = useStyles(); // Use styles
+  const [profileData, setProfileData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    address: "",
+    phone_number: "",
+    bio: "",
+  });
 
   useEffect(() => {
     fetchProfileData();
@@ -153,7 +153,7 @@ const DoctorProfileUpdate = () => {
             }}
           >
             <img
-              src={profileData.image || 'default_image_url.jpg'} // Default image if no profile image
+              src={profileData.image || "default_image_url.jpg"} // Default image if no profile image
               alt="Profile"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
@@ -167,11 +167,11 @@ const DoctorProfileUpdate = () => {
               onChange={handleInputChange}
               fullWidth
               margin="normal"
-                     className="editModeOff"
+              className="editModeOff"
               disabled={!editMode}
               InputProps={{
                 style: {
-                  color: editMode ? 'darkgreen' : '#000!important', // Set text color based on edit mode
+                  color: editMode ? "darkgreen" : "#000!important", // Set text color based on edit mode
                 },
               }}
             />
@@ -182,11 +182,11 @@ const DoctorProfileUpdate = () => {
               onChange={handleInputChange}
               fullWidth
               margin="normal"
-                     className="editModeOff"
+              className="editModeOff"
               disabled={!editMode}
               InputProps={{
                 style: {
-                  color: editMode ? 'darkgreen' : '#000!important', // Set text color based on edit mode
+                  color: editMode ? "darkgreen" : "#000!important", // Set text color based on edit mode
                 },
               }}
             />
@@ -200,7 +200,7 @@ const DoctorProfileUpdate = () => {
               disabled={!editMode}
               InputProps={{
                 style: {
-                  color: editMode ? 'darkgreen' : '#000!important', // Set text color based on edit mode
+                  color: editMode ? "darkgreen" : "#000!important", // Set text color based on edit mode
                 },
               }}
             />
@@ -211,11 +211,11 @@ const DoctorProfileUpdate = () => {
               onChange={handleInputChange}
               fullWidth
               margin="normal"
-                     className="editModeOff"
+              className="editModeOff"
               disabled={!editMode}
               InputProps={{
                 style: {
-                  color: editMode ? 'darkgreen' : '#000!important', // Set text color based on edit mode
+                  color: editMode ? "darkgreen" : "#000!important", // Set text color based on edit mode
                 },
               }}
             />
@@ -232,7 +232,7 @@ const DoctorProfileUpdate = () => {
               className="editModeOff"
               InputProps={{
                 style: {
-                  color: editMode ? 'darkgreen' : '#000!important', // Set text color based on edit mode
+                  color: editMode ? "darkgreen" : "#000!important", // Set text color based on edit mode
                 },
               }}
             />
@@ -242,7 +242,11 @@ const DoctorProfileUpdate = () => {
                 <Button variant="contained" type="submit">
                   Save Changes
                 </Button>
-                <Button variant="outlined" onClick={() => setEditMode(false)} style={{ marginLeft: "8px" }}>
+                <Button
+                  variant="outlined"
+                  onClick={() => setEditMode(false)}
+                  style={{ marginLeft: "8px" }}
+                >
                   Cancel
                 </Button>
               </>

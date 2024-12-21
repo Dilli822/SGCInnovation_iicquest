@@ -282,6 +282,7 @@ console.log("Data being posted:", postData);
               <TableCell>Doctor's Id: </TableCell>
               <TableCell>Start Time</TableCell>
               <TableCell>End Time</TableCell>
+              <TableCell>Status</TableCell>
               <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
@@ -332,6 +333,9 @@ console.log("Data being posted:", postData);
 
                     return `${hour}:${minutes} ${period}`;
                   })()}
+                </TableCell>
+                <TableCell>
+                  {slot.expired ? "Appointment Expired": "Available"}
                 </TableCell>
 
                 <TableCell>
