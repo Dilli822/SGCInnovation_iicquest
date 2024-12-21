@@ -155,31 +155,75 @@ class MediatatorTeacherProfile(models.Model):
             self.email = self.user.email
         super().save(*args, **kwargs)
 
+# class FreeTimeSlot(models.Model):
+#     user = models.ForeignKey(UserData, on_delete=models.CASCADE, related_name='free_time_slots')
+#     start_time = models.DateTimeField()
+#     end_time = models.DateTimeField()
+
+#     def __str__(self):
+#         return f"Free Time Slot for {self.user.username} from {self.start_time} to {self.end_time}"
+
+#     def clean(self):
+#         # Get the latest end_time for existing FreeTimeSlots of the same user
+#         latest_end_time = FreeTimeSlot.objects.filter(
+#             user=self.user
+#         ).exclude(id=self.id if self.id else None).order_by('-end_time').values_list('end_time', flat=True).first()
+
+#         if latest_end_time:
+#             # Calculate the minimum allowed end_time
+#             min_allowed_end_time = latest_end_time + timezone.timedelta(hours=1)
+
+#             # Compare with the proposed end_time
+#             if self.end_time <= min_allowed_end_time:
+#                 raise ValidationError(_('End time must be at least 1 hour greater than the latest end time of existing FreeTimeSlots for the same user.'))
+
+#     class Meta:
+#         unique_together = [['user', 'start_time', 'end_time']]
+      
+
+from django.db import models
+from django.utils import timezone
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+
 class FreeTimeSlot(models.Model):
     user = models.ForeignKey(UserData, on_delete=models.CASCADE, related_name='free_time_slots')
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
+    expired = models.BooleanField(default=False)  # Field to track if the slot is expired
 
     def __str__(self):
         return f"Free Time Slot for {self.user.username} from {self.start_time} to {self.end_time}"
 
     def clean(self):
-        # Get the latest end_time for existing FreeTimeSlots of the same user
+        # Ensure there's at least 1 hour gap between the previous time slot and the new one
         latest_end_time = FreeTimeSlot.objects.filter(
             user=self.user
         ).exclude(id=self.id if self.id else None).order_by('-end_time').values_list('end_time', flat=True).first()
 
         if latest_end_time:
-            # Calculate the minimum allowed end_time
-            min_allowed_end_time = latest_end_time + timezone.timedelta(hours=1)
+            # Calculate the minimum allowed start time
+            min_allowed_start_time = latest_end_time + timezone.timedelta(hours=1)
 
-            # Compare with the proposed end_time
-            if self.end_time <= min_allowed_end_time:
-                raise ValidationError(_('End time must be at least 1 hour greater than the latest end time of existing FreeTimeSlots for the same user.'))
+            # Check if the current start_time respects the required gap
+            if self.start_time < min_allowed_start_time:
+                raise ValidationError(_('Start time must be at least 1 hour after the latest end time of existing FreeTimeSlots for the same user.'))
+
+    def save(self, *args, **kwargs):
+        # Automatically set expired status based on the end time compared to the current time
+        current_time = timezone.now()
+        if self.end_time < current_time:
+            self.expired = True  # Mark as expired if end_time is past the current time
+        else:
+            self.expired = False  # Not expired otherwise
+
+        super().save(*args, **kwargs)
 
     class Meta:
         unique_together = [['user', 'start_time', 'end_time']]
-        
+        ordering = ['-start_time']  # Optional: Order time slots by the latest start time
+
+
 class Appointment(models.Model):
     doctor = models.ForeignKey(UserData, on_delete=models.CASCADE, related_name='appointments_as_doctor')
     free_time_slot = models.ForeignKey(FreeTimeSlot, on_delete=models.CASCADE, related_name='appointments')
